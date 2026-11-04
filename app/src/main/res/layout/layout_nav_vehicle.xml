@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_nav_vehicle"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/lw_text_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/veh_subtitle"
+            android:textSize="12sp"
+            android:textColor="@color/lw_text_secondary" />
+
+        <!-- 2x2 Grid using Horizontal Layouts -->
+        <!-- Row 1: Vehicle Info & Software Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_marginBottom="14dp">
+
+            <!-- Card 1: Vehicle Information -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/lw_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_sec_vehicle"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Brand -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_brand"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehBrand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BYD (Build Your Dreams)"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Model -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_model"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehModel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not Available"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Steering -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_steering"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehSteeringPos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="RHD (Right-Hand Drive)"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Connection Status -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_conn"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehConnStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Connected"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="#16A34A" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Card 2: Software Information -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/lw_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_sec_software"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- DiLink Version -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_dilink"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehDiLinkVer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not Available"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Firmware Version -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_firmware"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehFirmwareVer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not Available"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Android Version -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_android"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehAndroidVer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not Available"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- App Version -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_app"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehAppVer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not Available"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Row 2: Hardware Info & Compatibility Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <!-- Card 3: Hardware Information -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/lw_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_sec_hardware"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Screen Resolution -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_resolution"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehResolution"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1920 × 1080 (Landscape)"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Available Camera Devices -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_cameras"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehCameras"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Camera 0, 1, 2"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Sensor Availability -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_sensors"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehSensors"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not Available"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Card 4: Compatibility Information -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/lw_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_sec_compat"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Supported Camera Features -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_supp_cameras"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehSupportedCameras"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Turn PIP, Rearview, BEV 360°"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Available Vehicle API -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_api_status"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehApiStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BYD AutoService (Direct CAN)"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Overall Compatibility Status -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/veh_lbl_compat_status"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_text_secondary" />
+                    <TextView
+                        android:id="@+id/tvVehCompatibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Compatible (OEM Standard)"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="#16A34A" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

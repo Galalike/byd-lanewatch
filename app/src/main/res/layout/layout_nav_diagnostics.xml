@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Top Header & Action Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_nav_diagnostics"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lw_text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/diag_subtitle"
+                    android:textSize="12sp"
+                    android:textColor="@color/lw_text_secondary" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnCopyDiagReport"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/diag_btn_copy"
+                android:textSize="12sp"
+                android:textColor="@color/lw_btn_outline_text"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:strokeColor="@color/lw_btn_outline_stroke"
+                app:cornerRadius="8dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+            <Button
+                android:id="@+id/btnRefreshDiagnostics"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="@string/diag_btn_run"
+                android:textSize="12sp"
+                android:textColor="@color/lw_btn_solid_text"
+                android:backgroundTint="@color/lw_accent_primary"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+        <!-- 4 Diagnostics Sections Grid -->
+        <!-- Row 1: Camera System & Vehicle Integration -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_marginBottom="14dp">
+
+            <!-- Card 1: Camera System -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/lw_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/diag_sec_camera"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Blind Spot Camera -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Blind Spot Camera"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagCamBlindSpot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Digital Rearview Camera -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Digital Rearview Camera"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagCamRear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Front Wheels Camera -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Front Wheels Camera (BEV)"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagCamWheels"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Camera Connection -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Hardware Camera Connection"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagCamConn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Rendering Status -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="OpenGL ES Fisheye Rendering"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagCamRender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Card 2: Vehicle Integration -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/lw_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/diag_sec_vehicle"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Vehicle API Connection -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Vehicle API Connection"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagVehApi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Vehicle Data Availability -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Vehicle CAN Data Availability"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagVehData"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Vehicle State Access -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Vehicle State Access (Gear/Turn/Speed)"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagVehState"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- ADAS BSD Radar -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="ADAS Blind Spot Radar (CAN)"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagAdasRadar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Row 2: Android System & System Resources -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_marginBottom="14dp">
+
+            <!-- Card 3: Android System -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/lw_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/diag_sec_android"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Camera Permission -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Camera Permission"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagPermCam"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Overlay Permission -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="System Overlay Window Permission"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagPermOverlay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Accessibility Service -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Accessibility Service (Autostart/Keys)"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagPermAcc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- ADB Connection -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="ADB Connection / Debugging"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagAdb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Background Service Status -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Overlay Background Service"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagServiceOverlay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Card 4: System Resources -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/lw_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/diag_sec_resources"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Memory Usage -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Memory Usage (App RAM / Device)"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagMemory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="42 MB / 5.7 GB"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- CPU Usage -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="CPU Threads &amp; Core Allocation"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagCpu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- App Service Status -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Application Service Lifecycle"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagAppService"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Operational"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lw_divider" />
+
+                    <!-- Runtime Errors -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Runtime Errors / Crashes"
+                            android:textSize="12sp"
+                            android:textColor="@color/lw_text_primary" />
+                        <TextView
+                            android:id="@+id/tvDiagErrors"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 Errors (Clean)"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Diagnostic Summary Report Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/lw_bg_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/diag_sec_report"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lw_text_accent"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvDiagReportText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/lw_text_secondary"
+                    android:lineSpacingExtra="4dp"
+                    android:text="System diagnostics initializing..." />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

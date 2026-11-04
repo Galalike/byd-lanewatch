@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- ON: 3D Glossy Neon Green Track with Bevel Lighting -->
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="20dp"/>
+            <gradient
+                android:angle="270"
+                android:startColor="#00E676"
+                android:centerColor="#00C853"
+                android:endColor="#008E3D"/>
+            <stroke
+                android:width="1.5dp"
+                android:color="#B3FFFFFF"/>
+            <size android:width="58dp" android:height="32dp"/>
+        </shape>
+    </item>
+    <!-- OFF: 3D Recessed Dark Inset Track -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="20dp"/>
+            <gradient
+                android:angle="270"
+                android:startColor="#1E1E22"
+                android:endColor="#121214"/>
+            <stroke
+                android:width="1.5dp"
+                android:color="#383840"/>
+            <size android:width="58dp" android:height="32dp"/>
+        </shape>
+    </item>
+</selector>

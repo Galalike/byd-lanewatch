@@ -1,0 +1,219 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.nineoad.bydsignpicinpic"
+4    android:versionCode="32"
+5    android:versionName="3.2" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="28" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:3:5-77
+11-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:3:22-75
+12    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+12-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:4:5-76
+12-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:4:22-74
+13    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+13-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:5:5-77
+13-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:5:22-75
+14    <uses-permission android:name="android.permission.WAKE_LOCK" />
+14-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:6:5-67
+14-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:6:22-65
+15    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+15-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:7:5-80
+15-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:7:22-78
+16    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+16-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:8:5-80
+16-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:8:22-78
+17    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+17-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:9:5-79
+17-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:9:22-77
+18    <uses-permission android:name="com.byd.camera.write" />
+18-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:10:5-59
+18-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:10:22-57
+19    <uses-permission android:name="android.permission.CAMERA" />
+19-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:11:5-64
+19-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:11:22-62
+20    <uses-permission android:name="android.permission.INTERNET" />
+20-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:12:5-66
+20-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:12:22-64
+21    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+21-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:13:5-82
+21-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:13:22-80
+22
+23    <permission
+23-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:14:5-16:46
+24        android:name="com.nineoad.bydsignpicinpic.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+24-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:15:9-92
+25        android:protectionLevel="signature" />
+25-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:16:9-44
+26
+27    <uses-permission android:name="com.nineoad.bydsignpicinpic.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+27-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:17:5-107
+27-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:17:22-105
+28
+29    <application
+29-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:18:5-74:19
+30        android:name="com.nineoad.bydsignpicinpic.App"
+30-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:22:9-55
+31        android:allowBackup="true"
+31-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:23:9-35
+32        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+32-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:26:9-77
+33        android:debuggable="true"
+34        android:extractNativeLibs="false"
+34-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:25:9-42
+35        android:icon="@drawable/ic_launcher"
+35-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:21:9-45
+36        android:label="@string/app_name"
+36-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:20:9-41
+37        android:supportsRtl="true"
+37-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:24:9-35
+38        android:theme="@style/Theme.BYDSignalPnP" >
+38-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:19:9-50
+39        <activity
+39-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:27:9-34:20
+40            android:name="com.nineoad.bydsignpicinpic.ui.MainActivity"
+40-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:28:13-71
+41            android:exported="true" >
+41-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:29:13-36
+42            <intent-filter>
+42-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:30:13-33:29
+43                <action android:name="android.intent.action.MAIN" />
+43-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:31:17-68
+43-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:31:25-66
+44
+45                <category android:name="android.intent.category.LAUNCHER" />
+45-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:32:17-76
+45-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:32:27-74
+46            </intent-filter>
+47        </activity>
+48        <activity
+48-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:35:9-37:38
+49            android:name="com.nineoad.bydsignpicinpic.camera.PreviewTestActivity"
+49-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:36:13-82
+50            android:exported="true" />
+50-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:37:13-36
+51        <activity
+51-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:38:9-40:38
+52            android:name="com.nineoad.bydsignpicinpic.signal.TurnProbeActivity"
+52-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:39:13-80
+53            android:exported="true" />
+53-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:40:13-36
+54
+55        <service
+55-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:41:9-44:53
+56            android:name="com.nineoad.bydsignpicinpic.overlay.OverlayService"
+56-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:42:13-78
+57            android:exported="false"
+57-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:43:13-37
+58            android:foregroundServiceType="camera" />
+58-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:44:13-51
+59
+60        <provider
+60-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:45:9-53:20
+61            android:name="androidx.core.content.FileProvider"
+61-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:46:13-62
+62            android:authorities="com.nineoad.bydsignpicinpic.updateprovider"
+62-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:48:13-77
+63            android:exported="false"
+63-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:47:13-37
+64            android:grantUriPermissions="true" >
+64-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:49:13-47
+65            <meta-data
+65-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:50:13-52:53
+66                android:name="android.support.FILE_PROVIDER_PATHS"
+66-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:51:17-67
+67                android:resource="@xml/file_paths" />
+67-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:52:17-51
+68        </provider>
+69
+70        <receiver
+70-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:54:9-62:20
+71            android:name="com.nineoad.bydsignpicinpic.BootReceiver"
+71-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:55:13-68
+72            android:exported="true" >
+72-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:56:13-36
+73            <intent-filter>
+73-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:57:13-61:29
+74                <action android:name="android.intent.action.BOOT_COMPLETED" />
+74-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:58:17-78
+74-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:58:25-76
+75                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+75-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:59:17-81
+75-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:59:25-79
+76                <action android:name="ACC_ON" />
+76-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:60:17-48
+76-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:60:25-46
+77            </intent-filter>
+78        </receiver>
+79
+80        <provider
+80-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:63:9-73:20
+81            android:name="androidx.startup.InitializationProvider"
+81-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:64:13-67
+82            android:authorities="com.nineoad.bydsignpicinpic.androidx-startup"
+82-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:66:13-79
+83            android:exported="false" >
+83-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:65:13-37
+84            <meta-data
+84-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:67:13-69:51
+85                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+85-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:68:17-75
+86                android:value="androidx.startup" />
+86-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:69:17-49
+87            <meta-data
+87-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:70:13-72:51
+88                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+88-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:71:17-78
+89                android:value="androidx.startup" />
+89-->/Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:72:17-49
+90            <meta-data
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+91                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+92                android:value="androidx.startup" />
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+93        </provider>
+94
+95        <receiver
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+96            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+96-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+97            android:directBootAware="false"
+97-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+98            android:enabled="true"
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+99            android:exported="true"
+99-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+100            android:permission="android.permission.DUMP" >
+100-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+101            <intent-filter>
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+102                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+102-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+102-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+103            </intent-filter>
+104            <intent-filter>
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+105                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+105-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+105-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+106            </intent-filter>
+107            <intent-filter>
+107-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+108                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+108-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+108-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+109            </intent-filter>
+110            <intent-filter>
+110-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+111                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+111-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+111-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/dee/.gradle/caches/transforms-3/0db8f035745ab68a2782efc838399652/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+112            </intent-filter>
+113        </receiver>
+114    </application>
+115
+116</manifest>

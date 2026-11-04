@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="260dp"
+    android:height="150dp"
+    android:viewportWidth="260"
+    android:viewportHeight="150">
+
+    <!-- Subtle Background Card Canvas -->
+    <path
+        android:pathData="M 10,10 L 250,10 A 10,10 0 0,1 260,20 L 260,130 A 10,10 0 0,1 250,140 L 10,140 A 10,10 0 0,1 0,130 L 0,20 A 10,10 0 0,1 10,10 Z"
+        android:fillColor="#151518"/>
+
+    <!-- Lane Markings (Dashed road lines) -->
+    <path
+        android:pathData="M 60,15 L 60,35 M 60,50 L 60,70 M 60,85 L 60,105 M 60,120 L 60,140"
+        android:strokeColor="#2E2E34"
+        android:strokeWidth="2.5"/>
+    <path
+        android:pathData="M 200,15 L 200,35 M 200,50 L 200,70 M 200,85 L 200,105 M 200,120 L 200,140"
+        android:strokeColor="#2E2E34"
+        android:strokeWidth="2.5"/>
+
+    <!-- Left & Right Blind Spot Camera Cones -->
+    <!-- Left Blind Spot Area (Glowing Blue / Green) -->
+    <path
+        android:pathData="M 100,55 L 30,25 L 30,125 L 100,95 Z"
+        android:fillColor="#1F3E6AE1"/>
+    <path
+        android:pathData="M 100,55 L 30,25 L 30,125 L 100,95 Z"
+        android:strokeColor="#3E6AE1"
+        android:strokeWidth="1.2"/>
+
+    <!-- Right Blind Spot Area -->
+    <path
+        android:pathData="M 160,55 L 230,25 L 230,125 L 160,95 Z"
+        android:fillColor="#1F00E676"/>
+    <path
+        android:pathData="M 160,55 L 230,25 L 230,125 L 160,95 Z"
+        android:strokeColor="#00E676"
+        android:strokeWidth="1.2"/>
+
+    <!-- Center Vehicle Silhouette (Top View) -->
+    <!-- Vehicle Body -->
+    <path
+        android:pathData="M 115,25 Q 130,20 145,25 L 152,45 L 152,110 L 145,130 Q 130,133 115,130 L 108,110 L 108,45 Z"
+        android:fillColor="#222226"
+        android:strokeColor="#44444C"
+        android:strokeWidth="1.5"/>
+
+    <!-- Windshields & Roof Glass -->
+    <path
+        android:pathData="M 116,42 Q 130,38 144,42 L 142,65 Q 130,63 118,65 Z"
+        android:fillColor="#121214"/>
+    <path
+        android:pathData="M 118,90 Q 130,92 142,90 L 144,115 Q 130,118 116,115 Z"
+        android:fillColor="#121214"/>
+
+    <!-- 4 Wheels -->
+    <path android:pathData="M 104,38 L 108,38 L 108,55 L 104,55 Z" android:fillColor="#3E6AE1"/>
+    <path android:pathData="M 152,38 L 156,38 L 156,55 L 152,55 Z" android:fillColor="#00E676"/>
+    <path android:pathData="M 104,95 L 108,95 L 108,112 L 104,112 Z" android:fillColor="#3E6AE1"/>
+    <path android:pathData="M 152,95 L 156,95 L 156,112 L 152,112 Z" android:fillColor="#00E676"/>
+
+    <!-- Side Mirrors with Camera Dots -->
+    <path android:pathData="M 103,50 L 108,52 L 108,55 L 103,54 Z" android:fillColor="#3E6AE1"/>
+    <path android:pathData="M 157,50 L 152,52 L 152,55 L 157,54 Z" android:fillColor="#00E676"/>
+
+    <!-- Blind Spot Warning Beacon Pulse on Left -->
+    <path
+        android:pathData="M 45,75 A 12,12 0 1,1 45,74.9 Z"
+        android:fillColor="#333E6AE1"
+        android:strokeColor="#3E6AE1"
+        android:strokeWidth="1.5"/>
+    <path
+        android:pathData="M 45,75 A 5,5 0 1,1 45,74.9 Z"
+        android:fillColor="#3E6AE1"/>
+
+    <!-- Blind Spot Warning Beacon Pulse on Right -->
+    <path
+        android:pathData="M 215,75 A 12,12 0 1,1 215,74.9 Z"
+        android:fillColor="#3300E676"
+        android:strokeColor="#00E676"
+        android:strokeWidth="1.5"/>
+    <path
+        android:pathData="M 215,75 A 5,5 0 1,1 215,74.9 Z"
+        android:fillColor="#00E676"/>
+</vector>

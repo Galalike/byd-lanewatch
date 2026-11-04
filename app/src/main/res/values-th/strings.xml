@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BYD LaneWatch</string>
+    <string name="accessibility_service_description">ดักจับปุ่มพวงมาลัยเพื่อเปิด/ปิดกระจกมองหลังดิจิทัล (BYD LaneWatch)</string>
+    <string name="app_subtitle">ระบบกล้องช่วยขับขี่อัจฉริยะ</string>
+    <string name="status_active">● พร้อมทำงาน</string>
+    <string name="btn_overlay_perm">สิทธิ์ซ้อนทับหน้าจอ</string>
+
+    <string name="col1_badge">BLIND SPOT CAMERA</string>
+    <string name="col1_title">กล้องช่วยเลี้ยว (ไฟเลี้ยว)</string>
+    <string name="col1_desc">แสดงภาพมุมอับสายตาอัตโนมัติเมื่อเปิดไฟเลี้ยว</string>
+    <string name="col1_preset_label">รูปแบบการแสดงผล</string>
+    <string name="col1_linger_title">หน่วงเวลาหลังไฟดับ</string>
+    <string name="col1_linger_sub">แสดงภาพค้างไว้ก่อนซ่อนอัตโนมัติ</string>
+    <string name="col1_triggers_header">สัญญาณสั่งเปิดกล้อง</string>
+    <string name="col1_trig_left">ไฟเลี้ยวซ้าย</string>
+    <string name="col1_trig_right">ไฟเลี้ยวขวา</string>
+    <string name="col1_trig_hazard">ไฟฉุกเฉิน</string>
+    <string name="col1_btn_drop_show">ตั้งค่าเพิ่มเติมและทดสอบ [v]</string>
+    <string name="col1_test_header">ทดสอบแสดงผลทันที</string>
+    <string name="btn_left">ซ้าย</string>
+    <string name="btn_right">ขวา</string>
+    <string name="btn_hazard">ฉุกเฉิน</string>
+    <string name="btn_hide">ซ่อน</string>
+    <string name="col1_tune_header">ปรับแต่งโหมดกำหนดเอง</string>
+    <string name="col1_tune_side">เลือกด้านกล้อง</string>
+    <string name="col1_tune_rotate">หมุน 90°</string>
+    <string name="col1_tune_fine">หมุนละเอียด</string>
+    <string name="col1_tune_mirror">พลิกซ้าย-ขวา</string>
+    <string name="col1_tune_flipv">พลิกบน-ล่าง</string>
+    <string name="col1_crop_header">ตัดกรอบภาพ</string>
+    <string name="lbl_top">บน</string>
+    <string name="lbl_bottom">ล่าง</string>
+    <string name="lbl_left">ซ้าย</string>
+    <string name="lbl_right">ขวา</string>
+    <string name="lbl_corner">มุมโค้ง</string>
+    <string name="col1_fe_header">แก้เลนส์ตาปลา</string>
+    <string name="lbl_strength">ความแรง</string>
+    <string name="lbl_zoom">ซูม</string>
+    <string name="lbl_center_x">ศูนย์ X</string>
+    <string name="lbl_center_y">ศูนย์ Y</string>
+    <string name="btn_save_show">บันทึกและดูค่า</string>
+    <string name="btn_reset">รีเซ็ต</string>
+
+    <string name="col2_badge">DIGITAL REARVIEW</string>
+    <string name="col2_title">กระจกมองหลังดิจิทัล</string>
+    <string name="col2_desc">แสดงกล้องหลังมุมกว้างอิสระ แตะ 2 ครั้งที่หน้าต่างเพื่อปิด</string>
+    <string name="col2_btn_toggle">สลับแสดงผล</string>
+    <string name="col2_shortcut_header">ปุ่มลัดบนพวงมาลัย</string>
+    <string name="col2_shortcut_enable">เปิดใช้ปุ่มลัดพวงมาลัย</string>
+    <string name="col2_btn_acc_perm">สิทธิ์การเข้าถึง</string>
+    <string name="col2_btn_bind_key">กดเพื่อจับปุ่ม</string>
+    <string name="col2_btn_drop_show">ตั้งค่าปรับแต่งภาพ [v]</string>
+    <string name="col2_cal_header">ปรับแต่งภาพกระจกมองหลัง</string>
+    <string name="col2_btn_reset">รีเซ็ตค่าเริ่มต้นกระจกหลัง</string>
+
+    <string name="col3_badge">FRONT WHEELS</string>
+    <string name="col3_title">มุมล้อหน้าซ้ายและขวา</string>
+    <string name="col3_desc">แสดงภาพมุมล้อหน้าอัตโนมัติตามทิศทางที่เลี้ยวพวงมาลัย (ซ้าย/ขวา)</string>
+    <string name="col3_btn_toggle">สลับแสดงผลมุมล้อหน้า (ทดสอบ)</string>
+    <string name="col3_auto_header">ระบบสั่งเปิดอัตโนมัติ</string>
+    <string name="col3_auto_exit_p">เปิดเมื่อออกจากเกียร์ P</string>
+    <string name="col3_auto_steer">เปิดอัตโนมัติเมื่อหักเลี้ยว (องศาพวงมาลัย)</string>
+    <string name="col3_auto_speed">จำกัดความเร็วต่ำ (ปิดเมื่อขับเร็ว)</string>
+    <string name="col3_btn_drop_show">ปรับแต่งกรอบภาพ &amp; แก้ฟิชอาย 4 มุมล้อ [v]</string>
+    <string name="col3_crop_header">เลือกมุมล้อที่ต้องการปรับแต่ง (FL / FR / RL / RR)</string>
+    <string name="lbl_car_model">เลือกมุมล้อ</string>
+    <string name="car_model_atto3">ล้อหน้าซ้าย (Front-Left FL)</string>
+    <string name="car_model_dolphin">ล้อหน้าขวา (Front-Right FR)</string>
+    <string name="car_model_seal">ล้อหลังซ้าย (Rear-Left RL)</string>
+    <string name="car_model_sealu">ล้อหลังขวา (Rear-Right RR)</string>
+    <string name="car_model_han">BYD Han</string>
+    <string name="car_model_tang">BYD Tang</string>
+    <string name="car_model_qin">BYD Qin Plus</string>
+    <string name="car_model_song">BYD Song Pro / L</string>
+    <string name="car_model_generic">BYD มาตรฐาน (Default)</string>
+    <string name="lbl_cam_front">ขอบบน (Crop Top)</string>
+    <string name="lbl_cam_rear">ขอบล่าง (Crop Bottom)</string>
+    <string name="lbl_cam_left">ขอบซ้าย (Crop Left)</string>
+    <string name="lbl_cam_right">ขอบขวา (Crop Right)</string>
+    <string name="col3_roll_header">ปรับแต่งฟิชอายและองศาหมุนละเอียด</string>
+    <string name="lbl_roll_front">แก้ฟิชอาย</string>
+    <string name="lbl_roll_rear">ซูมภาพ</string>
+    <string name="lbl_roll_left">ศูนย์กลาง X</string>
+    <string name="lbl_roll_right">หมุนละเอียด</string>
+    <string name="col3_btn_reset">รีเซ็ตค่าเริ่มต้นกล้อง 4 มุมล้อ</string>
+
+    <string name="footer_info">ทำงานเบื้องหลังอัตโนมัติเมื่อสตาร์ทรถ · ลากหน้าต่างเพื่อย้ายตำแหน่ง · บีบ 2 นิ้วเพื่อปรับขนาด</string>
+
+    <!-- Adaptive Side Navigation Items -->
+    <string name="nav_home">หน้าหลัก</string>
+    <string name="nav_update">อัปเดต</string>
+    <string name="nav_vehicle">ข้อมูลรถ</string>
+    <string name="nav_settings">ตั้งค่า</string>
+    <string name="nav_diagnostics">สถานะระบบ</string>
+    <string name="nav_backup">สำรองข้อมูล</string>
+    <string name="nav_guide">คู่มือ</string>
+    <string name="nav_about">เกี่ยวกับ</string>
+
+    <string name="title_nav_home">ระบบกล้องช่วยขับขี่ (CAMERA DASHBOARD)</string>
+    <string name="title_nav_update">อัปเดตซอฟต์แวร์ (SOFTWARE UPDATE)</string>
+    <string name="title_nav_vehicle">ข้อมูลระบบรถยนต์ (VEHICLE INFORMATION)</string>
+    <string name="title_nav_settings">ตั้งค่าระบบ (SYSTEM SETTINGS)</string>
+    <string name="title_nav_diagnostics">การวินิจฉัยและสถานะระบบ (SYSTEM DIAGNOSTICS)</string>
+    <string name="title_nav_backup">สำรองและกู้คืนการตั้งค่า (BACKUP &amp; RESTORE)</string>
+    <string name="title_nav_guide">คู่มือการใช้งานและการแก้ปัญหา (USER GUIDE)</string>
+    <string name="title_nav_about">เกี่ยวกับซอฟต์แวร์ (ABOUT SOFTWARE)</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_subtitle">ปรับแต่งพฤติกรรมระบบ ภาษา ธีม และตำแหน่งแถบเมนูนำทาง</string>
+    <string name="settings_nav_appearance_header">การแสดงผลและแถบนำทาง (NAVIGATION &amp; APPEARANCE)</string>
+    <string name="settings_sidebar_pos_title">ตำแหน่งแถบเมนูนำทาง (Adaptive Sidebar Position):</string>
+    <string name="settings_sidebar_pos_desc">จัดวางชิดขวาเพื่อความสะดวกของผู้ขับขี่รถพวงมาลัยขวา (ไทย) หรือสลับไปซ้าย</string>
+    <string name="settings_steer_auto">อัตโนมัติตามรถ (Auto: RHD ขวา)</string>
+    <string name="settings_steer_rhd">ชิดขวา (RHD ขวา)</string>
+    <string name="settings_steer_lhd">ชิดซ้าย (LHD ซ้าย)</string>
+    <string name="settings_lang_title">ภาษาที่แสดงผล (Language):</string>
+    <string name="settings_theme_title">โหมดสีหน้าจอ (Theme Mode):</string>
+    <string name="settings_system_header">การทำงานระดับระบบ (SYSTEM &amp; AUTOSTART)</string>
+    <string name="settings_autostart_title">ปลดล็อกระบบปิด Autostart ของ BYD DiLink</string>
+    <string name="settings_autostart_desc">สั่งปลดบล็อกใน AppStartManagement อัตโนมัติ เพื่อให้แอปทำงานเมื่อสตาร์ทรถ</string>
+    <string name="settings_btn_run_autostart">🛡️ สั่งปลดบล็อกทันที</string>
+
+    <!-- Software Update Screen -->
+    <string name="update_subtitle">ระบบจัดการและอัปเดตซอฟต์แวร์แบบไร้สาย (OTA Software Update)</string>
+    <string name="update_btn_config_ota">⚙️ ตั้งค่าเซิร์ฟเวอร์ OTA</string>
+    <string name="update_cur_ver_label">เวอร์ชันปัจจุบัน:</string>
+    <string name="update_latest_ver_label">เวอร์ชันล่าสุดในระบบ: รอการตรวจสอบ</string>
+    <string name="update_status_not_checked">● ยังไม่ได้ตรวจสอบ</string>
+    <string name="update_channel_label">ช่องทางการอัปเดต (Channel):</string>
+    <string name="update_last_checked_label">ตรวจสอบล่าสุด (Last Checked):</string>
+    <string name="update_release_date_label">วันที่เผยแพร่ (Release Date):</string>
+    <string name="update_size_label">ขนาดไฟล์ดาวน์โหลด (Size):</string>
+    <string name="update_btn_check">🔍 ตรวจสอบการอัปเดต</string>
+    <string name="update_btn_download">⬇️ ดาวน์โหลดเวอร์ชันใหม่</string>
+    <string name="update_btn_install">⚡ ติดตั้งอัปเดตทันที</string>
+    <string name="update_btn_retry">🔄 ลองใหม่อีกครั้ง</string>
+    <string name="update_release_notes_header">บันทึกการเปลี่ยนแปลงและฟีเจอร์ใหม่ (RELEASE NOTES &amp; WHAT\'S NEW)</string>
+
+    <!-- Vehicle Info Screen -->
+    <string name="veh_subtitle">ข้อมูลจำเพาะระบบรถยนต์ BYD ฮาร์ดแวร์ ซอฟต์แวร์ และความเข้ากันได้ของระบบ</string>
+    <string name="veh_sec_vehicle">1. ข้อมูลรถยนต์ (VEHICLE INFORMATION)</string>
+    <string name="veh_lbl_brand">ยี่ห้อรถยนต์ (Vehicle Brand):</string>
+    <string name="veh_lbl_model">รุ่นรถยนต์ (Vehicle Model):</string>
+    <string name="veh_lbl_steering">ตำแหน่งพวงมาลัย (Steering Position):</string>
+    <string name="veh_lbl_conn">สถานะการเชื่อมต่อรถยนต์ (Connection Status):</string>
+    <string name="veh_sec_software">2. ข้อมูลซอฟต์แวร์ (SOFTWARE INFORMATION)</string>
+    <string name="veh_lbl_dilink">เวอร์ชันระบบ DiLink (DiLink Version):</string>
+    <string name="veh_lbl_firmware">เวอร์ชันเฟิร์มแวร์ (Firmware / Build ID):</string>
+    <string name="veh_lbl_android">เวอร์ชันระบบปฏิบัติการ (Android OS Version):</string>
+    <string name="veh_lbl_app">เวอร์ชันแอปพลิเคชัน (Application Version):</string>
+    <string name="veh_sec_hardware">3. ข้อมูลฮาร์ดแวร์ (HARDWARE INFORMATION)</string>
+    <string name="veh_lbl_resolution">ความละเอียดหน้าจอ (Screen Resolution):</string>
+    <string name="veh_lbl_cameras">อุปกรณ์กล้องในระบบ (Available Camera Devices):</string>
+    <string name="veh_lbl_sensors">ความพร้อมของเซนเซอร์ (Sensor Availability):</string>
+    <string name="veh_sec_compat">4. ความเข้ากันได้ของระบบ (COMPATIBILITY)</string>
+    <string name="veh_lbl_supp_cameras">ฟังก์ชันกล้องที่รองรับ (Supported Features):</string>
+    <string name="veh_lbl_api_status">Vehicle API Interface:</string>
+    <string name="veh_lbl_compat_status">สถานะความเข้ากันได้รวม (Compatibility Status):</string>
+
+    <!-- Diagnostics Screen -->
+    <string name="diag_subtitle">ตรวจสอบสุขภาพระบบ BYD LaneWatch กล้อง สัญญาณ CAN สิทธิ์ และทรัพยากรเครื่อง</string>
+    <string name="diag_btn_copy">📋 คัดลอกรายงานสรุป</string>
+    <string name="diag_btn_run">🔄 เริ่มการวินิจฉัย (Run Diagnostics)</string>
+    <string name="diag_sec_camera">1. ระบบกล้องและการประมวลผล (CAMERA SYSTEM)</string>
+    <string name="diag_sec_vehicle">2. การเชื่อมต่อสัญญาณรถยนต์ (VEHICLE INTEGRATION)</string>
+    <string name="diag_sec_android">3. สิทธิ์และการทำงานระบบ (ANDROID SYSTEM)</string>
+    <string name="diag_sec_resources">4. ทรัพยากรระบบและสถานะ (SYSTEM RESOURCES)</string>
+    <string name="diag_sec_report">รายงานผลการวินิจฉัย (DIAGNOSTIC REPORT SUMMARY)</string>
+
+    <!-- Backup Screen -->
+    <string name="backup_subtitle">ส่งออก นำเข้า และรีเซ็ตค่าการปรับแต่งมุมกล้องและการตั้งค่าทั้งหมด</string>
+    <string name="backup_header">การจัดการข้อมูลการตั้งค่า (CONFIGURATION DATA)</string>
+    <string name="backup_export_title">ส่งออกการตั้งค่าเป็นไฟล์ JSON</string>
+    <string name="backup_export_desc">บันทึกค่าการ Calibrate กล้องทั้งหมดลงในหน่วยความจำเครื่อง</string>
+    <string name="backup_btn_export">📤 ส่งออกไฟล์</string>
+    <string name="backup_import_title">นำเข้าการตั้งค่าจากไฟล์ JSON</string>
+    <string name="backup_import_desc">กู้คืนค่า Calibrate กล้องที่เคยบันทึกไว้กลับมาใช้งาน</string>
+    <string name="backup_btn_import">📥 นำเข้าไฟล์</string>
+    <string name="backup_reset_title">คืนค่าเริ่มต้นโรงงาน (Reset to Defaults)</string>
+    <string name="backup_reset_desc">ล้างค่าที่เคยปรับแต่งทั้งหมด และนำค่าแนะนำมาตรฐานมาใช้งาน</string>
+    <string name="backup_btn_reset">⚠️ รีเซ็ตค่าโรงงาน</string>
+    <string name="backup_status_ready">สถานะ: ระบบพร้อมสำหรับการสำรองหรือกู้คืนข้อมูล</string>
+
+    <!-- Guide Screen -->
+    <string name="guide_subtitle">คู่มือการทำงานของกล้อง ท่าทางสัมผัสในสตูดิโอ และการแก้ไขปัญหาเบื้องต้น</string>
+    <string name="guide_sec1_title">1. การทำงานของทั้ง 3 โหมดกล้อง</string>
+    <string name="guide_sec1_content">• กล้องไฟเลี้ยว (LaneWatch): เมื่อเปิดไฟเลี้ยวซ้ายหรือขวา ภาพมุมอับสายตาจะลอยขึ้นมาบนหน้าจออัตโนมัติ และจะซ่อนหลังไฟดับตามเวลาหน่วงที่ตั้งไว้ หากเปิดไฟฉุกเฉินจะแสดง 2 ฝั่งคู่กัน\n• การเตือน ADAS BSD: หากมีรถหรือมอเตอร์ไซค์เข้ามาในระยะอันตราย เรดาร์ของ BYD จะส่งสัญญาณให้ขอบหน้าต่างกระพริบเป็นกรอบสีแดงแจ้งเตือนทันที\n• กระจกมองหลังดิจิทัล: สั่งเปิด/ปิดผ่านปุ่มบนพวงมาลัย หรือแตะ 2 ครั้งบนหน้าต่างเพื่อปิดอย่างรวดเร็ว\n• มุมล้อหน้า (เทียบฟุตบาท): จะเปิดอัตโนมัติเมื่อออกจากเกียร์ P หรือเมื่อเลี้ยวพวงมาลัยเกินองศาที่กำหนด และตัดการทำงานเมื่อขับด้วยความเร็วสูง</string>
+    <string name="guide_sec2_title">2. การปรับแต่งภาพด้วยท่าทางสัมผัสในสตูดิโอ (Touch Calibration)</string>
+    <string name="guide_sec2_content">• เลื่อน 1 นิ้ว (Pan): ลากเลื่อนตำแหน่งมุมมองเพื่อจัดให้อยู่กึ่งกลางที่ต้องการ\n• บีบ / ถ่าง 2 นิ้ว (Pinch Zoom): ขยายภาพให้คมชัด หรือซูมออกเพื่อเก็บมุมกว้าง\n• หมุน 2 นิ้ว (Rotate Gesture): หมุนองศากล้องอย่างละเอียดแบบเรียลไทม์\n• แตะปุ่ม [บันทึกค่า]: เพื่อเซฟการปรับแต่งลงระบบถาวร</string>
+    <string name="guide_sec3_title">3. การแก้ไขปัญหาเบื้องต้น (Troubleshooting)</string>
+    <string name="guide_sec3_content">• หน้าต่างไม่ขึ้นเมื่อเปิดไฟเลี้ยว: ตรวจสอบสิทธิ์ Overlay Permission และสวิตช์เปิดหลักในการ์ดหน้าแรก\n• ปุ่มพวงมาลัยไม่ทำงาน: ตรวจสอบ Accessibility Service ในเมนู \'การวินิจฉัยและสถานะระบบ\'\n• แอปไม่เปิดอัตโนมัติตอนสตาร์ทรถ: เข้าเมนู \'ตั้งค่าระบบ\' แล้วกดปุ่ม [🛡️ สั่งปลดบล็อกทันที] เพื่อปลดการปิดกั้น Autostart ของ BYD DiLink</string>
+
+    <!-- About Screen -->
+    <string name="about_subtitle">ข้อมูลซอฟต์แวร์ ทีมพัฒนา และสิทธิ์การใช้งาน</string>
+    <string name="about_edition">OEM Automotive Infotainment Edition</string>
+    <string name="about_sec_arch">สถาปัตยกรรมระบบ (SYSTEM ARCHITECTURE)</string>
+    <string name="about_arch_desc">• Graphic Engine: OpenGL ES 2.0 Real-time Shaders\n• Inter-Process Communication: Android Binder to BYDAutoServer (autoservice)\n• Vehicle Integration: Native BYD Hardware Sensors &amp; CAN Radar Properties\n• Platform: ออกแบบเพื่อระบบ Infotainment BYD DiLink 3.0 / 4.0 / 5.0 โดยเฉพาะ</string>
+    <string name="about_sec_credits">ทีมพัฒนาและผู้มีส่วนร่วม (CREDITS &amp; LICENSES)</string>
+    <string name="about_credits_desc">• พัฒนาโดย: Galalike,NineOAD &amp; BYD Automotive Community Thailand\n• Open Source Libraries: AndroidX, Google Material Components, KaTeX, WebRTC\n• ลิขสิทธิ์ซอฟต์แวร์: พัฒนาเพื่อการใช้งานร่วมกับรถยนต์ BYD โดยไม่ดัดแปลงความปลอดภัยของระบบตัวรถ</string>
+</resources>

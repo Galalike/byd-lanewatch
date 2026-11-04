@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="260dp"
+    android:height="150dp"
+    android:viewportWidth="260"
+    android:viewportHeight="150">
+
+    <!-- Background Canvas -->
+    <path
+        android:pathData="M 10,10 L 250,10 A 10,10 0 0,1 260,20 L 260,130 A 10,10 0 0,1 250,140 L 10,140 A 10,10 0 0,1 0,130 L 0,20 A 10,10 0 0,1 10,10 Z"
+        android:fillColor="#151518"/>
+
+    <!-- 4 Quadrant Split Grid Lines -->
+    <path
+        android:pathData="M 130,15 L 130,135"
+        android:strokeColor="#24242A"
+        android:strokeWidth="1.5"/>
+    <path
+        android:pathData="M 20,75 L 240,75"
+        android:strokeColor="#24242A"
+        android:strokeWidth="1.5"/>
+
+    <!-- Center Vehicle Outline (Top View) -->
+    <path
+        android:pathData="M 118,30 Q 130,26 142,30 L 148,50 L 148,100 L 142,120 Q 130,123 118,120 L 112,100 L 112,50 Z"
+        android:fillColor="#1E1E22"
+        android:strokeColor="#3E3E48"
+        android:strokeWidth="1.5"/>
+    <path
+        android:pathData="M 119,45 L 141,45 L 139,65 L 121,65 Z"
+        android:fillColor="#121214"/>
+    <path
+        android:pathData="M 121,85 L 139,85 L 141,105 L 119,105 Z"
+        android:fillColor="#121214"/>
+
+    <!-- Quadrant 1: FL (Front Left Wheel) Target Frame -->
+    <path
+        android:pathData="M 30,22 L 105,22 A 6,6 0 0,1 111,28 L 111,68 A 6,6 0 0,1 105,74 L 30,74 A 6,6 0 0,1 24,68 L 24,28 A 6,6 0 0,1 30,22 Z"
+        android:fillColor="#12253E"
+        android:strokeColor="#3E6AE1"
+        android:strokeWidth="1.5"/>
+    <!-- FL Wheel Icon -->
+    <path android:pathData="M 108,35 L 114,35 L 114,52 L 108,52 Z" android:fillColor="#00E676"/>
+    <!-- FL Crosshair/Reticle Target -->
+    <path android:pathData="M 45,48 L 85,48 M 65,30 L 65,66" android:strokeColor="#3E6AE1" android:strokeWidth="1"/>
+    <path android:pathData="M 65,48 A 10,10 0 1,1 65,47.9 Z" android:strokeColor="#3E6AE1" android:strokeWidth="1.2" android:fillColor="#00000000"/>
+
+    <!-- Quadrant 2: FR (Front Right Wheel) Target Frame -->
+    <path
+        android:pathData="M 155,22 L 230,22 A 6,6 0 0,1 236,28 L 236,68 A 6,6 0 0,1 230,74 L 155,74 A 6,6 0 0,1 149,68 L 149,28 A 6,6 0 0,1 155,22 Z"
+        android:fillColor="#12253E"
+        android:strokeColor="#3E6AE1"
+        android:strokeWidth="1.5"/>
+    <!-- FR Wheel Icon -->
+    <path android:pathData="M 146,35 L 152,35 L 152,52 L 146,52 Z" android:fillColor="#00E676"/>
+    <!-- FR Crosshair/Reticle Target -->
+    <path android:pathData="M 175,48 L 215,48 M 195,30 L 195,66" android:strokeColor="#3E6AE1" android:strokeWidth="1"/>
+    <path android:pathData="M 195,48 A 10,10 0 1,1 195,47.9 Z" android:strokeColor="#3E6AE1" android:strokeWidth="1.2" android:fillColor="#00000000"/>
+
+    <!-- Quadrant 3: RL (Rear Left Wheel) Target Frame -->
+    <path
+        android:pathData="M 30,80 L 105,80 A 6,6 0 0,1 111,86 L 111,126 A 6,6 0 0,1 105,132 L 30,132 A 6,6 0 0,1 24,126 L 24,86 A 6,6 0 0,1 30,80 Z"
+        android:fillColor="#12253E"
+        android:strokeColor="#3E6AE1"
+        android:strokeWidth="1.5"/>
+    <!-- RL Wheel Icon -->
+    <path android:pathData="M 108,98 L 114,98 L 114,115 L 108,115 Z" android:fillColor="#00E676"/>
+    <!-- RL Crosshair Target -->
+    <path android:pathData="M 45,106 L 85,106 M 65,88 L 65,124" android:strokeColor="#3E6AE1" android:strokeWidth="1"/>
+    <path android:pathData="M 65,106 A 10,10 0 1,1 65,105.9 Z" android:strokeColor="#3E6AE1" android:strokeWidth="1.2" android:fillColor="#00000000"/>
+
+    <!-- Quadrant 4: RR (Rear Right Wheel) Target Frame -->
+    <path
+        android:pathData="M 155,80 L 230,80 A 6,6 0 0,1 236,86 L 236,126 A 6,6 0 0,1 230,132 L 155,132 A 6,6 0 0,1 149,86 L 149,86 A 6,6 0 0,1 155,80 Z"
+        android:fillColor="#12253E"
+        android:strokeColor="#3E6AE1"
+        android:strokeWidth="1.5"/>
+    <!-- RR Wheel Icon -->
+    <path android:pathData="M 146,98 L 152,98 L 152,115 L 146,115 Z" android:fillColor="#00E676"/>
+    <!-- RR Crosshair Target -->
+    <path android:pathData="M 175,106 L 215,106 M 195,88 L 195,124" android:strokeColor="#3E6AE1" android:strokeWidth="1"/>
+    <path android:pathData="M 195,106 A 10,10 0 1,1 195,105.9 Z" android:strokeColor="#3E6AE1" android:strokeWidth="1.2" android:fillColor="#00000000"/>
+</vector>

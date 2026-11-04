@@ -1,0 +1,14 @@
+{
+  "versionCode": 100,
+  "versionName": "1.0.0",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.0/BYDLaneWatch_v1.0.0.apk",
+  "size": 15420000,
+  "releaseDate": "2026-11-04",
+  "channel": "stable",
+  "whatsNew": "• BYD LaneWatch v1.0.0 OEM Automotive Edition\n• รองรับ Adaptive Side Navigation เต็มรูปแบบ (ซ้าย/ขวาตามพวงมาลัย)\n• ขยายการตั้งค่าหมุนละเอียดได้เต็มพิกัด ±180°\n• ระบบปลดล็อก Autostart ทันทีเมื่ออัปเดตซอฟต์แวร์เสร็จสิ้น",
+  "notes": [
+    "เวอร์ชันเสถียร (Stable Release) ผ่านการรับรองความเข้ากันได้กับ DiLink",
+    "ระบบกล้องทั้ง 3 โหมดทำงานได้อย่างสมบูรณ์",
+    "ระบบแบ็กอัปและกู้คืนค่าคอนฟิกทำงานอัตโนมัติ"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "versionCode": 101,
+  "versionName": "1.0.1-beta1",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.1-beta1/BYDLaneWatch_v1.0.1-beta1.apk",
+  "size": 15450000,
+  "releaseDate": "2026-11-05",
+  "channel": "beta",
+  "whatsNew": "• ฟังก์ชันทดลอง: ปรับปรุงประสิทธิภาพ OpenGL Shader ให้ลื่นไหลยิ่งขึ้น\n• ทดสอบการเชื่อมต่อ CAN Radar ความเร็วสูง",
+  "notes": [
+    "เวอร์ชันทดสอบ (Beta Channel) สำหรับผู้ร่วมทดสอบระบบล่วงหน้า",
+    "หากพบปัญหาในการใช้งาน สามารถสลับกลับมาใช้เวอร์ชัน Stable ได้ทุกเมื่อ"
+  ]
+}

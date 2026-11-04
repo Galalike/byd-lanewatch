@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- ON: 3D Glossy White Convex Knob with Beveled Edge -->
+    <item android:state_checked="true">
+        <layer-list>
+            <item android:top="2dp" android:bottom="2dp" android:left="2dp" android:right="2dp">
+                <shape android:shape="oval">
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#FFFFFF"
+                        android:centerColor="#F1F8E9"
+                        android:endColor="#DCEDC8"/>
+                    <stroke
+                        android:width="1.5dp"
+                        android:color="#FFFFFF"/>
+                    <size android:width="28dp" android:height="28dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <!-- OFF: 3D Metallic Dark Knob -->
+    <item>
+        <layer-list>
+            <item android:top="2dp" android:bottom="2dp" android:left="2dp" android:right="2dp">
+                <shape android:shape="oval">
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#636366"
+                        android:centerColor="#48484A"
+                        android:endColor="#2C2C2E"/>
+                    <stroke
+                        android:width="1.5dp"
+                        android:color="#7C7C80"/>
+                    <size android:width="28dp" android:height="28dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

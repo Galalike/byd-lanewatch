@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.BYDLaneWatch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/lw_bg_main</item>
+        <item name="android:statusBarColor">@color/lw_bg_main</item>
+        <item name="android:navigationBarColor">@color/lw_bg_main</item>
+        <item name="colorPrimary">@color/lw_accent_primary</item>
+        <item name="colorPrimaryVariant">@color/lw_accent_dark</item>
+        <item name="colorSecondary">@color/lw_accent_primary</item>
+        <item name="colorOnPrimary">@color/lw_btn_solid_text</item>
+        <item name="colorOnSecondary">@color/lw_btn_solid_text</item>
+        <item name="colorControlActivated">@color/lw_accent_primary</item>
+        <item name="colorControlHighlight">@color/lw_accent_soft</item>
+        <item name="colorSwitchThumbNormal">@color/white</item>
+    </style>
+</resources>

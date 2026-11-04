@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0F141C"
+    tools:context=".bev.studio.CalibrationStudioActivity">
+
+    <!-- Top Engineering Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:background="#161D27">
+
+        <Button
+            android:id="@+id/btnStudioBack"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="BACK"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:background="#242E3D"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="UNIVERSAL BEV CALIBRATION STUDIO"
+            android:textColor="#00E5FF"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <!-- Profile Selector Spinner -->
+        <Spinner
+            android:id="@+id/spinnerProfile"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:background="#242E3D"/>
+
+        <!-- Profile Status Badge -->
+        <TextView
+            android:id="@+id/tvProfileStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
+            android:paddingHorizontal="8dp"
+            android:gravity="center"
+            android:text="VERIFIED"
+            android:textColor="#00E676"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="#1B382B"/>
+
+        <!-- Hardware Compatibility Badge -->
+        <TextView
+            android:id="@+id/tvCompatStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginStart="6dp"
+            android:paddingHorizontal="8dp"
+            android:gravity="center"
+            android:text="COMPATIBLE"
+            android:textColor="#38BDF8"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="#162E44"/>
+
+        <!-- Space filler -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <!-- Camera Role Selector Tabs -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#1C2431"
+            android:padding="2dp">
+
+            <Button
+                android:id="@+id/btnTabFront"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="FRONT"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#00E5FF"
+                android:background="#2C3B4E"/>
+
+            <Button
+                android:id="@+id/btnTabRear"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="REAR"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#A0B3C6"
+                android:background="@android:color/transparent"/>
+
+            <Button
+                android:id="@+id/btnTabLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="LEFT"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#A0B3C6"
+                android:background="@android:color/transparent"/>
+
+            <Button
+                android:id="@+id/btnTabRight"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="RIGHT"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#A0B3C6"
+                android:background="@android:color/transparent"/>
+
+            <Button
+                android:id="@+id/btnTabBev360"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="360 BEV"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#FFB300"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <!-- Input Source Selector (HW / Mock) -->
+        <Button
+            android:id="@+id/btnToggleInputSource"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="10dp"
+            android:text="SRC: AUTO"
+            android:textColor="#38BDF8"
+            android:textSize="11sp"
+            android:background="#242E3D"/>
+
+    </LinearLayout>
+
+    <!-- Main Content Workspace (Split: Left Studio View, Right Numeric Controls) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!-- Calibration Studio Interactive Touch View -->
+        <com.nineoad.bydsignpicinpic.bev.studio.CalibrationStudioView
+            android:id="@+id/studioView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <!-- Vertical Divider -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#243040"/>
+
+        <!-- Right Numeric Dock (340dp width) -->
+        <ScrollView
+            android:id="@+id/dockScrollView"
+            android:layout_width="340dp"
+            android:layout_height="match_parent"
+            android:background="#131A24"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Card 1: 4 Corner Control Handles Selection -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1B2433"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4-CORNER CONTROL HANDLES"
+                        android:textColor="#00E5FF"
+                        android:textSize="11sp"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnSelectP0"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="P0 TL"
+                            android:textSize="11sp"
+                            android:textColor="#00E5FF"
+                            android:background="#2A384D"/>
+
+                        <Button
+                            android:id="@+id/btnSelectP1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="P1 TR"
+                            android:textSize="11sp"
+                            android:textColor="#A0B3C6"
+                            android:background="#1F2837"/>
+
+                        <Button
+                            android:id="@+id/btnSelectP2"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="P2 BR"
+                            android:textSize="11sp"
+                            android:textColor="#A0B3C6"
+                            android:background="#1F2837"/>
+
+                        <Button
+                            android:id="@+id/btnSelectP3"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="P3 BL"
+                            android:textSize="11sp"
+                            android:textColor="#A0B3C6"
+                            android:background="#1F2837"/>
+                    </LinearLayout>
+
+                    <!-- Coordinate Steppers for Active Handle -->
+                    <TextView
+                        android:id="@+id/tvActiveHandleCoord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="P0: X=0.000, Y=0.000"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"/>
+
+                    <!-- X Stepper -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:text="X Pos"
+                            android:textColor="#A0B3C6"
+                            android:textSize="12sp"/>
+
+                        <Button
+                            android:id="@+id/btnHandleXMinus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="-"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:background="#2A384D"/>
+
+                        <TextView
+                            android:id="@+id/tvValHandleX"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0.000"
+                            android:textColor="#00E5FF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"/>
+
+                        <Button
+                            android:id="@+id/btnHandleXPlus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="+"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:background="#2A384D"/>
+                    </LinearLayout>
+
+                    <!-- Y Stepper -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:text="Y Pos"
+                            android:textColor="#A0B3C6"
+                            android:textSize="12sp"/>
+
+                        <Button
+                            android:id="@+id/btnHandleYMinus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="-"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:background="#2A384D"/>
+
+                        <TextView
+                            android:id="@+id/tvValHandleY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0.000"
+                            android:textColor="#00E5FF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"/>
+
+                        <Button
+                            android:id="@+id/btnHandleYPlus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="+"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:background="#2A384D"/>
+                    </LinearLayout>
+
+                    <!-- Resolution Step Size Toggle -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnStepFine"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="Fine 0.002"
+                            android:textSize="10sp"
+                            android:textColor="#00E5FF"
+                            android:background="#2C3B4E"/>
+
+                        <Button
+                            android:id="@+id/btnStepNorm"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="Norm 0.01"
+                            android:textSize="10sp"
+                            android:textColor="#A0B3C6"
+                            android:background="#1F2837"/>
+
+                        <Button
+                            android:id="@+id/btnStepCoarse"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:text="Fast 0.05"
+                            android:textSize="10sp"
+                            android:textColor="#A0B3C6"
+                            android:background="#1F2837"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Card 2: Fine Rotation, Scale, Offset -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:background="#1B2433"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ROTATION &amp; SCALE RECTIFICATION"
+                        android:textColor="#38BDF8"
+                        android:textSize="11sp"
+                        android:textStyle="bold"/>
+
+                    <!-- Fine Rotation Stepper -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:text="Rotation"
+                            android:textColor="#A0B3C6"
+                            android:textSize="12sp"/>
+
+                        <Button
+                            android:id="@+id/btnRotMinus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="-0.5°"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            android:background="#2A384D"/>
+
+                        <TextView
+                            android:id="@+id/tvValRotation"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0.0°"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"/>
+
+                        <Button
+                            android:id="@+id/btnRotPlus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="+0.5°"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            android:background="#2A384D"/>
+                    </LinearLayout>
+
+                    <!-- Scale Stepper -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:text="Scale"
+                            android:textColor="#A0B3C6"
+                            android:textSize="12sp"/>
+
+                        <Button
+                            android:id="@+id/btnScaleMinus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="-"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:background="#2A384D"/>
+
+                        <TextView
+                            android:id="@+id/tvValScale"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="1.000"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"/>
+
+                        <Button
+                            android:id="@+id/btnScalePlus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="+"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:background="#2A384D"/>
+                    </LinearLayout>
+
+                    <!-- Distortion k1 Stepper -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:text="Fisheye k1"
+                            android:textColor="#A0B3C6"
+                            android:textSize="11sp"/>
+
+                        <Button
+                            android:id="@+id/btnDistMinus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="-"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:background="#2A384D"/>
+
+                        <TextView
+                            android:id="@+id/tvValDistortion"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="-0.150"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"/>
+
+                        <Button
+                            android:id="@+id/btnDistPlus"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"
+                            android:text="+"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:background="#2A384D"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Card 3: Vehicle Specs Readout -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:background="#1B2433"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VEHICLE DIMENSIONS SPEC"
+                        android:textColor="#A0B3C6"
+                        android:textSize="11sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvVehicleDimensions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="L: 4455mm | W: 1875mm | Wheelbase: 2720mm"
+                        android:textColor="#78909C"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <!-- Bottom Action Toolbar (Undo, Redo, Grid, Before/After, Import, Export, Save) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:background="#161D27">
+
+        <Button
+            android:id="@+id/btnUndo"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="UNDO"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:background="#242E3D"/>
+
+        <Button
+            android:id="@+id/btnRedo"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:text="REDO"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:background="#242E3D"/>
+
+        <Button
+            android:id="@+id/btnResetCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:text="RESET CAM"
+            android:textColor="#FF5252"
+            android:textSize="11sp"
+            android:background="#242E3D"/>
+
+        <Button
+            android:id="@+id/btnToggleGrid"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:text="GRID: ON"
+            android:textColor="#00E5FF"
+            android:textSize="11sp"
+            android:background="#242E3D"/>
+
+        <Button
+            android:id="@+id/btnBeforeAfter"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:text="BEFORE / AFTER"
+            android:textColor="#FFB300"
+            android:textSize="11sp"
+            android:background="#242E3D"/>
+
+        <!-- Space filler -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnExportJson"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:text="EXPORT JSON"
+            android:textColor="#A0B3C6"
+            android:textSize="11sp"
+            android:background="#242E3D"/>
+
+        <Button
+            android:id="@+id/btnImportJson"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:text="IMPORT JSON"
+            android:textColor="#A0B3C6"
+            android:textSize="11sp"
+            android:background="#242E3D"/>
+
+        <Button
+            android:id="@+id/btnDuplicateProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:text="DUPLICATE"
+            android:textColor="#A0B3C6"
+            android:textSize="11sp"
+            android:background="#242E3D"/>
+
+        <Button
+            android:id="@+id/btnSaveProfile"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:text="SAVE PROFILE"
+            android:textColor="#06283D"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="#00E5FF"/>
+
+    </LinearLayout>
+
+</LinearLayout>

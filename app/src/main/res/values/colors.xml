@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="brand">#3E6AE1</color>
+    <color name="neon_green">#34C759</color>
+    <color name="glass_card_bg">#FFFFFF</color>
+
+    <!-- Tesla Day Mode (Clean White & Slate with Tesla Blue Accent) -->
+    <color name="lw_bg_main">#F2F2F5</color>
+    <color name="lw_bg_card">#FFFFFF</color>
+    <color name="lw_bg_card_inner">#F8F8FA</color>
+    <color name="lw_bg_status">#EBEBEF</color>
+    <color name="lw_border_card">#E0E0E6</color>
+    <color name="lw_border_inner">#EAEAEF</color>
+    <color name="lw_divider">#E5E5EA</color>
+
+    <color name="lw_text_primary">#111113</color>
+    <color name="lw_text_secondary">#68686E</color>
+    <color name="lw_text_muted">#8E8E93</color>
+    <color name="lw_text_accent">#3E6AE1</color>
+
+    <color name="lw_accent_primary">#3E6AE1</color>
+    <color name="lw_accent_dark">#2A52BE</color>
+    <color name="lw_accent_soft">#EBF0FC</color>
+
+    <color name="lw_btn_solid_bg">#3E6AE1</color>
+    <color name="lw_btn_solid_text">#FFFFFF</color>
+    <color name="lw_btn_outline_stroke">#D1D1D6</color>
+    <color name="lw_btn_outline_text">#1C1C1E</color>
+    <color name="lw_dropdown_bg">#F4F4F7</color>
+    <color name="lw_dropdown_border">#D1D1D6</color>
+</resources>

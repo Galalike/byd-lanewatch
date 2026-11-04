@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CarRecources>
+    <!-- CarType 目前自学习提供，这里不做更改。-->
+    <CarType type="def" /><!--车型，通过车型使用指定资源，如果未检索到指定车型，请使用默认车型资源。这个通过车型自学习获取并更新-->
+    <!-- CarBodyColor 目前云服务流程还没有定，这里只是预留，当前左右车型颜色 按def 颜色渲染。-->
+    <CarBodyColor type="def" /><!--车体颜色，通过车体颜色使用相应指定车体，若未检索到指定车体颜色选项，请使用默认车体颜色。这个通过云服务下发更新-->
+    <Cars>
+        <Car type="def"><!--按车型解析-->
+            <CarBody>
+                <color type="def">hce_white_car.png</color><!--默认颜色车体-->
+                <color type="white">hce_white_car.png</color><!--白色颜色车体-->
+                <color type="black">hce_black_car.png</color><!--黑色颜色车体-->
+                <color type="red">hce_red_car.png</color><!--红色颜色车体-->
+                <color type="grey">hce_gray_car.png</color><!--灰色颜色车体-->
+                <TransparentCarBody>hce_def_t_car.png</TransparentCarBody><!--透明车体-->
+            </CarBody>
+            <NDCarBody>
+                <color type="def">hce_nd_white_car.png</color><!--默认颜色无车门车体-->
+                <color type="white">hce_nd_white_car.png</color><!--白色颜色无车门车体-->
+                <color type="black">hce_nd_black_car.png</color><!--黑色颜色无车门车体-->
+                <color type="red">hce_nd_red_car.png</color><!--红色颜色无车门车体-->
+                <color type="grey">hce_nd_gray_car.png</color><!--灰色颜色无车门车体-->
+            </NDCarBody>
+            <TNDCarBody>
+                <color type="def">hce_nd_t_car.png</color><!--默认颜色透明无车门车体-->
+                <color type="white">hce_nd_t_car.png</color><!--白色颜色无车门车体-->
+                <color type="black">hce_nd_t_car.png</color><!--黑色颜色无车门车体-->
+                <color type="red">hce_nd_t_car.png</color><!--红色颜色无车门车体-->
+                <color type="grey">hce_nd_t_car.png</color><!--灰色颜色无车门车体-->
+            </TNDCarBody>
+            <LRViewCarBody><!--前后两侧视角车体-->
+                <Front_LR_CarBody>hc_lr_car.png</Front_LR_CarBody><!--前两侧车体图-->
+                <Rear_LR_CarBody>hc_lr_car.png</Rear_LR_CarBody><!--后前两侧车体图-->
+                <LR_CarBody>hc_lr_car.png</LR_CarBody><!--后前两侧车体图-->
+            </LRViewCarBody>
+            <Door_Closeed>
+                <color type="def">
+                    <right_front_door>hce_nd_white_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>hce_nd_white_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>hce_nd_white_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>hce_nd_white_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+                <color type="white">
+                    <right_front_door>hce_nd_white_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>hce_nd_white_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>hce_nd_white_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>hce_nd_white_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+                <color type="black">
+                    <right_front_door>hce_nd_black_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>hce_nd_black_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>hce_nd_black_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>hce_nd_black_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+                <color type="red">
+                    <right_front_door>hce_nd_red_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>hce_nd_red_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>hce_nd_red_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>hce_nd_red_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+                <color type="grey">
+                    <right_front_door>hce_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>hce_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>hce_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>hce_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+            </Door_Closeed>
+            <Door_Opened>
+                <color type="def">
+                    <right_front_door>hce_white_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>hce_white_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>hce_white_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>hce_white_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>hce_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>hce_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+                <color type="white">
+                    <right_front_door>hce_white_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>hce_white_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>hce_white_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>hce_white_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>hce_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>hce_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+                <color type="black">
+                    <right_front_door>hce_black_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>hce_black_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>hce_black_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>hce_black_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>hce_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>hce_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+                <color type="red">
+                    <right_front_door>hce_red_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>hce_red_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>hce_red_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>hce_red_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>hce_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>hce_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+                <color type="grey">
+                    <right_front_door>hce_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>hce_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>hce_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>hce_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>hce_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>hce_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+            </Door_Opened>
+            <Transparent_Door_Closeed>
+                <right_front_door>hce_nd_t_car_fr_close.png</right_front_door><!--透明车体右前门关闭-->
+                <right_rear_door>hce_nd_t_car_rr_close.png</right_rear_door><!--透明车体右后门关闭-->
+                <left_front_door>hce_nd_t_car_fl_close.png</left_front_door><!--透明车体左前门关闭-->
+                <left_rear_door>hce_nd_t_car_rl_close.png</left_rear_door><!--透明车体左后门关闭-->
+            </Transparent_Door_Closeed>
+            <Transparent_Door_Opened>
+                <right_front_door>hce_t_car_fr_open.png</right_front_door><!--透明车体右前门开启-->
+                <right_rear_door>hce_t_car_rr_open.png</right_rear_door><!--透明车体右后门开启-->
+                <left_front_door>hce_t_car_fl_open.png</left_front_door><!--透明车体左前门开启-->
+                <left_rear_door>hce_t_car_rl_open.png</left_rear_door><!--透明车体左后门开启-->
+                <hood>hce_car_hood_open.png</hood><!--透明车体前舱盖开启-->
+                <trunk>hce_car_trunk_open.png</trunk><!--透明车体后备箱开启-->
+            </Transparent_Door_Opened>
+            <door_shadow>
+                <shadow_land_left>hc_shadow_land_left.png</shadow_land_left>
+                <shadow_land_right>hc_shadow_land_right.png</shadow_land_right>
+                <shadow_port_left>hc_shadow_port_left.png</shadow_port_left>
+                <shadow_port_right>hc_shadow_port_right.png</shadow_port_right>
+            </door_shadow>
+            <CarLogo>
+                <CarBody>
+                    <color type="def">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                    <color type="white">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                    <color type="black">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                    <color type="red">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                    <color type="grey">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                </CarBody>
+                <front>hc_front_2d.png</front><!--前视角-->
+                <left>hc_left_2d.png</left><!--左视角-->
+                <right>hc_right_2d.png</right><!--右视角-->
+                <rear>hc_rear_2d.png</rear><!--后视角-->
+                <front_l_r>mars_front_lr_2d.png</front_l_r><!--双前视视角-->
+                <rear_l_r>mars_rear_lr_2d.png</rear_l_r><!--双后视角-->
+                <front_wide>hc_front_wide_2d.png</front_wide><!--前广视角-->
+                <rear_wide>hc_rear_wide_2d.png</rear_wide><!--后广视角-->
+                <l_r_2d>hc_lr_2d.png</l_r_2d><!--双视角-->
+                <top_3d>hc_top_3d.png</top_3d><!--3D 顶视角-->
+                <front_3d>hc_front_3d.png</front_3d><!--3D 正前视角-->
+                <rear_3d>hc_rear_3d.png</rear_3d><!--3D 正后视角-->
+                <left_rear_3d>hc_left_rear_3d.png</left_rear_3d><!--3D 左后视角-->
+                <right_rear_3d>hc_right_rear_3d.png</right_rear_3d><!--3D 右后视角-->
+            </CarLogo>
+            <Car3DColor><!--3D 车模颜色 -->
+                <color type="def">white</color>
+            </Car3DColor>
+            <Car3DModels><!--3D 车模,后缀各自厂商自补,若后续同车型有不同车体时添加API控制 -->
+                <color type="def">car</color>
+            </Car3DModels>
+            <Car3DWheelModels><!--3D 车模车轮,后缀各自厂商自补,若后续同车型有不同车轮时添加API控制 -->
+                <color type="def">wheel</color>
+            </Car3DWheelModels>
+        </Car>
+        <Car type="sa2e"><!--按车型解析-->
+        <CarBody>
+            <color type="def">sa2h_gray_car.png</color><!--默认颜色车体-->
+            <color type="grey">sa2h_gray_car.png</color><!--灰色车体-->
+            <TransparentCarBody>sa2h_t_car.png</TransparentCarBody><!--透明车体-->
+        </CarBody>
+        <NDCarBody><!--无车门车体-->
+            <color type="def">sa2h_nd_gray_car.png</color>
+            <color type="grey">sa2h_nd_gray_car.png</color>
+        </NDCarBody>
+        <TNDCarBody><!--透明无车门车体-->
+            <color type="def">sa2h_nd_t_car.png</color>
+            <color type="grey">sa2h_nd_t_car.png</color>
+        </TNDCarBody>
+        <TWheel><!--透明车轮-->
+            <color type="def">sa2h_t_wheel.png</color>
+            <color type="grey">sa2h_t_wheel.png</color>
+        </TWheel>
+        <LRViewCarBody><!--前后两侧视角车体-->
+            <Front_LR_CarBody>sa2h_lr_car.png</Front_LR_CarBody><!--前两侧车体图-->
+            <Rear_LR_CarBody>sa2h_lr_car.png</Rear_LR_CarBody><!--后前两侧车体图-->
+            <LR_CarBody>sa2h_lr_car.png</LR_CarBody><!--后前两侧车体图-->
+        </LRViewCarBody>
+        <Door_Closeed>
+            <color type="def">
+                <right_front_door>sa2h_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                <right_rear_door>sa2h_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                <left_front_door>sa2h_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                <left_rear_door>sa2h_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+            </color>
+            <color type="grey">
+                <right_front_door>sa2h_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                <right_rear_door>sa2h_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                <left_front_door>sa2h_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                <left_rear_door>sa2h_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+            </color>
+        </Door_Closeed>
+        <Door_Opened>
+            <color type="def">
+                <right_front_door>sa2h_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                <right_rear_door>sa2h_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                <left_front_door>sa2h_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                <left_rear_door>sa2h_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                <hood>sa2h_car_hood_open.png</hood><!--前舱盖开启-->
+                <trunk>sa2h_car_trunk_open.png</trunk><!--后备箱开启-->
+            </color>
+            <color type="grey">
+                <right_front_door>sa2h_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                <right_rear_door>sa2h_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                <left_front_door>sa2h_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                <left_rear_door>sa2h_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                <hood>sa2h_car_hood_open.png</hood><!--前舱盖开启-->
+                <trunk>sa2h_car_trunk_open.png</trunk><!--后备箱开启-->
+            </color>
+        </Door_Opened>
+        <Transparent_Door_Closeed>
+            <right_front_door>sa2h_nd_t_car_fr_close.png</right_front_door><!--透明车体右前门关闭-->
+            <right_rear_door>sa2h_nd_t_car_rr_close.png</right_rear_door><!--透明车体右后门关闭-->
+            <left_front_door>sa2h_nd_t_car_fl_close.png</left_front_door><!--透明车体左前门关闭-->
+            <left_rear_door>sa2h_nd_t_car_rl_close.png</left_rear_door><!--透明车体左后门关闭-->
+        </Transparent_Door_Closeed>
+        <Transparent_Door_Opened>
+            <right_front_door>sa2h_t_car_fr_open.png</right_front_door><!--透明车体右前门开启-->
+            <right_rear_door>sa2h_t_car_rr_open.png</right_rear_door><!--透明车体右后门开启-->
+            <left_front_door>sa2h_t_car_fl_open.png</left_front_door><!--透明车体左前门开启-->
+            <left_rear_door>sa2h_t_car_rl_open.png</left_rear_door><!--透明车体左后门开启-->
+            <hood>sa2h_car_hood_open.png</hood><!--透明车体前舱盖开启-->
+            <trunk>sa2h_car_trunk_open.png</trunk><!--透明车体后备箱开启-->
+        </Transparent_Door_Opened>
+        <door_shadow>
+            <shadow_land_left>sa2h_shadow_land_left.png</shadow_land_left>
+            <shadow_land_right>sa2h_shadow_land_right.png</shadow_land_right>
+            <shadow_port_left>sa2h_shadow_port_left.png</shadow_port_left>
+            <shadow_port_right>sa2h_shadow_port_right.png</shadow_port_right>
+        </door_shadow>
+        <CarLogo>
+            <CarBody>
+                <color type="def">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                <color type="grey">def_car_logo.png</color><!--时光灰视角标记车体-->
+                <color type="white">def_car_logo.png</color><!--雪域白视角标记车体-->
+                <color type="mountain_grey">def_car_logo.png</color><!--山脉灰视角标记车体-->
+                <color type="red">def_car_logo.png</color><!--赤帝红视角标记车体-->
+                <color type="tianshan_white">def_car_logo.png</color><!--天山白视角标记车体-->
+                <color type="black">def_car_logo.png</color><!--德兰黑视角标记车体-->
+                <color type="blue">def_car_logo.png</color><!--蓝色视角标记车体-->
+            </CarBody>
+            <front>hc_front_2d.png</front><!--前视角-->
+            <left>hc_left_2d.png</left><!--左视角-->
+            <right>hc_right_2d.png</right><!--右视角-->
+            <rear>hc_rear_2d.png</rear><!--后视角-->
+            <front_l_r>mars_front_lr_2d.png</front_l_r><!--双前视视角-->
+            <rear_l_r>mars_rear_lr_2d.png</rear_l_r><!--双后视角-->
+            <front_wide>hc_front_wide_2d.png</front_wide><!--前广视角-->
+            <rear_wide>hc_rear_wide_2d.png</rear_wide><!--后广视角-->
+            <l_r_2d>hc_lr_2d.png</l_r_2d><!--双视角-->
+            <top_3d>hc_top_3d.png</top_3d><!--3D 顶视角-->
+            <front_3d>hc_front_3d.png</front_3d><!--3D 正前视角-->
+            <rear_3d>hc_rear_3d.png</rear_3d><!--3D 正后视角-->
+            <left_rear_3d>hc_left_rear_3d.png</left_rear_3d><!--3D 左后视角-->
+            <right_rear_3d>hc_right_rear_3d.png</right_rear_3d><!--3D 右后视角-->
+        </CarLogo>
+        <Car3DColor><!--3D 车模颜色 -->
+            <color type="def">white</color>
+        </Car3DColor>
+        <Car3DModels><!--3D 车模,后缀各自厂商自补,若后续同车型有不同车体时添加API控制 -->
+            <color type="def">car</color>
+        </Car3DModels>
+        <Car3DWheelModels><!--3D 车模车轮,后缀各自厂商自补,若后续同车型有不同车轮时添加API控制 -->
+            <color type="def">wheel</color>
+        </Car3DWheelModels>
+    </Car>
+        <Car type="sa2h"><!--按车型解析-->
+            <CarBody>
+                <color type="def">sa2h_gray_car.png</color><!--默认颜色车体-->
+                <color type="grey">sa2h_gray_car.png</color><!--灰色车体-->
+                <TransparentCarBody>sa2h_t_car.png</TransparentCarBody><!--透明车体-->
+            </CarBody>
+            <NDCarBody><!--无车门车体-->
+                <color type="def">sa2h_nd_gray_car.png</color>
+                <color type="grey">sa2h_nd_gray_car.png</color>
+            </NDCarBody>
+            <TNDCarBody><!--透明无车门车体-->
+                <color type="def">sa2h_nd_t_car.png</color>
+                <color type="grey">sa2h_nd_t_car.png</color>
+            </TNDCarBody>
+            <TWheel><!--透明车轮-->
+                <color type="def">sa2h_t_wheel.png</color>
+                <color type="grey">sa2h_t_wheel.png</color>
+            </TWheel>
+            <LRViewCarBody><!--前后两侧视角车体-->
+                <Front_LR_CarBody>sa2h_lr_car.png</Front_LR_CarBody><!--前两侧车体图-->
+                <Rear_LR_CarBody>sa2h_lr_car.png</Rear_LR_CarBody><!--后前两侧车体图-->
+                <LR_CarBody>sa2h_lr_car.png</LR_CarBody><!--后前两侧车体图-->
+            </LRViewCarBody>
+            <Door_Closeed>
+                <color type="def">
+                    <right_front_door>sa2h_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>sa2h_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>sa2h_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>sa2h_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+                <color type="grey">
+                    <right_front_door>sa2h_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>sa2h_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>sa2h_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>sa2h_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+            </Door_Closeed>
+            <Door_Opened>
+                <color type="def">
+                    <right_front_door>sa2h_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>sa2h_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>sa2h_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>sa2h_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>sa2h_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>sa2h_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+                <color type="grey">
+                    <right_front_door>sa2h_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>sa2h_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>sa2h_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>sa2h_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>sa2h_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>sa2h_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+            </Door_Opened>
+            <Transparent_Door_Closeed>
+                <right_front_door>sa2h_nd_t_car_fr_close.png</right_front_door><!--透明车体右前门关闭-->
+                <right_rear_door>sa2h_nd_t_car_rr_close.png</right_rear_door><!--透明车体右后门关闭-->
+                <left_front_door>sa2h_nd_t_car_fl_close.png</left_front_door><!--透明车体左前门关闭-->
+                <left_rear_door>sa2h_nd_t_car_rl_close.png</left_rear_door><!--透明车体左后门关闭-->
+            </Transparent_Door_Closeed>
+            <Transparent_Door_Opened>
+                <right_front_door>sa2h_t_car_fr_open.png</right_front_door><!--透明车体右前门开启-->
+                <right_rear_door>sa2h_t_car_rr_open.png</right_rear_door><!--透明车体右后门开启-->
+                <left_front_door>sa2h_t_car_fl_open.png</left_front_door><!--透明车体左前门开启-->
+                <left_rear_door>sa2h_t_car_rl_open.png</left_rear_door><!--透明车体左后门开启-->
+                <hood>sa2h_car_hood_open.png</hood><!--透明车体前舱盖开启-->
+                <trunk>sa2h_car_trunk_open.png</trunk><!--透明车体后备箱开启-->
+            </Transparent_Door_Opened>
+            <door_shadow>
+                <shadow_land_left>sa2h_shadow_land_left.png</shadow_land_left>
+                <shadow_land_right>sa2h_shadow_land_right.png</shadow_land_right>
+                <shadow_port_left>sa2h_shadow_port_left.png</shadow_port_left>
+                <shadow_port_right>sa2h_shadow_port_right.png</shadow_port_right>
+            </door_shadow>
+            <CarLogo>
+                <CarBody>
+                    <color type="def">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                    <color type="grey">def_car_logo.png</color><!--时光灰视角标记车体-->
+                    <color type="white">def_car_logo.png</color><!--雪域白视角标记车体-->
+                    <color type="mountain_grey">def_car_logo.png</color><!--山脉灰视角标记车体-->
+                    <color type="red">def_car_logo.png</color><!--赤帝红视角标记车体-->
+                    <color type="tianshan_white">def_car_logo.png</color><!--天山白视角标记车体-->
+                    <color type="black">def_car_logo.png</color><!--德兰黑视角标记车体-->
+                    <color type="blue">def_car_logo.png</color><!--蓝色视角标记车体-->
+                </CarBody>
+                <front>hc_front_2d.png</front><!--前视角-->
+                <left>hc_left_2d.png</left><!--左视角-->
+                <right>hc_right_2d.png</right><!--右视角-->
+                <rear>hc_rear_2d.png</rear><!--后视角-->
+                <front_l_r>mars_front_lr_2d.png</front_l_r><!--双前视视角-->
+                <rear_l_r>mars_rear_lr_2d.png</rear_l_r><!--双后视角-->
+                <front_wide>hc_front_wide_2d.png</front_wide><!--前广视角-->
+                <rear_wide>hc_rear_wide_2d.png</rear_wide><!--后广视角-->
+                <l_r_2d>hc_lr_2d.png</l_r_2d><!--双视角-->
+                <top_3d>hc_top_3d.png</top_3d><!--3D 顶视角-->
+                <front_3d>hc_front_3d.png</front_3d><!--3D 正前视角-->
+                <rear_3d>hc_rear_3d.png</rear_3d><!--3D 正后视角-->
+                <left_rear_3d>hc_left_rear_3d.png</left_rear_3d><!--3D 左后视角-->
+                <right_rear_3d>hc_right_rear_3d.png</right_rear_3d><!--3D 右后视角-->
+            </CarLogo>
+            <Car3DColor><!--3D 车模颜色 -->
+                <color type="def">white</color>
+            </Car3DColor>
+            <Car3DModels><!--3D 车模,后缀各自厂商自补,若后续同车型有不同车体时添加API控制 -->
+                <color type="def">car</color>
+            </Car3DModels>
+            <Car3DWheelModels><!--3D 车模车轮,后缀各自厂商自补,若后续同车型有不同车轮时添加API控制 -->
+                <color type="def">wheel</color>
+            </Car3DWheelModels>
+        </Car>
+        <Car type="sa2f"><!--按车型解析-->
+            <CarBody>
+                <color type="def">sa2h_gray_car.png</color><!--默认颜色车体-->
+                <color type="grey">sa2h_gray_car.png</color><!--灰色车体-->
+                <TransparentCarBody>sa2h_t_car.png</TransparentCarBody><!--透明车体-->
+            </CarBody>
+            <NDCarBody><!--无车门车体-->
+                <color type="def">sa2h_nd_gray_car.png</color>
+                <color type="grey">sa2h_nd_gray_car.png</color>
+            </NDCarBody>
+            <TNDCarBody><!--透明无车门车体-->
+                <color type="def">sa2h_nd_t_car.png</color>
+                <color type="grey">sa2h_nd_t_car.png</color>
+            </TNDCarBody>
+            <TWheel><!--透明车轮-->
+                <color type="def">sa2h_t_wheel.png</color>
+                <color type="grey">sa2h_t_wheel.png</color>
+            </TWheel>
+            <LRViewCarBody><!--前后两侧视角车体-->
+                <Front_LR_CarBody>sa2h_lr_car.png</Front_LR_CarBody><!--前两侧车体图-->
+                <Rear_LR_CarBody>sa2h_lr_car.png</Rear_LR_CarBody><!--后前两侧车体图-->
+                <LR_CarBody>sa2h_lr_car.png</LR_CarBody><!--后前两侧车体图-->
+            </LRViewCarBody>
+            <Door_Closeed>
+                <color type="def">
+                    <right_front_door>sa2h_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>sa2h_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>sa2h_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>sa2h_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+                <color type="grey">
+                    <right_front_door>sa2h_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>sa2h_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>sa2h_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>sa2h_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+            </Door_Closeed>
+            <Door_Opened>
+                <color type="def">
+                    <right_front_door>sa2h_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>sa2h_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>sa2h_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>sa2h_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>sa2h_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>sa2h_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+                <color type="grey">
+                    <right_front_door>sa2h_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>sa2h_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>sa2h_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>sa2h_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>sa2h_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>sa2h_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+            </Door_Opened>
+            <Transparent_Door_Closeed>
+                <right_front_door>sa2h_nd_t_car_fr_close.png</right_front_door><!--透明车体右前门关闭-->
+                <right_rear_door>sa2h_nd_t_car_rr_close.png</right_rear_door><!--透明车体右后门关闭-->
+                <left_front_door>sa2h_nd_t_car_fl_close.png</left_front_door><!--透明车体左前门关闭-->
+                <left_rear_door>sa2h_nd_t_car_rl_close.png</left_rear_door><!--透明车体左后门关闭-->
+            </Transparent_Door_Closeed>
+            <Transparent_Door_Opened>
+                <right_front_door>sa2h_t_car_fr_open.png</right_front_door><!--透明车体右前门开启-->
+                <right_rear_door>sa2h_t_car_rr_open.png</right_rear_door><!--透明车体右后门开启-->
+                <left_front_door>sa2h_t_car_fl_open.png</left_front_door><!--透明车体左前门开启-->
+                <left_rear_door>sa2h_t_car_rl_open.png</left_rear_door><!--透明车体左后门开启-->
+                <hood>sa2h_car_hood_open.png</hood><!--透明车体前舱盖开启-->
+                <trunk>sa2h_car_trunk_open.png</trunk><!--透明车体后备箱开启-->
+            </Transparent_Door_Opened>
+            <door_shadow>
+                <shadow_land_left>sa2h_shadow_land_left.png</shadow_land_left>
+                <shadow_land_right>sa2h_shadow_land_right.png</shadow_land_right>
+                <shadow_port_left>sa2h_shadow_port_left.png</shadow_port_left>
+                <shadow_port_right>sa2h_shadow_port_right.png</shadow_port_right>
+            </door_shadow>
+            <CarLogo>
+                <CarBody>
+                    <color type="def">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                    <color type="grey">def_car_logo.png</color><!--时光灰视角标记车体-->
+                    <color type="white">def_car_logo.png</color><!--雪域白视角标记车体-->
+                    <color type="mountain_grey">def_car_logo.png</color><!--山脉灰视角标记车体-->
+                    <color type="red">def_car_logo.png</color><!--赤帝红视角标记车体-->
+                    <color type="tianshan_white">def_car_logo.png</color><!--天山白视角标记车体-->
+                    <color type="black">def_car_logo.png</color><!--德兰黑视角标记车体-->
+                    <color type="blue">def_car_logo.png</color><!--蓝色视角标记车体-->
+                </CarBody>
+                <front>hc_front_2d.png</front><!--前视角-->
+                <left>hc_left_2d.png</left><!--左视角-->
+                <right>hc_right_2d.png</right><!--右视角-->
+                <rear>hc_rear_2d.png</rear><!--后视角-->
+                <front_l_r>mars_front_lr_2d.png</front_l_r><!--双前视视角-->
+                <rear_l_r>mars_rear_lr_2d.png</rear_l_r><!--双后视角-->
+                <front_wide>hc_front_wide_2d.png</front_wide><!--前广视角-->
+                <rear_wide>hc_rear_wide_2d.png</rear_wide><!--后广视角-->
+                <l_r_2d>hc_lr_2d.png</l_r_2d><!--双视角-->
+                <top_3d>hc_top_3d.png</top_3d><!--3D 顶视角-->
+                <front_3d>hc_front_3d.png</front_3d><!--3D 正前视角-->
+                <rear_3d>hc_rear_3d.png</rear_3d><!--3D 正后视角-->
+                <left_rear_3d>hc_left_rear_3d.png</left_rear_3d><!--3D 左后视角-->
+                <right_rear_3d>hc_right_rear_3d.png</right_rear_3d><!--3D 右后视角-->
+            </CarLogo>
+            <Car3DColor><!--3D 车模颜色 -->
+                <color type="def">white</color>
+            </Car3DColor>
+            <Car3DModels><!--3D 车模,后缀各自厂商自补,若后续同车型有不同车体时添加API控制 -->
+                <color type="def">car</color>
+            </Car3DModels>
+            <Car3DWheelModels><!--3D 车模车轮,后缀各自厂商自补,若后续同车型有不同车轮时添加API控制 -->
+                <color type="def">wheel</color>
+            </Car3DWheelModels>
+        </Car>
+        <Car type="sc2e"><!--按车型解析-->
+            <CarBody>
+                <color type="def">sc2e_gray_car.png</color><!--默认颜色车体-->
+                <color type="grey">sc2e_gray_car.png</color><!--灰色车体-->
+                <TransparentCarBody>sc2e_t_car.png</TransparentCarBody><!--透明车体-->
+            </CarBody>
+            <NDCarBody><!--无车门车体-->
+                <color type="def">sc2e_nd_gray_car.png</color>
+                <color type="grey">sc2e_nd_gray_car.png</color>
+            </NDCarBody>
+            <TNDCarBody><!--透明无车门车体-->
+                <color type="def">sc2e_nd_t_car.png</color>
+                <color type="grey">sc2e_nd_t_car.png</color>
+            </TNDCarBody>
+            <TWheel><!--透明车轮-->
+                <color type="def">sc2e_t_wheel.png</color>
+                <color type="grey">sc2e_t_wheel.png</color>
+            </TWheel>
+            <LRViewCarBody><!--前后两侧视角车体-->
+                <Front_LR_CarBody>sc2e_lr_car.png</Front_LR_CarBody><!--前两侧车体图-->
+                <Rear_LR_CarBody>sc2e_lr_car.png</Rear_LR_CarBody><!--后前两侧车体图-->
+                <LR_CarBody>sc2e_lr_car.png</LR_CarBody><!--后前两侧车体图-->
+            </LRViewCarBody>
+            <Door_Closeed>
+                <color type="def">
+                    <right_front_door>sc2e_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>sc2e_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>sc2e_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>sc2e_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+                <color type="grey">
+                    <right_front_door>sc2e_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>sc2e_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>sc2e_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>sc2e_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+            </Door_Closeed>
+            <Door_Opened>
+                <color type="def">
+                    <right_front_door>sc2e_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>sc2e_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>sc2e_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>sc2e_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>sc2e_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>sc2e_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+                <color type="grey">
+                    <right_front_door>sc2e_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>sc2e_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>sc2e_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>sc2e_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>sc2e_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>sc2e_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+            </Door_Opened>
+            <Transparent_Door_Closeed>
+                <right_front_door>sc2e_nd_t_car_fr_close.png</right_front_door><!--透明车体右前门关闭-->
+                <right_rear_door>sc2e_nd_t_car_rr_close.png</right_rear_door><!--透明车体右后门关闭-->
+                <left_front_door>sc2e_nd_t_car_fl_close.png</left_front_door><!--透明车体左前门关闭-->
+                <left_rear_door>sc2e_nd_t_car_rl_close.png</left_rear_door><!--透明车体左后门关闭-->
+            </Transparent_Door_Closeed>
+            <Transparent_Door_Opened>
+                <right_front_door>sc2e_t_car_fr_open.png</right_front_door><!--透明车体右前门开启-->
+                <right_rear_door>sc2e_t_car_rr_open.png</right_rear_door><!--透明车体右后门开启-->
+                <left_front_door>sc2e_t_car_fl_open.png</left_front_door><!--透明车体左前门开启-->
+                <left_rear_door>sc2e_t_car_rl_open.png</left_rear_door><!--透明车体左后门开启-->
+                <hood>sc2e_car_hood_open.png</hood><!--透明车体前舱盖开启-->
+                <trunk>sc2e_car_trunk_open.png</trunk><!--透明车体后备箱开启-->
+            </Transparent_Door_Opened>
+            <door_shadow>
+                <shadow_land_left>sc2e_shadow_land_left.png</shadow_land_left>
+                <shadow_land_right>sc2e_shadow_land_right.png</shadow_land_right>
+                <shadow_port_left>sc2e_shadow_port_left.png</shadow_port_left>
+                <shadow_port_right>sc2e_shadow_port_right.png</shadow_port_right>
+            </door_shadow>
+            <CarLogo>
+                <CarBody>
+                    <color type="def">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                    <color type="grey">def_car_logo.png</color><!--时光灰视角标记车体-->
+                    <color type="white">def_car_logo.png</color><!--雪域白视角标记车体-->
+                    <color type="mountain_grey">def_car_logo.png</color><!--山脉灰视角标记车体-->
+                    <color type="red">def_car_logo.png</color><!--赤帝红视角标记车体-->
+                    <color type="tianshan_white">def_car_logo.png</color><!--天山白视角标记车体-->
+                    <color type="black">def_car_logo.png</color><!--德兰黑视角标记车体-->
+                    <color type="blue">def_car_logo.png</color><!--蓝色视角标记车体-->
+                </CarBody>
+                <front>hc_front_2d.png</front><!--前视角-->
+                <left>hc_left_2d.png</left><!--左视角-->
+                <right>hc_right_2d.png</right><!--右视角-->
+                <rear>hc_rear_2d.png</rear><!--后视角-->
+                <front_l_r>mars_front_lr_2d.png</front_l_r><!--双前视视角-->
+                <rear_l_r>mars_rear_lr_2d.png</rear_l_r><!--双后视角-->
+                <front_wide>hc_front_wide_2d.png</front_wide><!--前广视角-->
+                <rear_wide>hc_rear_wide_2d.png</rear_wide><!--后广视角-->
+                <l_r_2d>hc_lr_2d.png</l_r_2d><!--双视角-->
+                <top_3d>hc_top_3d.png</top_3d><!--3D 顶视角-->
+                <front_3d>hc_front_3d.png</front_3d><!--3D 正前视角-->
+                <rear_3d>hc_rear_3d.png</rear_3d><!--3D 正后视角-->
+                <left_rear_3d>hc_left_rear_3d.png</left_rear_3d><!--3D 左后视角-->
+                <right_rear_3d>hc_right_rear_3d.png</right_rear_3d><!--3D 右后视角-->
+            </CarLogo>
+            <Car3DColor><!--3D 车模颜色 -->
+                <color type="def">white</color>
+            </Car3DColor>
+            <Car3DModels><!--3D 车模,后缀各自厂商自补,若后续同车型有不同车体时添加API控制 -->
+                <color type="def">car</color>
+            </Car3DModels>
+            <Car3DWheelModels><!--3D 车模车轮,后缀各自厂商自补,若后续同车型有不同车轮时添加API控制 -->
+                <color type="def">wheel</color>
+            </Car3DWheelModels>
+        </Car>
+        <Car type="sc2e_right"><!--按车型解析-->
+            <CarBody>
+                <color type="def">sc2e_gray_car.png</color><!--默认颜色车体-->
+                <color type="grey">sc2e_gray_car.png</color><!--灰色车体-->
+                <TransparentCarBody>sc2e_t_car.png</TransparentCarBody><!--透明车体-->
+            </CarBody>
+            <NDCarBody><!--无车门车体-->
+                <color type="def">sc2e_nd_gray_car.png</color>
+                <color type="grey">sc2e_nd_gray_car.png</color>
+            </NDCarBody>
+            <TNDCarBody><!--透明无车门车体-->
+                <color type="def">sc2e_nd_t_car.png</color>
+                <color type="grey">sc2e_nd_t_car.png</color>
+            </TNDCarBody>
+            <TWheel><!--透明车轮-->
+                <color type="def">sc2e_t_wheel.png</color>
+                <color type="grey">sc2e_t_wheel.png</color>
+            </TWheel>
+            <LRViewCarBody><!--前后两侧视角车体-->
+                <Front_LR_CarBody>sc2e_lr_car.png</Front_LR_CarBody><!--前两侧车体图-->
+                <Rear_LR_CarBody>sc2e_lr_car.png</Rear_LR_CarBody><!--后前两侧车体图-->
+                <LR_CarBody>sc2e_lr_car.png</LR_CarBody><!--后前两侧车体图-->
+            </LRViewCarBody>
+            <Door_Closeed>
+                <color type="def">
+                    <right_front_door>sc2e_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>sc2e_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>sc2e_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>sc2e_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+                <color type="grey">
+                    <right_front_door>sc2e_nd_gray_car_fr_close.png</right_front_door><!--右前门关闭-->
+                    <right_rear_door>sc2e_nd_gray_car_rr_close.png</right_rear_door><!--右后门关闭-->
+                    <left_front_door>sc2e_nd_gray_car_fl_close.png</left_front_door><!--左前门关闭-->
+                    <left_rear_door>sc2e_nd_gray_car_rl_close.png</left_rear_door><!--左后门关闭-->
+                </color>
+            </Door_Closeed>
+            <Door_Opened>
+                <color type="def">
+                    <right_front_door>sc2e_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>sc2e_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>sc2e_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>sc2e_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>sc2e_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>sc2e_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+                <color type="grey">
+                    <right_front_door>sc2e_gray_car_fr_open.png</right_front_door><!--右前门开启-->
+                    <right_rear_door>sc2e_gray_car_rr_open.png</right_rear_door><!--右后门开启-->
+                    <left_front_door>sc2e_gray_car_fl_open.png</left_front_door><!--左前门开启-->
+                    <left_rear_door>sc2e_gray_car_rl_open.png</left_rear_door><!--左后门开启-->
+                    <hood>sc2e_car_hood_open.png</hood><!--前舱盖开启-->
+                    <trunk>sc2e_car_trunk_open.png</trunk><!--后备箱开启-->
+                </color>
+            </Door_Opened>
+            <Transparent_Door_Closeed>
+                <right_front_door>sc2e_nd_t_car_fr_close.png</right_front_door><!--透明车体右前门关闭-->
+                <right_rear_door>sc2e_nd_t_car_rr_close.png</right_rear_door><!--透明车体右后门关闭-->
+                <left_front_door>sc2e_nd_t_car_fl_close.png</left_front_door><!--透明车体左前门关闭-->
+                <left_rear_door>sc2e_nd_t_car_rl_close.png</left_rear_door><!--透明车体左后门关闭-->
+            </Transparent_Door_Closeed>
+            <Transparent_Door_Opened>
+                <right_front_door>sc2e_t_car_fr_open.png</right_front_door><!--透明车体右前门开启-->
+                <right_rear_door>sc2e_t_car_rr_open.png</right_rear_door><!--透明车体右后门开启-->
+                <left_front_door>sc2e_t_car_fl_open.png</left_front_door><!--透明车体左前门开启-->
+                <left_rear_door>sc2e_t_car_rl_open.png</left_rear_door><!--透明车体左后门开启-->
+                <hood>sc2e_car_hood_open.png</hood><!--透明车体前舱盖开启-->
+                <trunk>sc2e_car_trunk_open.png</trunk><!--透明车体后备箱开启-->
+            </Transparent_Door_Opened>
+            <door_shadow>
+                <shadow_land_left>sc2e_shadow_land_left.png</shadow_land_left>
+                <shadow_land_right>sc2e_shadow_land_right.png</shadow_land_right>
+                <shadow_port_left>sc2e_shadow_port_left.png</shadow_port_left>
+                <shadow_port_right>sc2e_shadow_port_right.png</shadow_port_right>
+            </door_shadow>
+            <CarLogo>
+                <CarBody>
+                    <color type="def">def_car_logo.png</color><!--默认颜色视角标记车体-->
+                    <color type="grey">def_car_logo.png</color><!--时光灰视角标记车体-->
+                    <color type="white">def_car_logo.png</color><!--雪域白视角标记车体-->
+                    <color type="mountain_grey">def_car_logo.png</color><!--山脉灰视角标记车体-->
+                    <color type="red">def_car_logo.png</color><!--赤帝红视角标记车体-->
+                    <color type="tianshan_white">def_car_logo.png</color><!--天山白视角标记车体-->
+                    <color type="black">def_car_logo.png</color><!--德兰黑视角标记车体-->
+                    <color type="blue">def_car_logo.png</color><!--蓝色视角标记车体-->
+                </CarBody>
+                <front>hc_front_2d.png</front><!--前视角-->
+                <left>hc_left_2d.png</left><!--左视角-->
+                <right>hc_right_2d.png</right><!--右视角-->
+                <rear>hc_rear_2d.png</rear><!--后视角-->
+                <front_l_r>mars_front_lr_2d.png</front_l_r><!--双前视视角-->
+                <rear_l_r>mars_rear_lr_2d.png</rear_l_r><!--双后视角-->
+                <front_wide>hc_front_wide_2d.png</front_wide><!--前广视角-->
+                <rear_wide>hc_rear_wide_2d.png</rear_wide><!--后广视角-->
+                <l_r_2d>hc_lr_2d.png</l_r_2d><!--双视角-->
+                <top_3d>hc_top_3d.png</top_3d><!--3D 顶视角-->
+                <front_3d>hc_front_3d.png</front_3d><!--3D 正前视角-->
+                <rear_3d>hc_rear_3d.png</rear_3d><!--3D 正后视角-->
+                <left_rear_3d>hc_left_rear_3d.png</left_rear_3d><!--3D 左后视角-->
+                <right_rear_3d>hc_right_rear_3d.png</right_rear_3d><!--3D 右后视角-->
+            </CarLogo>
+            <Car3DColor><!--3D 车模颜色 -->
+                <color type="def">white</color>
+            </Car3DColor>
+            <Car3DModels><!--3D 车模,后缀各自厂商自补,若后续同车型有不同车体时添加API控制 -->
+                <color type="def">car</color>
+            </Car3DModels>
+            <Car3DWheelModels><!--3D 车模车轮,后缀各自厂商自补,若后续同车型有不同车轮时添加API控制 -->
+                <color type="def">wheel</color>
+            </Car3DWheelModels>
+        </Car>
+    </Cars>
+</CarRecources>

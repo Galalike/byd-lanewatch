@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BYD LaneWatch</string>
+    <string name="accessibility_service_description">Intercepts steering wheel button to toggle Digital Rearview Mirror (BYD LaneWatch)</string>
+    <string name="app_subtitle">Intelligent Camera Assist System</string>
+    <string name="status_active">● Active &amp; Monitoring</string>
+    <string name="btn_overlay_perm">Overlay Permission</string>
+
+    <string name="col1_badge">BLIND SPOT CAMERA</string>
+    <string name="col1_title">Turn Signal Camera</string>
+    <string name="col1_desc">Automatically display blind-spot camera on turn signal</string>
+    <string name="col1_preset_label">Display Mode Preset</string>
+    <string name="col1_linger_title">Linger Delay</string>
+    <string name="col1_linger_sub">Keep camera visible after signal off</string>
+    <string name="col1_triggers_header">ACTIVE TRIGGERS</string>
+    <string name="col1_trig_left">Left Turn Signal</string>
+    <string name="col1_trig_right">Right Turn Signal</string>
+    <string name="col1_trig_hazard">Hazard Lights</string>
+    <string name="col1_btn_drop_show">Settings &amp; Tuning [v]</string>
+    <string name="col1_test_header">QUICK PREVIEW TEST</string>
+    <string name="btn_left">Left</string>
+    <string name="btn_right">Right</string>
+    <string name="btn_hazard">Hazard</string>
+    <string name="btn_hide">Hide</string>
+    <string name="col1_tune_header">CUSTOM MODE TUNING</string>
+    <string name="col1_tune_side">Camera Side</string>
+    <string name="col1_tune_rotate">Rotate 90°</string>
+    <string name="col1_tune_fine">Fine Angle</string>
+    <string name="col1_tune_mirror">Mirror H</string>
+    <string name="col1_tune_flipv">Flip V</string>
+    <string name="col1_crop_header">CROP FRAMING</string>
+    <string name="lbl_top">Top</string>
+    <string name="lbl_bottom">Bottom</string>
+    <string name="lbl_left">Left</string>
+    <string name="lbl_right">Right</string>
+    <string name="lbl_corner">Corner</string>
+    <string name="col1_fe_header">FISHEYE CORRECTION</string>
+    <string name="lbl_strength">Strength</string>
+    <string name="lbl_zoom">Zoom</string>
+    <string name="lbl_center_x">Center X</string>
+    <string name="lbl_center_y">Center Y</string>
+    <string name="btn_save_show">Save &amp; View</string>
+    <string name="btn_reset">Reset</string>
+
+    <string name="col2_badge">DIGITAL REARVIEW</string>
+    <string name="col2_title">Digital Rearview Mirror</string>
+    <string name="col2_desc">Wide-angle rear camera stream (double-tap window to close)</string>
+    <string name="col2_btn_toggle">Toggle View</string>
+    <string name="col2_shortcut_header">STEERING WHEEL SHORTCUT</string>
+    <string name="col2_shortcut_enable">Enable Steering Key</string>
+    <string name="col2_btn_acc_perm">Accessibility</string>
+    <string name="col2_btn_bind_key">Bind Key</string>
+    <string name="col2_btn_drop_show">Mirror Tuning [v]</string>
+    <string name="col2_cal_header">REARVIEW CALIBRATION</string>
+    <string name="col2_btn_reset">Reset Rearview Defaults</string>
+
+    <string name="col3_badge">FRONT WHEELS</string>
+    <string name="col3_title">Front Wheels Blindspot</string>
+    <string name="col3_desc">Auto show front wheel curb view on steering turn (Left/Right)</string>
+    <string name="col3_btn_toggle">Toggle Front Wheels (Test)</string>
+    <string name="col3_auto_header">SMART AUTOMATION</string>
+    <string name="col3_auto_exit_p">Auto Show on Exit Park (P)</string>
+    <string name="col3_auto_steer">Auto Show on Steering Turn</string>
+    <string name="col3_auto_speed">Low-Speed Guard (Auto Hide)</string>
+    <string name="col3_btn_drop_show">Wheel View &amp; Fisheye Tuning [v]</string>
+    <string name="col3_crop_header">Select Wheel to Tune (FL / FR / RL / RR)</string>
+    <string name="lbl_car_model">Select Wheel</string>
+    <string name="car_model_atto3">Front-Left (FL)</string>
+    <string name="car_model_dolphin">Front-Right (FR)</string>
+    <string name="car_model_seal">Rear-Left (RL)</string>
+    <string name="car_model_sealu">Rear-Right (RR)</string>
+    <string name="car_model_han">BYD Han</string>
+    <string name="car_model_tang">BYD Tang</string>
+    <string name="car_model_qin">BYD Qin Plus</string>
+    <string name="car_model_song">BYD Song Pro / L</string>
+    <string name="car_model_generic">BYD Default</string>
+    <string name="lbl_cam_front">Crop Top</string>
+    <string name="lbl_cam_rear">Crop Bottom</string>
+    <string name="lbl_cam_left">Crop Left</string>
+    <string name="lbl_cam_right">Crop Right</string>
+    <string name="col3_roll_header">Fisheye &amp; Fine Rotation Tuning</string>
+    <string name="lbl_roll_front">Fisheye Strength</string>
+    <string name="lbl_roll_rear">Zoom</string>
+    <string name="lbl_roll_left">Optical Center X</string>
+    <string name="lbl_roll_right">Fine Rotation</string>
+    <string name="col3_btn_reset">Reset All 4 Wheel Defaults</string>
+
+    <string name="footer_info">Auto-starts on boot · Drag window to move · Pinch with 2 fingers to resize</string>
+
+    <!-- Adaptive Side Navigation Items -->
+    <string name="nav_home">Home</string>
+    <string name="nav_update">Update</string>
+    <string name="nav_vehicle">Vehicle</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_diagnostics">Diagnostics</string>
+    <string name="nav_backup">Backup</string>
+    <string name="nav_guide">Guide</string>
+    <string name="nav_about">About</string>
+
+    <string name="title_nav_home">CAMERA DASHBOARD</string>
+    <string name="title_nav_update">SOFTWARE UPDATE</string>
+    <string name="title_nav_vehicle">VEHICLE INFORMATION</string>
+    <string name="title_nav_settings">SYSTEM SETTINGS</string>
+    <string name="title_nav_diagnostics">SYSTEM DIAGNOSTICS</string>
+    <string name="title_nav_backup">BACKUP &amp; RESTORE</string>
+    <string name="title_nav_guide">USER GUIDE &amp; TROUBLESHOOTING</string>
+    <string name="title_nav_about">ABOUT SOFTWARE</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_subtitle">Configure system behavior, language, appearance theme and adaptive navigation bar</string>
+    <string name="settings_nav_appearance_header">NAVIGATION &amp; APPEARANCE</string>
+    <string name="settings_sidebar_pos_title">Adaptive Sidebar Position:</string>
+    <string name="settings_sidebar_pos_desc">Dock to the right for RHD driver reach (Thailand) or dock to the left for LHD</string>
+    <string name="settings_steer_auto">Auto Detect (RHD Right)</string>
+    <string name="settings_steer_rhd">Dock Right (RHD)</string>
+    <string name="settings_steer_lhd">Dock Left (LHD)</string>
+    <string name="settings_lang_title">Display Language:</string>
+    <string name="settings_theme_title">Theme Mode:</string>
+    <string name="settings_system_header">SYSTEM &amp; AUTOSTART</string>
+    <string name="settings_autostart_title">Bypass BYD DiLink Autostart Restriction</string>
+    <string name="settings_autostart_desc">Automatically unblock in AppStartManagement so the app starts on vehicle boot</string>
+    <string name="settings_btn_run_autostart">🛡️ Unblock Autostart Now</string>
+
+    <!-- Software Update Screen -->
+    <string name="update_subtitle">Over-The-Air software update and performance management (OTA)</string>
+    <string name="update_btn_config_ota">⚙️ Configure OTA Server</string>
+    <string name="update_cur_ver_label">Current Version:</string>
+    <string name="update_latest_ver_label">Latest System Version: Waiting for check</string>
+    <string name="update_status_not_checked">● Not Checked</string>
+    <string name="update_channel_label">Update Channel:</string>
+    <string name="update_last_checked_label">Last Checked:</string>
+    <string name="update_release_date_label">Release Date:</string>
+    <string name="update_size_label">Download Size:</string>
+    <string name="update_btn_check">🔍 Check for Updates</string>
+    <string name="update_btn_download">⬇️ Download New Version</string>
+    <string name="update_btn_install">⚡ Install Update Now</string>
+    <string name="update_btn_retry">🔄 Retry</string>
+    <string name="update_release_notes_header">RELEASE NOTES &amp; WHAT\'S NEW</string>
+
+    <!-- Vehicle Info Screen -->
+    <string name="veh_subtitle">BYD vehicle specifications, hardware, software and compatibility status</string>
+    <string name="veh_sec_vehicle">1. VEHICLE INFORMATION</string>
+    <string name="veh_lbl_brand">Vehicle Brand:</string>
+    <string name="veh_lbl_model">Vehicle Model:</string>
+    <string name="veh_lbl_steering">Steering Position:</string>
+    <string name="veh_lbl_conn">Connection Status:</string>
+    <string name="veh_sec_software">2. SOFTWARE INFORMATION</string>
+    <string name="veh_lbl_dilink">DiLink Version:</string>
+    <string name="veh_lbl_firmware">Firmware / Build ID:</string>
+    <string name="veh_lbl_android">Android OS Version:</string>
+    <string name="veh_lbl_app">Application Version:</string>
+    <string name="veh_sec_hardware">3. HARDWARE INFORMATION</string>
+    <string name="veh_lbl_resolution">Screen Resolution:</string>
+    <string name="veh_lbl_cameras">Available Camera Devices:</string>
+    <string name="veh_lbl_sensors">Sensor Availability:</string>
+    <string name="veh_sec_compat">4. SYSTEM COMPATIBILITY</string>
+    <string name="veh_lbl_supp_cameras">Supported Features:</string>
+    <string name="veh_lbl_api_status">Vehicle API Interface:</string>
+    <string name="veh_lbl_compat_status">Compatibility Status:</string>
+
+    <!-- Diagnostics Screen -->
+    <string name="diag_subtitle">Diagnose BYD LaneWatch health: cameras, CAN signals, permissions, and system resources</string>
+    <string name="diag_btn_copy">📋 Copy Report</string>
+    <string name="diag_btn_run">🔄 Run Diagnostics</string>
+    <string name="diag_sec_camera">1. CAMERA SYSTEM &amp; RENDERING</string>
+    <string name="diag_sec_vehicle">2. VEHICLE INTEGRATION</string>
+    <string name="diag_sec_android">3. ANDROID SYSTEM &amp; PERMISSIONS</string>
+    <string name="diag_sec_resources">4. SYSTEM RESOURCES &amp; HEALTH</string>
+    <string name="diag_sec_report">DIAGNOSTIC REPORT SUMMARY</string>
+
+    <!-- Backup Screen -->
+    <string name="backup_subtitle">Export, import and restore camera calibration and app preferences</string>
+    <string name="backup_header">CONFIGURATION DATA MANAGEMENT</string>
+    <string name="backup_export_title">Export Settings to JSON File</string>
+    <string name="backup_export_desc">Save all camera calibrations and preferences to storage</string>
+    <string name="backup_btn_export">📤 Export File</string>
+    <string name="backup_import_title">Import Settings from JSON File</string>
+    <string name="backup_import_desc">Restore saved camera calibrations and preferences</string>
+    <string name="backup_btn_import">📥 Import File</string>
+    <string name="backup_reset_title">Reset to Defaults</string>
+    <string name="backup_reset_desc">Clear all customizations and restore recommended OEM defaults</string>
+    <string name="backup_btn_reset">⚠️ Reset Defaults</string>
+    <string name="backup_status_ready">Status: Ready for configuration backup or restore</string>
+
+    <!-- Guide Screen -->
+    <string name="guide_subtitle">Camera operation guide, touch calibration gestures and troubleshooting</string>
+    <string name="guide_sec1_title">1. Overview of 3 Camera Modes</string>
+    <string name="guide_sec1_content">• Turn Signal Camera (LaneWatch): Blind-spot camera automatically pops up when turning left or right, and hides after a configurable delay. In hazard mode, both sides appear side-by-side.\n• ADAS BSD Radar Alert: If a vehicle or motorcycle enters your blind spot, BYD radar triggers a flashing red warning border on the PiP in real-time.\n• Digital Rearview Mirror: Toggle via steering wheel shortcut button or double-tap the window to close quickly.\n• Front Wheels (Curb Monitor): Pops up on shift out of P or when steering past the threshold angle, and automatically cuts off at higher speeds.</string>
+    <string name="guide_sec2_title">2. Touch Gestures in Calibration Studio</string>
+    <string name="guide_sec2_content">• 1-Finger Pan: Drag to pan and reposition the camera view.\n• 2-Finger Pinch Zoom: Pinch to zoom in for clarity or zoom out for ultra-wide angle.\n• 2-Finger Rotate: Rotate gesture for fine-tuning angle in real-time.\n• Tap [Save &amp; View]: Permanently saves camera calibration to storage.</string>
+    <string name="guide_sec3_title">3. Troubleshooting</string>
+    <string name="guide_sec3_content">• Window does not pop up on turn signal: Check Overlay Permission and master switch on Home tab.\n• Steering wheel button not responding: Check Accessibility Service under \'System Diagnostics\'.\n• App does not start on car power on: Open \'System Settings\' and tap [🛡️ Unblock Autostart Now] to bypass BYD DiLink background restrictions.</string>
+
+    <!-- About Screen -->
+    <string name="about_subtitle">Software specifications, engineering credits and licensing</string>
+    <string name="about_edition">OEM Automotive Infotainment Edition</string>
+    <string name="about_sec_arch">SYSTEM ARCHITECTURE</string>
+    <string name="about_arch_desc">• Graphic Engine: OpenGL ES 2.0 Real-time Shaders\n• Inter-Process Communication: Android Binder to BYDAutoServer (autoservice)\n• Vehicle Integration: Native BYD Hardware Sensors &amp; CAN Radar Properties\n• Platform: Engineered specifically for BYD DiLink 3.0 / 4.0 / 5.0 Infotainment systems</string>
+    <string name="about_sec_credits">CREDITS &amp; LICENSES</string>
+    <string name="about_credits_desc">• Developed by: Galalike,NineOAD &amp; BYD Automotive Community Thailand\n• Open Source Libraries: AndroidX, Google Material Components, KaTeX, WebRTC\n• Software License: Dedicated for BYD vehicle infotainment integration without modifying vehicle safety systems.</string>
+</resources>
