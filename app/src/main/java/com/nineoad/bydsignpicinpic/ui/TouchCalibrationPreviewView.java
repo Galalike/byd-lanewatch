@@ -341,49 +341,80 @@ public class TouchCalibrationPreviewView extends View {
     private void drawHudOverlay(Canvas canvas, int w, int h) {
         String pipTag;
         if (pipMode == 1) {
-            pipTag = "สเกล PIP 16:9";
+            pipTag = "PIP 16:9";
         } else if (pipMode == 2) {
-            pipTag = "สเกล PIP 3:1";
+            pipTag = "PIP 3:1";
         } else {
-            pipTag = "สเกล PIP แนวตั้ง 2:3";
+            pipTag = "PIP แนวตั้ง 2:3";
+        }
+
+        // Clean label without redundant English suffix to keep width automotive-minimal
+        String label = activeLabel;
+        if (label != null && label.contains("(")) {
+            label = label.substring(0, label.indexOf("(")).trim();
+        } else if (label == null) {
+            label = "กล้อง";
         }
 
         // Top HUD Capsule (Position & Zoom specs)
         String readout = String.format(Locale.US,
-                "%s   |   %s   |   X: %+.2f  Y: %+.2f   |   ซูม: %.2fx   |   หมุน: %+.1f°%s",
-                activeLabel, pipTag, liveCropX, liveCropY, liveZoom, liveRotation,
-                cameraConnected ? "" : "  [กำลังต่อกล้อง...]");
+                "%s • %s • X: %+.2f Y: %+.2f • ซูม: %.2fx • หมุน: %+.1f°%s",
+                label, pipTag, liveCropX, liveCropY, liveZoom, liveRotation,
+                cameraConnected ? "" : " [เชื่อมต่อ...]");
 
+        // Dynamic auto-scaling to guarantee it NEVER overflows w in any mode
+        float maxAllowedW = w - 40f;
+        float currentSize = 18f;
+        hudTextPaint.setTextSize(currentSize);
         float textWidth = hudTextPaint.measureText(readout);
-        float pillW = textWidth + 40f;
-        float pillH = 50f;
+        while (textWidth > maxAllowedW - 28f && currentSize > 11f) {
+            currentSize -= 0.5f;
+            hudTextPaint.setTextSize(currentSize);
+            textWidth = hudTextPaint.measureText(readout);
+        }
+
+        float pillW = Math.min(maxAllowedW, textWidth + 28f);
+        float pillH = 38f;
         float pillX = 20f;
-        float pillY = 20f;
+        float pillY = 16f;
 
         RectF pillRect = new RectF(pillX, pillY, pillX + pillW, pillY + pillH);
-        canvas.drawRoundRect(pillRect, 25f, 25f, hudBgPaint);
+        canvas.drawRoundRect(pillRect, pillH / 2f, pillH / 2f, hudBgPaint);
 
         Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setStrokeWidth(1.5f);
-        borderPaint.setColor(Color.argb(100, 62, 106, 225));
-        canvas.drawRoundRect(pillRect, 25f, 25f, borderPaint);
+        borderPaint.setStrokeWidth(1.2f);
+        borderPaint.setColor(Color.argb(120, 62, 106, 225));
+        canvas.drawRoundRect(pillRect, pillH / 2f, pillH / 2f, borderPaint);
 
-        canvas.drawText(readout, pillX + 20f, pillY + 34f, hudTextPaint);
+        Paint.FontMetrics fm = hudTextPaint.getFontMetrics();
+        float baseline = pillY + (pillH - (fm.bottom - fm.top)) / 2f - fm.top;
+        float textX = pillX + (pillW - textWidth) / 2f;
+        canvas.drawText(readout, textX, baseline, hudTextPaint);
 
         // Bottom Gestures Guide Badge
-        String guide = "👆 1 นิ้ว: เลื่อน X/Y   |   🤏 2 นิ้ว: ซูมเข้า-ออก   |   🔄 2 นิ้ว: เอียงองศา";
+        String guide = "👆 1 นิ้ว: เลื่อน X/Y • 🤏 2 นิ้ว: ซูม • 🔄 2 นิ้ว: เอียงองศา";
         Paint guideText = new Paint(hudTextPaint);
-        guideText.setTextSize(20f);
+        float gSize = 15f;
+        guideText.setTextSize(gSize);
         guideText.setColor(Color.rgb(180, 185, 195));
+        float gTextW = guideText.measureText(guide);
+        while (gTextW > maxAllowedW - 24f && gSize > 10f) {
+            gSize -= 0.5f;
+            guideText.setTextSize(gSize);
+            gTextW = guideText.measureText(guide);
+        }
 
-        float gW = guideText.measureText(guide) + 36f;
-        float gH = 42f;
+        float gW = Math.min(maxAllowedW, gTextW + 24f);
+        float gH = 32f;
         float gX = (w - gW) / 2f;
-        float gY = h - gH - 18f;
+        float gY = h - gH - 14f;
 
         RectF gRect = new RectF(gX, gY, gX + gW, gY + gH);
-        canvas.drawRoundRect(gRect, 21f, 21f, hudBgPaint);
-        canvas.drawText(guide, gX + 18f, gY + 28f, guideText);
+        canvas.drawRoundRect(gRect, gH / 2f, gH / 2f, hudBgPaint);
+
+        Paint.FontMetrics gFm = guideText.getFontMetrics();
+        float gBaseline = gY + (gH - (gFm.bottom - gFm.top)) / 2f - gFm.top;
+        canvas.drawText(guide, gX + (gW - gTextW) / 2f, gBaseline, guideText);
     }
 }
