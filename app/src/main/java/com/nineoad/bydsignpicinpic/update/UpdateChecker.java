@@ -289,6 +289,12 @@ public class UpdateChecker {
 
     public void install(File file) {
         try {
+            try {
+                this.ctx.getSharedPreferences("pnp", Context.MODE_PRIVATE)
+                        .edit()
+                        .putBoolean("pending_autostart_unblock", true)
+                        .apply();
+            } catch (Throwable ignored) {}
             Uri uriForFile = FileProvider.getUriForFile(this.ctx, this.ctx.getPackageName() + ".updateprovider", file);
             Intent intent = new Intent("android.intent.action.VIEW");
             intent.setDataAndType(uriForFile, "application/vnd.android.package-archive");

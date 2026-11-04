@@ -2,9 +2,12 @@ package com.nineoad.bydsignpicinpic.signal;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.accessibilityservice.GestureDescription;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +20,7 @@ import java.util.List;
 
 public class BydKeyRemapService extends AccessibilityService {
     private static final String TAG = "BydKeyRemap";
+    public static volatile BydKeyRemapService instance = null;
     public static volatile boolean isServiceRunning = false;
     public static volatile boolean isCapturing = false;
     public static volatile KeyCaptureListener captureListener = null;
@@ -41,6 +45,7 @@ public class BydKeyRemapService extends AccessibilityService {
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
+        instance = this;
         isServiceRunning = true;
         try {
             AccessibilityServiceInfo info = getServiceInfo();
@@ -51,7 +56,8 @@ public class BydKeyRemapService extends AccessibilityService {
             info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
             info.notificationTimeout = 100;
             info.flags |= AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS
-                    | AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
+                    | AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS
+                    | AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
             setServiceInfo(info);
             Log.i(TAG, "BydKeyRemapService connected, listening for steering wheel buttons & autostart automation");
             checkAutoStartOnServiceConnected();
@@ -64,15 +70,18 @@ public class BydKeyRemapService extends AccessibilityService {
         SharedPreferences sp = getSharedPreferences("pnp", Context.MODE_PRIVATE);
         int lastVer = sp.getInt("last_disabled_autostart_version", -1);
         int curVer = getAppVersionCode(this);
-        if (lastVer != curVer) {
-            Log.i(TAG, "Update detected on service connected (last=" + lastVer + ", cur=" + curVer + ") -> Triggering autostart unlock immediately");
-            autostartHandler.postDelayed(() -> triggerDisableAutostartAutomation(this), 300L);
+        boolean pending = sp.getBoolean("pending_autostart_unblock", false);
+        if (pending || lastVer != curVer) {
+            Log.i(TAG, "Update detected on service connected (pending=" + pending + ", last=" + lastVer + ", cur=" + curVer + ") -> Triggering autostart unlock immediately");
+            sp.edit().putBoolean("pending_autostart_unblock", true).apply();
+            autostartHandler.postDelayed(() -> triggerDisableAutostartAutomation(this), 600L);
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        instance = null;
         isServiceRunning = false;
         Log.i(TAG, "BydKeyRemapService destroyed");
     }
@@ -86,16 +95,16 @@ public class BydKeyRemapService extends AccessibilityService {
     };
 
     public static void triggerDisableAutostartAutomation(Context context) {
-        if (!isServiceRunning) {
+        if (!isServiceRunning || instance == null) {
             Log.w(TAG, "BydKeyRemapService not yet active, scheduling retry waiting for service...");
             autostartHandler.postDelayed(new Runnable() {
                 int attempts = 0;
                 @Override
                 public void run() {
-                    if (isServiceRunning) {
+                    if (isServiceRunning && instance != null) {
                         Log.i(TAG, "BydKeyRemapService now connected! Running automation immediately");
                         triggerDisableAutostartAutomation(context);
-                    } else if (attempts < 15) {
+                    } else if (attempts < 20) {
                         attempts++;
                         autostartHandler.postDelayed(this, 500L);
                     } else {
@@ -118,13 +127,20 @@ public class BydKeyRemapService extends AccessibilityService {
                 isHandlingDisableAutostart = false;
             }
         };
-        autostartHandler.postDelayed(autostartTimeoutRunnable, 8000L);
+        autostartHandler.postDelayed(autostartTimeoutRunnable, 15000L);
 
         try {
             Intent intent = new Intent("android.intent.action.BYD_APPSTARTMANAGEMENT");
             intent.setClassName("com.byd.appstartmanagement", "com.byd.appstartmanagement.frame.AppStartManagement");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            context.startActivity(intent);
+            if (instance != null) {
+                instance.startActivity(intent);
+            } else if (context != null) {
+                context.startActivity(intent);
+            }
+            // Ensure first processing pass starts even if window state change event is coalesced
+            autostartHandler.removeCallbacks(instance.processAutostartRunnable);
+            autostartHandler.postDelayed(instance.processAutostartRunnable, 800L);
         } catch (Throwable t) {
             Log.e(TAG, "Failed to launch AppStartManagement: " + t);
             isHandlingDisableAutostart = false;
@@ -136,7 +152,7 @@ public class BydKeyRemapService extends AccessibilityService {
             AccessibilityNodeInfo root = getRootInActiveWindow();
             if (root == null) {
                 if (isHandlingDisableAutostart) {
-                    autostartHandler.postDelayed(processAutostartRunnable, 200L);
+                    autostartHandler.postDelayed(processAutostartRunnable, 250L);
                 }
                 return;
             }
@@ -155,23 +171,36 @@ public class BydKeyRemapService extends AccessibilityService {
                     AccessibilityNodeInfo switchNode = findSwitchChild(row);
                     if (switchNode != null) {
                         CharSequence txt = switchNode.getText();
-                        isCurrentlyOn = switchNode.isChecked() || (txt != null && "ON".equalsIgnoreCase(txt.toString().trim()));
+                        String txtStr = txt != null ? txt.toString().trim() : "";
+                        isCurrentlyOn = switchNode.isChecked() 
+                                || "ON".equalsIgnoreCase(txtStr) 
+                                || "开".equals(txtStr) 
+                                || "เปิด".equalsIgnoreCase(txtStr);
                     }
 
                     if (isCurrentlyOn) {
-                        Log.i(TAG, "Automation: Found BYD LaneWatch with Disable Autostart ON -> Clicking row to turn OFF");
-                        row.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        Log.i(TAG, "Automation: Found BYD LaneWatch with Disable Autostart ON -> Clicking row/switch to turn OFF");
+                        boolean clicked = false;
+                        if (switchNode != null && switchNode.isClickable()) {
+                            clicked = switchNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        }
+                        if (!clicked) {
+                            row.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        }
                     } else {
                         Log.i(TAG, "Automation: BYD LaneWatch Disable Autostart is already OFF");
                     }
 
-                    // Success! Mark completed and save version
+                    // Success! Mark completed and reset pending flag
                     isHandlingDisableAutostart = false;
                     if (autostartTimeoutRunnable != null) {
                         autostartHandler.removeCallbacks(autostartTimeoutRunnable);
                     }
                     SharedPreferences prefs = getSharedPreferences("pnp", Context.MODE_PRIVATE);
-                    prefs.edit().putInt("last_disabled_autostart_version", getAppVersionCode(this)).apply();
+                    prefs.edit()
+                            .putBoolean("pending_autostart_unblock", false)
+                            .putInt("last_disabled_autostart_version", getAppVersionCode(this))
+                            .apply();
 
                     // Smoothly dismiss dialog
                     autostartHandler.postDelayed(() -> {
@@ -184,29 +213,86 @@ public class BydKeyRemapService extends AccessibilityService {
                             }
                         }
                         performGlobalAction(GLOBAL_ACTION_BACK);
-                    }, 350L);
+                    }, 400L);
                     return;
                 }
             }
 
-            // Not yet visible on screen -> scroll ListView
-            if (autostartScrollAttempts < 8) {
+            // Not yet visible on screen -> scroll ListView using physical swipe gesture
+            if (autostartScrollAttempts < 12) {
                 autostartScrollAttempts++;
                 List<AccessibilityNodeInfo> listViews = root.findAccessibilityNodeInfosByViewId("com.byd.appstartmanagement:id/installed_app");
-                if (listViews != null && !listViews.isEmpty()) {
-                    Log.i(TAG, "Automation: Scrolling ListView to find BYD LaneWatch (attempt " + autostartScrollAttempts + ")");
-                    listViews.get(0).performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
-                    autostartHandler.postDelayed(processAutostartRunnable, 350L);
-                    return;
-                }
+                AccessibilityNodeInfo listNode = (listViews != null && !listViews.isEmpty()) ? listViews.get(0) : null;
+                Log.i(TAG, "Automation: Scrolling ListView with gesture to find BYD LaneWatch (attempt " + autostartScrollAttempts + "/12)");
+                performScrollGesture(listNode);
+                return;
             }
 
             Log.w(TAG, "Automation: Exceeded scroll attempts without finding BYD LaneWatch");
             isHandlingDisableAutostart = false;
+            SharedPreferences prefs = getSharedPreferences("pnp", Context.MODE_PRIVATE);
+            prefs.edit().putBoolean("pending_autostart_unblock", false).apply();
             performGlobalAction(GLOBAL_ACTION_BACK);
         } catch (Throwable t) {
             Log.e(TAG, "processAppStartManagement error: " + t);
             isHandlingDisableAutostart = false;
+        }
+    }
+
+    private void performScrollGesture(AccessibilityNodeInfo listNode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            float startX = 981f;
+            float startY = 780f;
+            float endX = 981f;
+            float endY = 320f;
+
+            if (listNode != null) {
+                Rect rect = new Rect();
+                listNode.getBoundsInScreen(rect);
+                if (rect.width() > 100 && rect.height() > 200) {
+                    startX = rect.centerX();
+                    endX = rect.centerX();
+                    startY = rect.bottom - (rect.height() * 0.18f);
+                    endY = rect.top + (rect.height() * 0.18f);
+                }
+            }
+
+            Path path = new Path();
+            path.moveTo(startX, startY);
+            path.lineTo(endX, endY);
+
+            GestureDescription.Builder builder = new GestureDescription.Builder();
+            builder.addStroke(new GestureDescription.StrokeDescription(path, 0, 280L));
+            GestureDescription gesture = builder.build();
+
+            boolean dispatched = dispatchGesture(gesture, new GestureResultCallback() {
+                @Override
+                public void onCompleted(GestureDescription gestureDescription) {
+                    super.onCompleted(gestureDescription);
+                    Log.i(TAG, "Scroll gesture completed -> schedule next check in 450ms");
+                    autostartHandler.postDelayed(processAutostartRunnable, 450L);
+                }
+
+                @Override
+                public void onCancelled(GestureDescription gestureDescription) {
+                    super.onCancelled(gestureDescription);
+                    Log.w(TAG, "Scroll gesture cancelled -> retrying in 450ms");
+                    autostartHandler.postDelayed(processAutostartRunnable, 450L);
+                }
+            }, autostartHandler);
+
+            if (!dispatched) {
+                Log.w(TAG, "dispatchGesture returned false, trying fallback ACTION_SCROLL_FORWARD");
+                if (listNode != null) {
+                    listNode.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+                }
+                autostartHandler.postDelayed(processAutostartRunnable, 500L);
+            }
+        } else {
+            if (listNode != null) {
+                listNode.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);
+            }
+            autostartHandler.postDelayed(processAutostartRunnable, 500L);
         }
     }
 
@@ -216,7 +302,8 @@ public class BydKeyRemapService extends AccessibilityService {
             AccessibilityNodeInfo child = parent.getChild(i);
             if (child != null) {
                 if ("com.byd.appstartmanagement:id/select_button".equals(child.getViewIdResourceName())
-                        || (child.getClassName() != null && child.getClassName().toString().contains("Switch"))) {
+                        || (child.getClassName() != null && child.getClassName().toString().contains("Switch"))
+                        || (child.getClassName() != null && child.getClassName().toString().contains("CheckBox"))) {
                     return child;
                 }
             }

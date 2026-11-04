@@ -1,14 +1,14 @@
 {
-  "versionCode": 101,
-  "versionName": "1.0.1",
+  "versionCode": 102,
+  "versionName": "1.0.2",
   "url": "https://raw.githubusercontent.com/Galalike/byd-lanewatch/main/app/build/outputs/apk/debug/app-debug.apk",
-  "size": 63009161,
+  "size": 63009189,
   "releaseDate": "2026-11-04",
   "channel": "stable",
-  "whatsNew": "• แก้ไขข้อความในกรอบ PIP Studio ไม่ให้ล้นกรอบในทุกโหมดกล้อง\n• ปรับแต่งฟอนต์ HUD ให้กระชับ สวยงาม สไตล์ OEM\n• ขยายการตั้งค่าหมุนละเอียดได้เต็มพิกัด ±180°\n• ระบบปลดล็อก Autostart ทันทีเมื่ออัปเดตเสร็จสิ้น",
+  "whatsNew": "• ระบบปลดล็อก Autostart อัตโนมัติด้วย Physical Gesture Scrolling หาแอปแม่นยำ\n• ปลดล็อกและปิดหน้าต่างตั้งค่าให้อัตโนมัติทันทีหลังอัปเดต\n• แก้ไขข้อความสเกลในกรอบ PIP Studio ไม่ให้ล้นกรอบทุกโหมด\n• ขยายการตั้งค่าหมุนละเอียดได้เต็มพิกัด ±180° พร้อม Long-Click ±5°",
   "notes": [
-    "เวอร์ชันเสถียร (Stable Release v1.0.1)",
-    "แก้ไขปัญหาข้อความในกรอบ HUD Preview ล้นกรอบ",
-    "ทดสอบการติดตั้งผ่านระบบ OTA ภายในแอปพลิเคชัน"
+    "เวอร์ชันเสถียร (Stable Release v1.0.2)",
+    "แก้ไขระบบปลดบล็อกการเริ่มอัตโนมัติ (Autostart Unblock Automation) อย่างสมบูรณ์แบบ",
+    "รองรับ OTA Update ติดตั้งและปลดล็อกทันที"
   ]
 }

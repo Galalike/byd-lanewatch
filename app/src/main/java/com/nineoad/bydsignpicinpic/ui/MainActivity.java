@@ -428,11 +428,13 @@ public class MainActivity extends AppCompatActivity {
     private void checkAutoStartAutomationOnUpdate() {
         int lastVer = this.prefs.getInt("last_disabled_autostart_version", -1);
         int currentVer = com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.getAppVersionCode(this);
-        if (lastVer != currentVer) {
-            android.util.Log.i("MainActivity", "App updated to version " + currentVer + " (previous=" + lastVer + ") -> triggering autostart unblock immediately");
+        boolean pending = this.prefs.getBoolean("pending_autostart_unblock", false);
+        if (pending || lastVer != currentVer) {
+            android.util.Log.i("MainActivity", "App updated or pending autostart unblock (pending=" + pending + ", cur=" + currentVer + ", last=" + lastVer + ") -> triggering autostart unblock");
+            this.prefs.edit().putBoolean("pending_autostart_unblock", true).apply();
             new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
                 com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.triggerDisableAutostartAutomation(MainActivity.this);
-            }, 300L);
+            }, 600L);
         }
     }
 
@@ -3220,8 +3222,9 @@ public class MainActivity extends AppCompatActivity {
         Button btnRunAutostart = findViewById(R.id.btnRunAutostartSync);
         if (btnRunAutostart != null) {
             btnRunAutostart.setOnClickListener(v -> {
+                prefs.edit().putBoolean("pending_autostart_unblock", true).apply();
                 Toast.makeText(MainActivity.this, 
-                    tr("กำลังเริ่มระบบตรวจสอบและเปิด Autostart อัตโนมัติ...", "Starting Autostart sync automation..."), 
+                    tr("กำลังเริ่มระบบตรวจสอบและปลดล็อก Autostart อัตโนมัติ...", "Starting Autostart sync automation..."), 
                     Toast.LENGTH_SHORT).show();
                 BydKeyRemapService.triggerDisableAutostartAutomation(MainActivity.this);
             });

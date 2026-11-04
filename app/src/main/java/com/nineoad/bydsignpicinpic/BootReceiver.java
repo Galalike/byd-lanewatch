@@ -15,6 +15,12 @@ public class BootReceiver extends BroadcastReceiver {
         }
         if ("android.intent.action.MY_PACKAGE_REPLACED".equals(intent.getAction())) {
             android.util.Log.i("BootReceiver", "Package replaced / updated -> Triggering autostart configuration");
+            try {
+                context.getSharedPreferences("pnp", Context.MODE_PRIVATE)
+                        .edit()
+                        .putBoolean("pending_autostart_unblock", true)
+                        .apply();
+            } catch (Throwable ignored) {}
             com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.triggerDisableAutostartAutomation(context);
         }
         Intent intent2 = new Intent(context, (Class<?>) OverlayService.class);
