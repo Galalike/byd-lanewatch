@@ -1,13 +1,15 @@
 {
-  "versionCode": 101,
-  "versionName": "1.0.1-beta1",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.1-beta1/BYDLaneWatch_v1.0.1-beta1.apk",
-  "size": 15450000,
+  "versionCode": 103,
+  "versionName": "1.0.3-beta1",
+  "url": "https://raw.githubusercontent.com/Galalike/byd-lanewatch/main/app/build/outputs/apk/debug/app-debug.apk",
+  "size": 63025837,
   "releaseDate": "2026-11-05",
   "channel": "beta",
-  "whatsNew": "• ฟังก์ชันทดลอง: ปรับปรุงประสิทธิภาพ OpenGL Shader ให้ลื่นไหลยิ่งขึ้น\n• ทดสอบการเชื่อมต่อ CAN Radar ความเร็วสูง",
+  "whatsNew": "• เพิ่มระบบ Vehicle Signal Probe ดักฟังสัญญาณรถสด (CAN / ก้านไฟเลี้ยว / เรดาร์ ADAS / มุมพวงมาลัย / เกียร์ / ความเร็ว)\n• ปรับแต่งการเตือนจุดอับสายตา (Blind Spot): ไม่แสดงกรอบแดงตลอดเวลา จะขึ้นเฉพาะเมื่อระบบตรวจจับสัญญาณเตือนได้จริง (Any-Side / Generic Alert)\n• เพิ่มปุ่มลัด 'ตรวจสัญญาณ' บนหน้าหลักและหน้าวินิจฉัย เข้าถึงได้ทันที\n• เพิ่มปุ่มทดสอบจำลองสัญญาณเตือน BSD ซ้าย/ขวา 3 วินาที และฟังก์ชัน Copy Full Report",
   "notes": [
-    "เวอร์ชันทดสอบ (Beta Channel) สำหรับผู้ร่วมทดสอบระบบล่วงหน้า",
-    "หากพบปัญหาในการใช้งาน สามารถสลับกลับมาใช้เวอร์ชัน Stable ได้ทุกเมื่อ"
+    "เวอร์ชันทดสอบ (Beta Channel v1.0.3-beta1) สำหรับผู้ร่วมทดสอบระบบล่วงหน้า",
+    "เพิ่มหน้าจอ Vehicle Signal Probe ตรวจสอบสัญญาณไฟเลี้ยวและเรดาร์สดขณะขับขี่",
+    "ปรับระบบเตือน Blind Spot รองรับ Any-Side Generic BSD Alert ตามสถาปัตยกรรม DiLink 3.0",
+    "หากพบปัญหาในการใช้งาน สามารถสลับกลับมาใช้เวอร์ชัน Stable ได้ทุกเมื่อในหน้าอัปเดต"
   ]
 }

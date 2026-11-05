@@ -27,6 +27,11 @@ public class AdasBlindSpotMonitor {
     private volatile boolean running = false;
     private volatile boolean lastLeftAlert = false;
     private volatile boolean lastRightAlert = false;
+    private volatile boolean lastAnyAlert = false;
+    private long lastDaemonPollMs = 0;
+    private boolean daemonAlertL = false;
+    private boolean daemonAlertR = false;
+    private boolean daemonAlertAny = false;
 
     public AdasBlindSpotMonitor(Callback callback) {
         this.callback = callback;
@@ -79,9 +84,27 @@ public class AdasBlindSpotMonitor {
                     if (lcaR != null && lcaR > 0 && lcaR != 65535) alertR = true;
                 }
 
-                if (alertL != this.lastLeftAlert || alertR != this.lastRightAlert) {
+                // Check generic / any-side blind spot warning (BSD state > 2, Instrument detection, or daemon blindSpot:side=any)
+                boolean alertAny = false;
+                Integer bsdState = AutoserviceClient.getInt(1038, 1098907656); // ADAS_BSD_STATE
+                if (bsdState != null && bsdState > 2 && bsdState != 65535) {
+                    alertAny = true;
+                }
+                Integer instBsd = AutoserviceClient.getInt(1000, 107920); // INSTRUMENT_BLIND_AREA_DETECTION_SYSTEM
+                if (instBsd != null && instBsd > 0 && instBsd != 65535) {
+                    alertAny = true;
+                }
+
+                // Check local Overdrive daemon loopback states if running
+                checkDaemonAlerts();
+                if (this.daemonAlertL) alertL = true;
+                if (this.daemonAlertR) alertR = true;
+                if (this.daemonAlertAny) alertAny = true;
+
+                if (alertL != this.lastLeftAlert || alertR != this.lastRightAlert || alertAny != this.lastAnyAlert) {
                     this.lastLeftAlert = alertL;
                     this.lastRightAlert = alertR;
+                    this.lastAnyAlert = alertAny;
                     final boolean fL = alertL;
                     final boolean fR = alertR;
                     this.mainHandler.post(() -> {
@@ -102,11 +125,55 @@ public class AdasBlindSpotMonitor {
         }
     }
 
+    private void checkDaemonAlerts() {
+        long now = System.currentTimeMillis();
+        if (now - this.lastDaemonPollMs < 300) return;
+        this.lastDaemonPollMs = now;
+        try {
+            java.net.URL url = new java.net.URL("http://127.0.0.1:8080/api/automations/state");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(200);
+            conn.setReadTimeout(200);
+            conn.setRequestMethod("GET");
+            if (conn.getResponseCode() == 200) {
+                java.io.InputStream in = conn.getInputStream();
+                java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(in));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                reader.close();
+                in.close();
+                org.json.JSONObject root = new org.json.JSONObject(sb.toString());
+                org.json.JSONObject state = root.optJSONObject("state");
+                if (state != null) {
+                    this.daemonAlertL = "on".equalsIgnoreCase(state.optString("blindSpot:side=left"))
+                            || "on".equalsIgnoreCase(state.optString("rearCrossTraffic:side=left"))
+                            || "on".equalsIgnoreCase(state.optString("doorOpenWarning:side=left"));
+                    this.daemonAlertR = "on".equalsIgnoreCase(state.optString("blindSpot:side=right"))
+                            || "on".equalsIgnoreCase(state.optString("rearCrossTraffic:side=right"))
+                            || "on".equalsIgnoreCase(state.optString("doorOpenWarning:side=right"));
+                    this.daemonAlertAny = "on".equalsIgnoreCase(state.optString("blindSpot:side=any"));
+                    return;
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        this.daemonAlertL = false;
+        this.daemonAlertR = false;
+        this.daemonAlertAny = false;
+    }
+
     public boolean isLeftAlert() {
         return this.lastLeftAlert;
     }
 
     public boolean isRightAlert() {
         return this.lastRightAlert;
+    }
+
+    public boolean isAnyAlert() {
+        return this.lastAnyAlert || this.daemonAlertAny;
     }
 }

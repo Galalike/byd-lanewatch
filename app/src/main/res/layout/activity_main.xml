@@ -353,6 +353,21 @@
                 android:insetBottom="0dp"
                 app:cornerRadius="10dp"
                 android:text="@string/btn_overlay_perm"/>
+
+            <!-- Real-time Signal Probe Button -->
+            <Button
+                android:id="@+id/btnSignalProbeTop"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#2563EB"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginStart="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="10dp"
+                android:text="📡 ตรวจสัญญาณ"/>
         </LinearLayout>
 
         <!-- 3-COLUMN MAIN DASHBOARD (1920x1080 Landscape Optimized) -->

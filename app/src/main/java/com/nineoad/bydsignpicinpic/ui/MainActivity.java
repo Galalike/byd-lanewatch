@@ -352,6 +352,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        Button btnSignalProbeTop = findViewById(R.id.btnSignalProbeTop);
+        if (btnSignalProbeTop != null) {
+            btnSignalProbeTop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, com.nineoad.bydsignpicinpic.signal.TurnProbeActivity.class);
+                    MainActivity.this.startActivity(intent);
+                }
+            });
+        }
         this.tvCropT = (TextView) findViewById(R.id.tvCropT);
         this.tvCropB = (TextView) findViewById(R.id.tvCropB);
         this.tvCropL = (TextView) findViewById(R.id.tvCropL);
@@ -3256,6 +3266,17 @@ public class MainActivity extends AppCompatActivity {
                             tr("คัดลอกรายงานสรุปลงคลิปบอร์ดแล้ว", "Diagnostic report copied to clipboard"), 
                             Toast.LENGTH_SHORT).show();
                     }
+                }
+            });
+        }
+
+        Button btnProbe = findViewById(R.id.btnOpenSignalProbe);
+        if (btnProbe != null) {
+            btnProbe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, com.nineoad.bydsignpicinpic.signal.TurnProbeActivity.class);
+                    MainActivity.this.startActivity(intent);
                 }
             });
         }

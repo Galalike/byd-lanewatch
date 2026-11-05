@@ -42,7 +42,9 @@
             android:theme="@style/Theme.BYDLaneWatch"/>
         <activity
             android:name="com.nineoad.bydsignpicinpic.signal.TurnProbeActivity"
-            android:exported="true"/>
+            android:exported="true"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
         <activity
             android:name="com.nineoad.bydsignpicinpic.bev.studio.CalibrationStudioActivity"
             android:exported="true"

@@ -43,6 +43,20 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/btnOpenSignalProbe"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginEnd="10dp"
+                android:text="📡 ตรวจสัญญาณสด"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#2563EB"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="8dp" />
+
+            <Button
                 android:id="@+id/btnCopyDiagReport"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"

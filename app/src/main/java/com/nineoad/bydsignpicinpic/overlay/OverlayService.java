@@ -130,6 +130,14 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         return this.panoView;
     }
 
+    public com.nineoad.bydsignpicinpic.signal.TurnSignalListener getTurnSignalListener() {
+        return this.listener;
+    }
+
+    public com.nineoad.bydsignpicinpic.signal.AdasBlindSpotMonitor getAdasMonitor() {
+        return this.adasMonitor;
+    }
+
     private Button btnSwitchCam;
     private WindowManager.LayoutParams btnLp;
 
@@ -397,10 +405,13 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                 }
             });
         } else if ("TEST_ADAS".equals(action)) {
+            final boolean left = intent != null ? intent.getBooleanExtra("left", true) : true;
+            final boolean right = intent != null ? intent.getBooleanExtra("right", true) : true;
+            final long duration = intent != null ? intent.getLongExtra("duration", 5000L) : 5000L;
             this.main.post(new Runnable() {
                 @Override
                 public final void run() {
-                    OverlayService.this.testAdasAlert(true, true, 5000L);
+                    OverlayService.this.testAdasAlert(left, right, duration);
                 }
             });
         } else if (ACTION_HIDE.equals(action)) {
@@ -2177,6 +2188,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     }
 
     private void handleAdasAlert(boolean alertLeft, boolean alertRight) {
+        // No auto-popup when driving straight: only update red layer if PIP is already showing
         updateBlindSpotViews(this.pendingSide);
     }
 
@@ -2235,7 +2247,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     public void testAdasAlert(final boolean left, final boolean right, long durationMs) {
         testAdasAlertLeft = left;
         testAdasAlertRight = right;
-        updateBlindSpotViews(this.pendingSide != 0 ? this.pendingSide : 1);
+        handleAdasAlert(left, right);
         if (testAdasRunnable != null) {
             this.main.removeCallbacks(testAdasRunnable);
         }
@@ -2244,7 +2256,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             public void run() {
                 testAdasAlertLeft = false;
                 testAdasAlertRight = false;
-                updateBlindSpotViews(pendingSide);
+                handleAdasAlert(false, false);
             }
         };
         this.main.postDelayed(testAdasRunnable, durationMs);
@@ -2264,44 +2276,35 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
 
         boolean alertLeft = (this.adasMonitor != null && this.adasMonitor.isLeftAlert()) || testAdasAlertLeft;
         boolean alertRight = (this.adasMonitor != null && this.adasMonitor.isRightAlert()) || testAdasAlertRight;
+        boolean alertAny = (this.adasMonitor != null && this.adasMonitor.isAnyAlert());
         boolean isDualMode = this.isDualView;
         int activeTurnSignal = (this.listener != null) ? this.listener.getState() : 0;
 
-        // 1. Left Side: Active if Left Turn (1, 21), Dual, Hazard (3), Rearview mirror (4), or Standalone FL (5/11)
-        boolean leftAllowed = (side == 1 || side == 21 || isDualMode || side == 3 || side == 4 || side == 11 || (side == 5 && steeringWheelSide == 1));
-        if (leftAllowed && alertLeft) {
+        // 1. เลเยอร์สีแดงฝั่งซ้าย: แสดงเฉพาะเมื่อได้รับสัญญาณเตือนจริง (alertLeft หรือ alertAny เมื่อเปิดกล้อง/ไฟเลี้ยวซ้าย)
+        boolean leftAllowed = (side == 1 || side == 21 || activeTurnSignal == 1 || isDualMode || side == 3 || side == 11 || (side == 5 && this.steeringWheelSide == 1));
+        boolean showLeftRed = leftAllowed && (alertLeft || alertAny);
+        if (showLeftRed) {
             this.blindSpotLeftView.setVisibility(View.VISIBLE);
             this.blindSpotLeftView.bringToFront();
             if (this.root != null) {
                 this.root.bringChildToFront(this.blindSpotLeftView);
             }
-            // If turning left (side == 1 or side == 21 or activeTurnSignal == 1 or testAdasAlertLeft): BLINK / FLASH!
-            if (side == 1 || side == 21 || activeTurnSignal == 1 || testAdasAlertLeft) {
-                startPulse(this.blindSpotLeftView, true);
-            } else {
-                // Detected vehicle in blind spot without left turn signal: Solid / Steady ON!
-                stopPulse(this.blindSpotLeftView, true);
-            }
+            startPulse(this.blindSpotLeftView, true);
         } else {
             this.blindSpotLeftView.setVisibility(View.GONE);
             stopPulse(this.blindSpotLeftView, true);
         }
 
-        // 2. Right Side: Active if Right Turn (2, 22), Dual, Hazard (3), Rearview mirror (4), or Standalone FR (5/12)
-        boolean rightAllowed = (side == 2 || side == 22 || isDualMode || side == 3 || side == 4 || side == 12 || (side == 5 && steeringWheelSide == 2));
-        if (rightAllowed && alertRight) {
+        // 2. เลเยอร์สีแดงฝั่งขวา: แสดงเฉพาะเมื่อได้รับสัญญาณเตือนจริง (alertRight หรือ alertAny เมื่อเปิดกล้อง/ไฟเลี้ยวขวา)
+        boolean rightAllowed = (side == 2 || side == 22 || activeTurnSignal == 2 || isDualMode || side == 3 || side == 12 || (side == 5 && this.steeringWheelSide == 2));
+        boolean showRightRed = rightAllowed && (alertRight || alertAny);
+        if (showRightRed) {
             this.blindSpotRightView.setVisibility(View.VISIBLE);
             this.blindSpotRightView.bringToFront();
             if (this.root != null) {
                 this.root.bringChildToFront(this.blindSpotRightView);
             }
-            // If turning right (side == 2 or side == 22 or activeTurnSignal == 2 or testAdasAlertRight): BLINK / FLASH!
-            if (side == 2 || side == 22 || activeTurnSignal == 2 || testAdasAlertRight) {
-                startPulse(this.blindSpotRightView, false);
-            } else {
-                // Detected vehicle in blind spot without right turn signal: Solid / Steady ON!
-                stopPulse(this.blindSpotRightView, false);
-            }
+            startPulse(this.blindSpotRightView, false);
         } else {
             this.blindSpotRightView.setVisibility(View.GONE);
             stopPulse(this.blindSpotRightView, false);

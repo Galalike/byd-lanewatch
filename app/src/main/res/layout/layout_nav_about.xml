@@ -79,7 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Version 1.0.2 (Build 102)"
+                            android:text="Version 1.0.3-beta1 (Build 103)"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="@color/lw_text_accent" />
