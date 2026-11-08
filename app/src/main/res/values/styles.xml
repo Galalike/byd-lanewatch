@@ -12,5 +12,9 @@
         <item name="colorControlActivated">@color/lw_accent_primary</item>
         <item name="colorControlHighlight">@color/lw_accent_soft</item>
         <item name="colorSwitchThumbNormal">@color/white</item>
+
+        <!-- Noto Sans Thai Typography -->
+        <item name="android:fontFamily">@font/noto_sans_thai</item>
+        <item name="fontFamily">@font/noto_sans_thai</item>
     </style>
 </resources>

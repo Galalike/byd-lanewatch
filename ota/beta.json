@@ -1,15 +1,15 @@
 {
-  "versionCode": 105,
-  "versionName": "1.0.4",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.4/BYDLaneWatch_v1.0.4.apk",
-  "size": 63026125,
-  "releaseDate": "2026-11-08",
+  "versionCode": 106,
+  "versionName": "1.0.5",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.5/BYDLaneWatch_v1.0.5.apk",
+  "size": 63075627,
+  "releaseDate": "2026-11-09",
   "channel": "beta",
-  "whatsNew": "• แก้ไขปัญหาแอพหลุดหลังอัปเดต (Autostart Unblock Recovery): ปรับปรุงระบบปลดล็อกการเริ่มอัตโนมัติ ไม่ปิดหรือหลุดออกจากแอพ และเปิดทำงานต่อเนื่องอัตโนมัติทันที\n• ป้องกันการเรียกซ้ำซ้อน (Single-Flight Lock): ควบคุมไม่ให้หน้าต่าง Disable Autostart ซ้อนทับกัน และปิดหน้าต่างอย่างปลอดภัยโดยไม่ส่งผลกระทบต่อหน้าจอหลัก\n• ปรับปรุงโหมดกล้องล้อหน้า (Front-Wheel Camera Attachment): สลับมุมมองกล้องล้อหน้าเมื่อเปิดไฟเลี้ยวและหมุนพวงมาลัยถึงองศาที่กำหนดขณะขับขี่ความเร็วต่ำ\n• กำจัดอาการภาพบิดเบี้ยวเฟรมแรกของ PIP (Instant Aspect Calibration): แก้ไขอาการกล้องวูบหรือบิดเบี้ยวช่วงเปลี่ยนสัญญาณภาพเร็วๆ",
+  "whatsNew": "• Noto Sans Thai Font Integration: Updated Thai typography to modern, sleek Noto Sans Thai across all app UI elements and dialogs.\n• Enhanced Readability on Automotive Displays: Full weight support (Regular, Medium, SemiBold, Bold) optimized for high-resolution BYD touchscreens.\n• Autostart Recovery & State Persistence: Seamless automatic continuation of MainActivity and OverlayService after system updates.",
   "notes": [
-    "เวอร์ชันล่าสุด (v1.0.4)",
-    "แก้ปัญหาแอพหลุดหลังการอัปเดต และรับประกันการทำงานต่อเนื่องของ OverlayService อัตโนมัติ",
-    "ปรับปรุงระบบมุมมองกล้องล้อหน้าตามไฟเลี้ยวและองศาพวงมาลัยความเร็วต่ำ",
-    "กำจัดอาการภาพบิดเบี้ยวในเฟรมแรกของ PIP ขณะสลับกล้องอย่างรวดเร็ว"
+    "Latest Release v1.0.5",
+    "Noto Sans Thai font integration for clean, modern automotive typography",
+    "Full weight support (Regular, Medium, SemiBold, Bold) across all dialogs and screens",
+    "Self-recovering autostart automation and persistent background service"
   ]
 }

@@ -44,13 +44,13 @@
             android:name="com.nineoad.bydsignpicinpic.signal.TurnProbeActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
+            android:theme="@style/Theme.BYDLaneWatch"/>
         <activity
             android:name="com.nineoad.bydsignpicinpic.bev.studio.CalibrationStudioActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
+            android:theme="@style/Theme.BYDLaneWatch"/>
         <service
             android:name="com.nineoad.bydsignpicinpic.overlay.OverlayService"
             android:exported="true"
