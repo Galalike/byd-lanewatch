@@ -476,7 +476,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         if (swStudioSteering != null) {
             swStudioSteering.setChecked(prefs.getBoolean("bev_auto_steering", true));
             swStudioSteering.setOnCheckedChangeListener((btn, isChecked) -> {
-                prefs.edit().putBoolean("bev_auto_steering", isChecked).apply();
+                prefs.edit().putBoolean("bev_auto_steering", isChecked).putBoolean("wheel_trigger_enabled", isChecked).apply();
                 OverlayService.reapplyLive();
             });
         }

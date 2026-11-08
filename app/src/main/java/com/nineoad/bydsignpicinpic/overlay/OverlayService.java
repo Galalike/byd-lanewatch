@@ -404,6 +404,16 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                     OverlayService.this.handleWheelTriggerHide();
                 }
             });
+        } else if ("RELOAD_PREFS".equals(action)) {
+            this.main.post(new Runnable() {
+                @Override
+                public final void run() {
+                    if (OverlayService.this.bevAutomation != null) {
+                        OverlayService.this.bevAutomation.reloadPreferences();
+                    }
+                    OverlayService.this.refreshView();
+                }
+            });
         } else if ("TEST_ADAS".equals(action)) {
             final boolean left = intent != null ? intent.getBooleanExtra("left", true) : true;
             final boolean right = intent != null ? intent.getBooleanExtra("right", true) : true;
@@ -816,10 +826,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onSignal$5(int i) {
         if (i == 0) {
-            if (this.steeringWheelSide != 0) {
-                // Turn signal ended, but steering wheel is still turned: transition to standalone front wheel!
-                show(5);
-            } else if (this.isRearviewActive && !this.userDismissedRear) {
+            if (this.isRearviewActive && !this.userDismissedRear) {
                 show(4);
             } else {
                 this.isBevActive = false;
@@ -835,6 +842,12 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         if (isStudioActive && !allowStudioPipTest) return;
         if (this.hazardMode || this.pendingSide == 3) {
             // Hazard light active: do not disrupt dual emergency camera view
+            return;
+        }
+
+        boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true)
+                && this.prefs.getBoolean("bev_auto_steering", true);
+        if (!wheelEnabled) {
             return;
         }
 
@@ -854,9 +867,8 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             pushGlParams();
             Log.i(TAG, "Attached front wheel (" + side + ") to active turn signal PIP");
         } else {
-            // Standalone wheel mode!
-            show(5);
-            Log.i(TAG, "Showing standalone front wheel PIP (" + side + ")");
+            // Front wheel camera is only attached when turn signal is active; do not popup standalone
+            Log.d(TAG, "Wheel trigger ignored because turn signal is not active (pendingSide=" + this.pendingSide + ")");
         }
     }
 
@@ -1012,9 +1024,11 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             this.glView.setVisibility(View.VISIBLE);
             this.glView.setActiveOnScreen(true);
             int targetGlSide = i;
-            if (!this.isDualView && i == 1 && this.steeringWheelSide != 0) {
+            boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true)
+                    && this.prefs.getBoolean("bev_auto_steering", true);
+            if (wheelEnabled && !this.isDualView && i == 1 && this.steeringWheelSide != 0) {
                 targetGlSide = 21;
-            } else if (!this.isDualView && i == 2 && this.steeringWheelSide != 0) {
+            } else if (wheelEnabled && !this.isDualView && i == 2 && this.steeringWheelSide != 0) {
                 targetGlSide = 22;
             }
             this.glView.setDualMode(this.isDualView, targetGlSide);
@@ -1464,8 +1478,10 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             baseTurnW = isLandscape() ? drivingWidthPx : singleWidthPx;
         }
 
-        // If turn signal is active in single mode AND steering wheel angle is triggered: attach wheel strip to the right!
-        if (!this.isDualView && (this.pendingSide == 1 || this.pendingSide == 2) && this.steeringWheelSide != 0) {
+        // If turn signal is active in single mode AND steering wheel angle is triggered AND wheel feature enabled: attach wheel strip to the right!
+        boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true)
+                && this.prefs.getBoolean("bev_auto_steering", true);
+        if (wheelEnabled && !this.isDualView && (this.pendingSide == 1 || this.pendingSide == 2) && this.steeringWheelSide != 0) {
             return baseTurnW + wheelStripWidthPx;
         }
         return baseTurnW;
@@ -1606,6 +1622,9 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     static /* synthetic */ void lambda$reapplyLive$6(OverlayService overlayService) {
         overlayService.dispMode = overlayService.prefs.getInt("mode", 3);
         overlayService.loadDrivingTuning();
+        if (overlayService.bevAutomation != null) {
+            overlayService.bevAutomation.reloadPreferences();
+        }
         if (overlayService.glView != null) {
             loadQuadWheelTuning(overlayService.prefs, overlayService.glView);
         }

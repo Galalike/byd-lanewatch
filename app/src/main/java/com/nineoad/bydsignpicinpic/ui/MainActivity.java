@@ -632,14 +632,24 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         if (this.swMasterBev != null) {
-            this.swMasterBev.setChecked(OverlayService.isBevActive);
+            boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true)
+                    && this.prefs.getBoolean("bev_auto_steering", true);
+            this.swMasterBev.setChecked(wheelEnabled);
             this.swMasterBev.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (MainActivity.this.suppressMasterSwitches) return;
+                    MainActivity.this.prefs.edit()
+                            .putBoolean("wheel_trigger_enabled", isChecked)
+                            .putBoolean("bev_auto_steering", isChecked)
+                            .apply();
                     Intent intent = new Intent(MainActivity.this, OverlayService.class);
-                    intent.setAction(isChecked ? OverlayService.ACTION_SHOW_BEV : OverlayService.ACTION_HIDE_BEV);
+                    intent.setAction("RELOAD_PREFS");
                     MainActivity.this.startService(intent);
+                    OverlayService.reapplyLive();
+                    Toast.makeText(MainActivity.this, isChecked
+                            ? MainActivity.this.tr("เปิดใช้มุมกล้องล้อหน้าเมื่อเปิดไฟเลี้ยวและหมุนพวงมาลัยแล้ว", "Front wheel camera on turn signal enabled")
+                            : MainActivity.this.tr("ปิดใช้มุมกล้องล้อหน้าแล้ว", "Front wheel camera disabled"), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -650,8 +660,12 @@ public class MainActivity extends AppCompatActivity {
         if (this.swMasterRear != null && this.swMasterRear.isChecked() != OverlayService.isRearviewActive) {
             this.swMasterRear.setChecked(OverlayService.isRearviewActive);
         }
-        if (this.swMasterBev != null && this.swMasterBev.isChecked() != OverlayService.isBevActive) {
-            this.swMasterBev.setChecked(OverlayService.isBevActive);
+        if (this.swMasterBev != null) {
+            boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true)
+                    && this.prefs.getBoolean("bev_auto_steering", true);
+            if (this.swMasterBev.isChecked() != wheelEnabled) {
+                this.swMasterBev.setChecked(wheelEnabled);
+            }
         }
         this.suppressMasterSwitches = false;
     }

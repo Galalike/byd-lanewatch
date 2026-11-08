@@ -141,6 +141,7 @@ public class OemRecommendedPreset {
             .putInt("y_bev", 0)
             .putInt("bev_steering_angle", 90)
             .putBoolean("bev_auto_steering", true)
+            .putBoolean("wheel_trigger_enabled", true)
             .putFloat("bev_speed_limit_kmh", 20.0f)
             .putBoolean("bev_auto_speed_limit", true)
             .putFloat("bev_car_aspect_h", 2.4f)

@@ -56,7 +56,7 @@
 
     <string name="col3_badge">FRONT WHEELS</string>
     <string name="col3_title">Front Wheels Blindspot</string>
-    <string name="col3_desc">Auto show front wheel curb view on steering turn (Left/Right)</string>
+    <string name="col3_desc">Auto attach front wheel camera when turn signal is on and steering turns past angle at low speed</string>
     <string name="col3_btn_toggle">Toggle Front Wheels (Test)</string>
     <string name="col3_auto_header">SMART AUTOMATION</string>
     <string name="col3_auto_exit_p">Auto Show on Exit Park (P)</string>

@@ -56,7 +56,7 @@
 
     <string name="col3_badge">FRONT WHEELS</string>
     <string name="col3_title">มุมล้อหน้าซ้ายและขวา</string>
-    <string name="col3_desc">แสดงภาพมุมล้อหน้าอัตโนมัติตามทิศทางที่เลี้ยวพวงมาลัย (ซ้าย/ขวา)</string>
+    <string name="col3_desc">เปิดใช้มุมกล้องล้อหน้าอัตโนมัติเมื่อเปิดไฟเลี้ยวและหมุนพวงมาลัยถึงองศาที่กำหนด (ความเร็วต่ำ)</string>
     <string name="col3_btn_toggle">สลับแสดงผลมุมล้อหน้า (ทดสอบ)</string>
     <string name="col3_auto_header">ระบบสั่งเปิดอัตโนมัติ</string>
     <string name="col3_auto_exit_p">เปิดเมื่อออกจากเกียร์ P</string>
