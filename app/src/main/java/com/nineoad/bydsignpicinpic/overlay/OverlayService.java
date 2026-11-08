@@ -846,6 +846,9 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             }
             // Turn signal already active in single mode: expand PIP window to Combined mode
             if (this.btnSwitchCam != null) this.btnSwitchCam.setVisibility(8);
+            if (this.glView != null) {
+                this.glView.setDualMode(false, this.pendingSide == 1 ? 21 : 22);
+            }
             applyWindowForMode();
             updateRenderSize();
             pushGlParams();
@@ -868,6 +871,9 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             }
             // Turn signal is still active: shrink PIP window back to 16:9
             if (this.btnSwitchCam != null) this.btnSwitchCam.setVisibility(0);
+            if (this.glView != null) {
+                this.glView.setDualMode(false, this.pendingSide);
+            }
             applyWindowForMode();
             updateRenderSize();
             pushGlParams();

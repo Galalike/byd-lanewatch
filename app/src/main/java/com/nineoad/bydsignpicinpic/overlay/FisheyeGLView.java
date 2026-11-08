@@ -65,13 +65,82 @@ public class FisheyeGLView extends GLSurfaceView {
     private volatile boolean hasWarmFrameL = false;
     private volatile boolean hasWarmFrameR = false;
     private volatile boolean hasWarmFrameRear = false;
+    private volatile boolean freshFrameL = false;
+    private volatile boolean freshFrameR = false;
+    private volatile boolean freshFrameRear = false;
     private volatile int lastFixedW = -1;
     private volatile int lastFixedH = -1;
+
+    private final Runnable frameTimeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (FisheyeGLView.this.waitingForFrame) {
+                Log.d(TAG, "Frame wait timeout elapsed, releasing blank gate");
+                FisheyeGLView.this.waitingForFrame = false;
+                FisheyeGLView.this.requestRender();
+            }
+        }
+    };
+
+    public void startWaitingForFreshFrame() {
+        this.waitingForFrame = true;
+        this.freshFrameL = false;
+        this.freshFrameR = false;
+        this.freshFrameRear = false;
+        removeCallbacks(this.frameTimeoutRunnable);
+        // Timeout fallback: if camera HAL is delayed, release after 140ms (~3-4 frames at 25fps)
+        postDelayed(this.frameTimeoutRunnable, 140L);
+        requestRender(); // Immediately clears to transparent black
+    }
+
+    private void checkFreshFrameSatisfied() {
+        if (!this.waitingForFrame) {
+            requestRender();
+            return;
+        }
+        boolean satisfied;
+        if (this.isDual) {
+            satisfied = (this.freshFrameL || this.freshFrameR);
+        } else {
+            switch (this.singleSide) {
+                case 1:
+                case 5:
+                case 11:
+                case 13:
+                case 21:
+                    satisfied = this.freshFrameL;
+                    break;
+                case 2:
+                case 12:
+                case 14:
+                case 22:
+                    satisfied = this.freshFrameR;
+                    break;
+                case 4:
+                    satisfied = this.freshFrameRear;
+                    break;
+                default:
+                    satisfied = true;
+                    break;
+            }
+        }
+        if (satisfied) {
+            this.waitingForFrame = false;
+            removeCallbacks(this.frameTimeoutRunnable);
+            requestRender();
+        }
+    }
 
     public void setActiveOnScreen(boolean active) {
         if (this.activeOnScreen != active) {
             this.activeOnScreen = active;
-            requestRender();
+            if (active) {
+                startWaitingForFreshFrame();
+            } else {
+                this.waitingForFrame = false;
+                removeCallbacks(this.frameTimeoutRunnable);
+                requestRender();
+            }
         } else if (active) {
             requestRender();
         }
@@ -252,25 +321,14 @@ public class FisheyeGLView extends GLSurfaceView {
     }
 
     public void setDualMode(boolean dual, int side) {
-        boolean alreadyWarm = (dual || side == 5 || side == 21 || side == 22) ? (this.hasWarmFrameL && this.hasWarmFrameR)
-                : (side == 4 ? this.hasWarmFrameRear : ((side == 2 || side == 12 || side == 22) ? this.hasWarmFrameR : this.hasWarmFrameL));
-        if (!alreadyWarm && (this.isDual != dual || this.singleSide != side)) {
-            this.waitingForFrame = true;
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (FisheyeGLView.this.waitingForFrame) {
-                        FisheyeGLView.this.waitingForFrame = false;
-                        FisheyeGLView.this.requestRender();
-                    }
-                }
-            }, 100);
-        } else {
-            this.waitingForFrame = false;
-        }
+        boolean modeChanged = (this.isDual != dual || this.singleSide != side);
         this.isDual = dual;
         this.singleSide = side;
-        requestRender();
+        if (modeChanged) {
+            startWaitingForFreshFrame();
+        } else if (!this.waitingForFrame) {
+            requestRender();
+        }
     }
 
     public void setParamsLeft(float f, float f2, boolean z, boolean z2, float[] fArr, float f3, float f4, float f5, float f6) {
@@ -363,6 +421,9 @@ public class FisheyeGLView extends GLSurfaceView {
             this.stMatrixL = new float[16];
             this.stMatrixR = new float[16];
             this.stMatrixRear = new float[16];
+            android.opengl.Matrix.setIdentityM(this.stMatrixL, 0);
+            android.opengl.Matrix.setIdentityM(this.stMatrixR, 0);
+            android.opengl.Matrix.setIdentityM(this.stMatrixRear, 0);
             this.rot = new float[4];
             this.quadPos = FisheyeGLView.fb(new float[]{-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f});
             this.quadUv = FisheyeGLView.fb(new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f});
@@ -416,13 +477,8 @@ public class FisheyeGLView extends GLSurfaceView {
                     }
                     FisheyeGLView.this.lastFrameArrivalMs = now;
                     FisheyeGLView.this.hasWarmFrameL = true;
-                    if (FisheyeGLView.this.singleSide == 1 || FisheyeGLView.this.singleSide == 5
-                            || FisheyeGLView.this.singleSide == 11 || FisheyeGLView.this.singleSide == 13
-                            || FisheyeGLView.this.singleSide == 21
-                            || FisheyeGLView.this.isDual) {
-                        FisheyeGLView.this.waitingForFrame = false;
-                    }
-                    FisheyeGLView.this.requestRender();
+                    FisheyeGLView.this.freshFrameL = true;
+                    FisheyeGLView.this.checkFreshFrameSatisfied();
                 }
             });
             this.camSurfaceL = new Surface(this.camSTL);
@@ -441,13 +497,8 @@ public class FisheyeGLView extends GLSurfaceView {
                     }
                     FisheyeGLView.this.lastFrameArrivalMs = now;
                     FisheyeGLView.this.hasWarmFrameR = true;
-                    if (FisheyeGLView.this.singleSide == 2 || FisheyeGLView.this.singleSide == 5
-                            || FisheyeGLView.this.singleSide == 12 || FisheyeGLView.this.singleSide == 14
-                            || FisheyeGLView.this.singleSide == 22
-                            || FisheyeGLView.this.isDual) {
-                        FisheyeGLView.this.waitingForFrame = false;
-                    }
-                    FisheyeGLView.this.requestRender();
+                    FisheyeGLView.this.freshFrameR = true;
+                    FisheyeGLView.this.checkFreshFrameSatisfied();
                 }
             });
             this.camSurfaceR = new Surface(this.camSTR);
@@ -466,10 +517,8 @@ public class FisheyeGLView extends GLSurfaceView {
                     }
                     FisheyeGLView.this.lastFrameArrivalMs = now;
                     FisheyeGLView.this.hasWarmFrameRear = true;
-                    if (FisheyeGLView.this.singleSide == 4) {
-                        FisheyeGLView.this.waitingForFrame = false;
-                    }
-                    FisheyeGLView.this.requestRender();
+                    FisheyeGLView.this.freshFrameRear = true;
+                    FisheyeGLView.this.checkFreshFrameSatisfied();
                 }
             });
             this.camSurfaceRear = new Surface(this.camSTRear);
@@ -653,12 +702,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
                     drawQuad(this.oesTexL, this.stMatrixL,
                             FisheyeGLView.this.pRotQuad[0], FisheyeGLView.this.pFineQuad[0],
                             FisheyeGLView.this.pMirQuad[0], FisheyeGLView.this.pFlipVQuad[0],
                             FisheyeGLView.this.pCropQuad[0], FisheyeGLView.this.pStrengthQuad[0],
                             FisheyeGLView.this.pZoomQuad[0], FisheyeGLView.this.pCxQuad[0],
-                            FisheyeGLView.this.pCyQuad[0], FisheyeGLView.this.pAspect);
+                            FisheyeGLView.this.pCyQuad[0], aspectSingle);
                 } else if (FisheyeGLView.this.singleSide == 12) {
                     // FR (Front-Right Wheel - standalone)
                     if (this.camSTR != null) {
@@ -668,12 +718,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
                     drawQuad(this.oesTexR, this.stMatrixR,
                             FisheyeGLView.this.pRotQuad[1], FisheyeGLView.this.pFineQuad[1],
                             FisheyeGLView.this.pMirQuad[1], FisheyeGLView.this.pFlipVQuad[1],
                             FisheyeGLView.this.pCropQuad[1], FisheyeGLView.this.pStrengthQuad[1],
                             FisheyeGLView.this.pZoomQuad[1], FisheyeGLView.this.pCxQuad[1],
-                            FisheyeGLView.this.pCyQuad[1], FisheyeGLView.this.pAspect);
+                            FisheyeGLView.this.pCyQuad[1], aspectSingle);
                 } else if (FisheyeGLView.this.singleSide == 4) {
                     if (this.camSTRear != null) {
                         try {
@@ -682,12 +733,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
                     drawQuad(this.oesTexRear, this.stMatrixRear,
                             FisheyeGLView.this.pRotDegRear, FisheyeGLView.this.pFineRear,
                             FisheyeGLView.this.pMirrorRear, FisheyeGLView.this.pFlipVRear,
                             FisheyeGLView.this.pCropRear, FisheyeGLView.this.pStrengthRear,
                             FisheyeGLView.this.pZoomRear, FisheyeGLView.this.pCxRear,
-                            FisheyeGLView.this.pCyRear, FisheyeGLView.this.pAspect);
+                            FisheyeGLView.this.pCyRear, aspectSingle);
                 } else if (FisheyeGLView.this.singleSide == 2) {
                     if (this.camSTR != null) {
                         try {
@@ -696,12 +748,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
                     drawQuad(this.oesTexR, this.stMatrixR,
                             FisheyeGLView.this.pRotDegR, FisheyeGLView.this.pFineR,
                             FisheyeGLView.this.pMirrorR, FisheyeGLView.this.pFlipVR,
                             FisheyeGLView.this.pCropR, FisheyeGLView.this.pStrengthR,
                             FisheyeGLView.this.pZoomR, FisheyeGLView.this.pCxR,
-                            FisheyeGLView.this.pCyR, FisheyeGLView.this.pAspect);
+                            FisheyeGLView.this.pCyR, aspectSingle);
                 } else {
                     if (this.camSTL != null) {
                         try {
@@ -710,12 +763,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
                     drawQuad(this.oesTexL, this.stMatrixL,
                             FisheyeGLView.this.pRotDegL, FisheyeGLView.this.pFineL,
                             FisheyeGLView.this.pMirrorL, FisheyeGLView.this.pFlipVL,
                             FisheyeGLView.this.pCropL, FisheyeGLView.this.pStrengthL,
                             FisheyeGLView.this.pZoomL, FisheyeGLView.this.pCxL,
-                            FisheyeGLView.this.pCyL, FisheyeGLView.this.pAspect);
+                            FisheyeGLView.this.pCyL, aspectSingle);
                 }
             } else {
                 // DUAL CAMERA VIEW (Side-by-side)
@@ -730,12 +784,13 @@ public class FisheyeGLView extends GLSurfaceView {
                     } catch (Throwable unused) {}
                 }
                 GLES20.glViewport(0, 0, leftW, this.viewH);
+                float aspectDualLeft = (this.viewH > 0) ? ((float) leftW / (float) this.viewH) : (16.0f / 9.0f);
                 drawQuad(this.oesTexL, this.stMatrixL,
                         FisheyeGLView.this.pRotDegL, FisheyeGLView.this.pFineL,
                         FisheyeGLView.this.pMirrorL, FisheyeGLView.this.pFlipVL,
                         FisheyeGLView.this.pCropL, FisheyeGLView.this.pStrengthL,
                         FisheyeGLView.this.pZoomL, FisheyeGLView.this.pCxL,
-                        FisheyeGLView.this.pCyL, FisheyeGLView.this.pAspect);
+                        FisheyeGLView.this.pCyL, aspectDualLeft);
 
                 // 2. Draw RIGHT camera on right half (with 1px gap)
                 int rightX = halfW + 1;
@@ -747,12 +802,13 @@ public class FisheyeGLView extends GLSurfaceView {
                     } catch (Throwable unused) {}
                 }
                 GLES20.glViewport(rightX, 0, rightW, this.viewH);
+                float aspectDualRight = (this.viewH > 0) ? ((float) rightW / (float) this.viewH) : (16.0f / 9.0f);
                 drawQuad(this.oesTexR, this.stMatrixR,
                         FisheyeGLView.this.pRotDegR, FisheyeGLView.this.pFineR,
                         FisheyeGLView.this.pMirrorR, FisheyeGLView.this.pFlipVR,
                         FisheyeGLView.this.pCropR, FisheyeGLView.this.pStrengthR,
                         FisheyeGLView.this.pZoomR, FisheyeGLView.this.pCxR,
-                        FisheyeGLView.this.pCyR, FisheyeGLView.this.pAspect);
+                        FisheyeGLView.this.pCyR, aspectDualRight);
             }
         }
 
