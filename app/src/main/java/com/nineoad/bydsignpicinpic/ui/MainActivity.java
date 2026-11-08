@@ -447,12 +447,29 @@ public class MainActivity extends AppCompatActivity {
         int currentVer = com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.getAppVersionCode(this);
         boolean pending = this.prefs.getBoolean("pending_autostart_unblock", false);
         if (pending || lastVer != currentVer) {
+            if (com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.isAutomationInProgress()) {
+                android.util.Log.i("MainActivity", "Autostart automation already running, skipping duplicate launch");
+                return;
+            }
             android.util.Log.i("MainActivity", "App updated or pending autostart unblock (pending=" + pending + ", cur=" + currentVer + ", last=" + lastVer + ") -> triggering autostart unblock");
             this.prefs.edit().putBoolean("pending_autostart_unblock", true).apply();
+            Toast.makeText(this, tr("⚙️ กำลังตรวจสอบการเริ่มทำงานอัตโนมัติ...", "⚙️ Checking autostart settings..."), Toast.LENGTH_SHORT).show();
             new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
                 com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.triggerDisableAutostartAutomation(MainActivity.this);
             }, 600L);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // If autostart automation recently completed or is in progress, ignore back button to protect app from dropping out
+        long now = android.os.SystemClock.elapsedRealtime();
+        if (com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.isAutomationInProgress()
+                || (now - com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.lastAutomationEndTime < 4000L)) {
+            android.util.Log.i("MainActivity", "Swallowing onBackPressed right after autostart automation to protect app from dropping out");
+            return;
+        }
+        super.onBackPressed();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -722,6 +739,10 @@ public class MainActivity extends AppCompatActivity {
     @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
     protected void onResume() {
         super.onResume();
+        if (this.prefs.getBoolean("just_unblocked_autostart", false)) {
+            this.prefs.edit().putBoolean("just_unblocked_autostart", false).apply();
+            Toast.makeText(this, tr("✨ ปลดล็อกการเริ่มอัตโนมัติและพร้อมใช้งานแล้ว", "✨ Autostart unlocked and ready"), Toast.LENGTH_SHORT).show();
+        }
         if (!isAccessibilityServiceEnabled()) {
             tryEnableAccessibilityDirectly();
         }
@@ -3317,7 +3338,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, 
                     tr("กำลังเริ่มระบบตรวจสอบและปลดล็อก Autostart อัตโนมัติ...", "Starting Autostart sync automation..."), 
                     Toast.LENGTH_SHORT).show();
-                BydKeyRemapService.triggerDisableAutostartAutomation(MainActivity.this);
+                BydKeyRemapService.triggerDisableAutostartAutomation(MainActivity.this, true);
             });
         }
     }

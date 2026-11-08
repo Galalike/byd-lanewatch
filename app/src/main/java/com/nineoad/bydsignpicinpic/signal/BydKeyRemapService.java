@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -26,9 +27,16 @@ public class BydKeyRemapService extends AccessibilityService {
     public static volatile KeyCaptureListener captureListener = null;
 
     public static volatile boolean isHandlingDisableAutostart = false;
+    public static volatile boolean isAutomationInProgress = false;
+    public static volatile long lastAutomationStartTime = 0L;
+    public static volatile long lastAutomationEndTime = 0L;
     private static int autostartScrollAttempts = 0;
     private static final Handler autostartHandler = new Handler(Looper.getMainLooper());
     private static Runnable autostartTimeoutRunnable = null;
+
+    public static boolean isAutomationInProgress() {
+        return isHandlingDisableAutostart || isAutomationInProgress;
+    }
 
     private static long lastPressTime = 0;
     private static final long DEBOUNCE_MS = 120L; // Swallows mechanical contact bounce
@@ -83,6 +91,8 @@ public class BydKeyRemapService extends AccessibilityService {
         super.onDestroy();
         instance = null;
         isServiceRunning = false;
+        isHandlingDisableAutostart = false;
+        isAutomationInProgress = false;
         Log.i(TAG, "BydKeyRemapService destroyed");
     }
 
@@ -95,6 +105,16 @@ public class BydKeyRemapService extends AccessibilityService {
     };
 
     public static void triggerDisableAutostartAutomation(Context context) {
+        triggerDisableAutostartAutomation(context, false);
+    }
+
+    public static synchronized void triggerDisableAutostartAutomation(Context context, boolean force) {
+        long now = SystemClock.elapsedRealtime();
+        if (!force && (isAutomationInProgress || isHandlingDisableAutostart || (now - lastAutomationStartTime < 15000L))) {
+            Log.i(TAG, "Autostart automation already in progress or recently executed (elapsed=" + (now - lastAutomationStartTime) + "ms), skipping duplicate call");
+            return;
+        }
+
         if (!isServiceRunning || instance == null) {
             Log.w(TAG, "BydKeyRemapService not yet active, scheduling retry waiting for service...");
             autostartHandler.postDelayed(new Runnable() {
@@ -103,7 +123,7 @@ public class BydKeyRemapService extends AccessibilityService {
                 public void run() {
                     if (isServiceRunning && instance != null) {
                         Log.i(TAG, "BydKeyRemapService now connected! Running automation immediately");
-                        triggerDisableAutostartAutomation(context);
+                        triggerDisableAutostartAutomation(context, force);
                     } else if (attempts < 20) {
                         attempts++;
                         autostartHandler.postDelayed(this, 500L);
@@ -114,7 +134,10 @@ public class BydKeyRemapService extends AccessibilityService {
             }, 500L);
             return;
         }
+
+        isAutomationInProgress = true;
         isHandlingDisableAutostart = true;
+        lastAutomationStartTime = now;
         autostartScrollAttempts = 0;
         Log.i(TAG, "Triggering BYD AppStartManagement automation immediately...");
 
@@ -122,9 +145,12 @@ public class BydKeyRemapService extends AccessibilityService {
             autostartHandler.removeCallbacks(autostartTimeoutRunnable);
         }
         autostartTimeoutRunnable = () -> {
-            if (isHandlingDisableAutostart) {
-                Log.w(TAG, "Disable autostart automation timed out -> resetting flag");
+            if (isHandlingDisableAutostart && instance != null) {
+                Log.w(TAG, "Disable autostart automation timed out -> safely dismissing and recovering");
+                instance.safeDismissAppStartDialogAndResume();
+            } else {
                 isHandlingDisableAutostart = false;
+                isAutomationInProgress = false;
             }
         };
         autostartHandler.postDelayed(autostartTimeoutRunnable, 15000L);
@@ -144,6 +170,7 @@ public class BydKeyRemapService extends AccessibilityService {
         } catch (Throwable t) {
             Log.e(TAG, "Failed to launch AppStartManagement: " + t);
             isHandlingDisableAutostart = false;
+            isAutomationInProgress = false;
         }
     }
 
@@ -191,29 +218,8 @@ public class BydKeyRemapService extends AccessibilityService {
                         Log.i(TAG, "Automation: BYD LaneWatch Disable Autostart is already OFF");
                     }
 
-                    // Success! Mark completed and reset pending flag
-                    isHandlingDisableAutostart = false;
-                    if (autostartTimeoutRunnable != null) {
-                        autostartHandler.removeCallbacks(autostartTimeoutRunnable);
-                    }
-                    SharedPreferences prefs = getSharedPreferences("pnp", Context.MODE_PRIVATE);
-                    prefs.edit()
-                            .putBoolean("pending_autostart_unblock", false)
-                            .putInt("last_disabled_autostart_version", getAppVersionCode(this))
-                            .apply();
-
-                    // Smoothly dismiss dialog
-                    autostartHandler.postDelayed(() -> {
-                        AccessibilityNodeInfo closeRoot = getRootInActiveWindow();
-                        if (closeRoot != null) {
-                            List<AccessibilityNodeInfo> closeBtns = closeRoot.findAccessibilityNodeInfosByViewId("com.byd.appstartmanagement:id/iv_close_right");
-                            if (closeBtns != null && !closeBtns.isEmpty()) {
-                                closeBtns.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                                return;
-                            }
-                        }
-                        performGlobalAction(GLOBAL_ACTION_BACK);
-                    }, 400L);
+                    // Success! Smoothly dismiss dialog and restore app state
+                    autostartHandler.postDelayed(this::safeDismissAppStartDialogAndResume, 400L);
                     return;
                 }
             }
@@ -228,14 +234,85 @@ public class BydKeyRemapService extends AccessibilityService {
                 return;
             }
 
-            Log.w(TAG, "Automation: Exceeded scroll attempts without finding BYD LaneWatch");
-            isHandlingDisableAutostart = false;
-            SharedPreferences prefs = getSharedPreferences("pnp", Context.MODE_PRIVATE);
-            prefs.edit().putBoolean("pending_autostart_unblock", false).apply();
-            performGlobalAction(GLOBAL_ACTION_BACK);
+            Log.w(TAG, "Automation: Exceeded scroll attempts without finding BYD LaneWatch -> safely dismissing and recovering");
+            safeDismissAppStartDialogAndResume();
         } catch (Throwable t) {
             Log.e(TAG, "processAppStartManagement error: " + t);
-            isHandlingDisableAutostart = false;
+            safeDismissAppStartDialogAndResume();
+        }
+    }
+
+    private void safeDismissAppStartDialogAndResume() {
+        Log.i(TAG, "Dismissing AppStartManagement dialog safely and restoring app state...");
+        isHandlingDisableAutostart = false;
+        isAutomationInProgress = false;
+        lastAutomationEndTime = SystemClock.elapsedRealtime();
+
+        if (autostartTimeoutRunnable != null) {
+            autostartHandler.removeCallbacks(autostartTimeoutRunnable);
+            autostartTimeoutRunnable = null;
+        }
+        autostartHandler.removeCallbacks(processAutostartRunnable);
+
+        // Update preferences
+        SharedPreferences prefs = getSharedPreferences("pnp", Context.MODE_PRIVATE);
+        prefs.edit()
+                .putBoolean("pending_autostart_unblock", false)
+                .putInt("last_disabled_autostart_version", getAppVersionCode(this))
+                .putBoolean("just_unblocked_autostart", true)
+                .apply();
+
+        // Safely click close button if AppStartManagement is open
+        AccessibilityNodeInfo closeRoot = getRootInActiveWindow();
+        boolean closeClicked = false;
+        if (closeRoot != null) {
+            CharSequence pkg = closeRoot.getPackageName();
+            if (pkg != null && "com.byd.appstartmanagement".equals(pkg.toString())) {
+                List<AccessibilityNodeInfo> closeBtns = closeRoot.findAccessibilityNodeInfosByViewId("com.byd.appstartmanagement:id/iv_close_right");
+                if (closeBtns != null && !closeBtns.isEmpty()) {
+                    closeClicked = closeBtns.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    Log.i(TAG, "Clicked iv_close_right via AccessibilityNodeInfo (result=" + closeClicked + ")");
+                }
+            }
+        }
+        if (!closeClicked) {
+            // Tap close button coordinates (1365, 150)
+            Log.i(TAG, "Close button node not found or not clickable; tapping close coordinate (1365, 150)");
+            clickCoordinates(1365f, 150f);
+        }
+
+        // Bring MainActivity back to foreground and ensure OverlayService is running
+        autostartHandler.postDelayed(() -> {
+            try {
+                Log.i(TAG, "Relaunching/Foregrounding MainActivity after autostart unblock");
+                Intent mainIntent = new Intent(this, com.nineoad.bydsignpicinpic.ui.MainActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(mainIntent);
+            } catch (Throwable t) {
+                Log.e(TAG, "Failed to resume MainActivity: " + t);
+            }
+
+            try {
+                Log.i(TAG, "Ensuring OverlayService is running after autostart unblock");
+                Intent svcIntent = new Intent(this, com.nineoad.bydsignpicinpic.overlay.OverlayService.class);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    startForegroundService(svcIntent);
+                } else {
+                    startService(svcIntent);
+                }
+            } catch (Throwable t) {
+                Log.e(TAG, "Failed to start OverlayService: " + t);
+            }
+        }, 400L);
+    }
+
+    private void clickCoordinates(float x, float y) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Path clickPath = new Path();
+            clickPath.moveTo(x, y);
+            GestureDescription.Builder builder = new GestureDescription.Builder();
+            builder.addStroke(new GestureDescription.StrokeDescription(clickPath, 0, 50L));
+            dispatchGesture(builder.build(), null, null);
         }
     }
 

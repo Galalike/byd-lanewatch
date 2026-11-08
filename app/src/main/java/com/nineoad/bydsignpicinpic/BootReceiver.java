@@ -21,7 +21,7 @@ public class BootReceiver extends BroadcastReceiver {
                         .putBoolean("pending_autostart_unblock", true)
                         .apply();
             } catch (Throwable ignored) {}
-            com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.triggerDisableAutostartAutomation(context);
+            com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.triggerDisableAutostartAutomation(context.getApplicationContext());
         }
         Intent intent2 = new Intent(context, (Class<?>) OverlayService.class);
         String subAction = intent.getStringExtra("action");
@@ -29,7 +29,8 @@ public class BootReceiver extends BroadcastReceiver {
             intent2.setAction(subAction);
         } else if (!"android.intent.action.BOOT_COMPLETED".equals(intent.getAction())
                 && !"android.intent.action.QUICKBOOT_POWERON".equals(intent.getAction())
-                && !"ACC_ON".equals(intent.getAction())) {
+                && !"ACC_ON".equals(intent.getAction())
+                && !"android.intent.action.MY_PACKAGE_REPLACED".equals(intent.getAction())) {
             intent2.setAction(intent.getAction());
         }
         try {
