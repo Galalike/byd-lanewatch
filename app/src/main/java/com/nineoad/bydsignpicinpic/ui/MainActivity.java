@@ -433,6 +433,13 @@ public class MainActivity extends AppCompatActivity {
         });
         ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.CAMERA"}, 1);
         checkAutoStartAutomationOnUpdate();
+        int lastRunVer = this.prefs.getInt("last_run_version_code", 0);
+        int curVer = com.nineoad.bydsignpicinpic.signal.BydKeyRemapService.getAppVersionCode(this);
+        if (lastRunVer != 0 && curVer > lastRunVer) {
+            Toast.makeText(this, tr("✨ อัปเดตเป็น BYD LaneWatch สำเร็จแล้ว!", "✨ BYD LaneWatch updated successfully!"), Toast.LENGTH_LONG).show();
+        }
+        this.prefs.edit().putInt("last_run_version_code", curVer).apply();
+        checkUpdateAutoOnLaunch();
     }
 
     private void checkAutoStartAutomationOnUpdate() {
@@ -2852,6 +2859,22 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        // Setup Auto-Check Update Switch
+        Switch swAutoCheck = findViewById(R.id.swAutoCheckUpdate);
+        if (swAutoCheck != null) {
+            swAutoCheck.setChecked(updateChecker.isAutoCheckEnabled());
+            swAutoCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    updateChecker.setAutoCheckEnabled(isChecked);
+                    Toast.makeText(MainActivity.this, 
+                        tr(isChecked ? "เปิดการตรวจสอบอัปเดตอัตโนมัติแล้ว" : "ปิดการตรวจสอบอัปเดตอัตโนมัติแล้ว",
+                           isChecked ? "Auto-check enabled" : "Auto-check disabled"), 
+                        Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         // Check Action
         Runnable runCheck = () -> {
             if (btnCheck != null) btnCheck.setEnabled(false);
@@ -3027,6 +3050,50 @@ public class MainActivity extends AppCompatActivity {
                     .show();
             });
         }
+    }
+
+    private void checkUpdateAutoOnLaunch() {
+        final UpdateChecker updateChecker = new UpdateChecker(this);
+        if (!updateChecker.isAutoCheckEnabled()) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        long lastCheckTime = this.prefs.getLong("ota_last_check_timestamp", 0L);
+        if (now - lastCheckTime < 4 * 3600 * 1000L && lastCheckTime != 0) {
+            return;
+        }
+        this.prefs.edit().putLong("ota_last_check_timestamp", now).apply();
+
+        updateChecker.check(new UpdateChecker.Listener() {
+            @Override public void onChecking() {}
+            @Override public void onUpToDate(int i) {}
+            @Override public void onError(String str) {}
+            @Override public void onDownloadProgress(int p, long d, long t) {}
+            @Override public void onDownloadComplete(File f) {}
+
+            @Override
+            public void onUpdateAvailable(UpdateChecker.UpdateInfo info) {
+                if (isFinishing() || isDestroyed()) return;
+                availableUpdateInfo = info;
+                showUpdatePromptDialog(info);
+            }
+        });
+    }
+
+    private void showUpdatePromptDialog(UpdateChecker.UpdateInfo info) {
+        if (info == null || isFinishing() || isDestroyed()) return;
+        new AlertDialog.Builder(this)
+            .setTitle(tr("🚀 พบการอัปเดตใหม่ v" + info.versionName, "🚀 New Update Available v" + info.versionName))
+            .setMessage(tr("มีเวอร์ชันใหม่พร้อมติดตั้งสำหรับ BYD LaneWatch:\n\n", "A new version of BYD LaneWatch is ready:\n\n")
+                    + (info.whatsNew != null && !info.whatsNew.isEmpty() ? info.whatsNew : (info.notes != null ? info.notes : "")))
+            .setPositiveButton(tr("เปิดหน้าอัปเดต", "Go to Update"), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switchNavTab(1);
+                }
+            })
+            .setNegativeButton(tr("ภายหลัง", "Later"), null)
+            .show();
     }
 
     private void setupNavVehiclePage() {

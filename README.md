@@ -8,7 +8,7 @@
 
 | เวอร์ชัน | ประเภท | ดาวน์โหลด APK | ไฮไลท์สำคัญ |
 | :--- | :---: | :--- | :--- |
-| **v1.0.3-beta1** | 🧪 **Beta (ล่าสุด)** | [⬇️ ดาวน์โหลด BYDLaneWatch_v1.0.3-beta1.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.3-beta1/BYDLaneWatch_v1.0.3-beta1.apk) | เพิ่มตัวดักสัญญาณรถสด (Signal Probe) และระบบเตือนจุดอับสายตา Any-Side |
+| **v1.0.3** | 🛡️ **Stable (ล่าสุด)** | [⬇️ ดาวน์โหลด BYDLaneWatch_v1.0.3.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.3/BYDLaneWatch_v1.0.3.apk) | ค่าแนะนำมาตรฐานจากรถจริง (OEM Preset), ตรวจอัปเดตอัตโนมัติ, Vehicle Signal Probe, และยกระดับความปลอดภัย |
 | **v1.0.2** | 🛡️ **Stable** | [⬇️ ดาวน์โหลด BYDLaneWatch_v1.0.2.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.2/BYDLaneWatch_v1.0.2.apk) | ปลดล็อก Autostart อัตโนมัติด้วย Physical Gesture Scrolling |
 
 > 📌 หรือไปที่หน้า **[GitHub Releases ทั้งหมด](https://github.com/Galalike/byd-lanewatch/releases)** เพื่อเลือกดาวน์โหลดทุกเวอร์ชันย้อนหลัง

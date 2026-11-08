@@ -101,6 +101,16 @@ public class UpdateChecker {
         sp.edit().putString("ota_channel", channel).apply();
     }
 
+    public boolean isAutoCheckEnabled() {
+        android.content.SharedPreferences sp = this.ctx.getSharedPreferences("pnp", Context.MODE_PRIVATE);
+        return sp.getBoolean("auto_check_update", true);
+    }
+
+    public void setAutoCheckEnabled(boolean enabled) {
+        android.content.SharedPreferences sp = this.ctx.getSharedPreferences("pnp", Context.MODE_PRIVATE);
+        sp.edit().putBoolean("auto_check_update", enabled).apply();
+    }
+
     private int currentCode() {
         try {
             return this.ctx.getPackageManager().getPackageInfo(this.ctx.getPackageName(), 0).versionCode;
@@ -120,6 +130,10 @@ public class UpdateChecker {
         String serverUrl = getResolvedOtaUrl();
         if (serverUrl == null || serverUrl.trim().isEmpty()) {
             fail(listener, "ยังไม่ได้กำหนด URL เซิร์ฟเวอร์อัปเดต (OTA Endpoint Not Configured)\nกรุณากำหนด URL หรือ Endpoint ของระบบจัดการอัปเดต");
+            return;
+        }
+        if (!serverUrl.toLowerCase().startsWith("https://")) {
+            fail(listener, "URL อัปเดตต้องเป็น HTTPS เท่านั้นเพื่อความปลอดภัย");
             return;
         }
         HttpURLConnection conn = null;
@@ -188,6 +202,10 @@ public class UpdateChecker {
     }
 
     private void downloadInternal(UpdateInfo updateInfo, final Listener listener) {
+        if (updateInfo == null || updateInfo.url == null || updateInfo.url.trim().isEmpty()) {
+            fail(listener, "URL สำหรับดาวน์โหลดไม่ถูกต้อง");
+            return;
+        }
         HttpURLConnection conn = null;
         try {
             File dir = new File(this.ctx.getExternalCacheDir(), "updates");
@@ -196,16 +214,47 @@ public class UpdateChecker {
             }
             final File targetApk = new File(dir, "update.apk");
             File dlFile = new File(dir, "update.dl");
+            // Security: Prevent path traversal
+            if (!targetApk.getCanonicalPath().startsWith(dir.getCanonicalPath())) {
+                fail(listener, "เป้าหมายไฟล์ไม่ปลอดภัย (Path Traversal Detected)");
+                return;
+            }
             if (targetApk.exists()) {
                 targetApk.delete();
             }
             if (dlFile.exists()) {
                 dlFile.delete();
             }
-            conn = (HttpURLConnection) new URL(updateInfo.url).openConnection();
-            conn.setConnectTimeout(CONN_TIMEOUT_MS);
-            conn.setReadTimeout(60000);
-            int responseCode = conn.getResponseCode();
+
+            // Follow HTTP/HTTPS redirects safely up to 5 times (e.g. GitHub Releases CDN)
+            String targetUrl = updateInfo.url;
+            int responseCode = -1;
+            int redirectCount = 0;
+            while (redirectCount < 5) {
+                if (!targetUrl.toLowerCase().startsWith("https://")) {
+                    fail(listener, "ต้องดาวน์โหลดผ่าน HTTPS เท่านั้นเพื่อความปลอดภัย");
+                    return;
+                }
+                conn = (HttpURLConnection) new URL(targetUrl).openConnection();
+                conn.setConnectTimeout(CONN_TIMEOUT_MS);
+                conn.setReadTimeout(60000);
+                conn.setInstanceFollowRedirects(true);
+                responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_MOVED_PERM
+                        || responseCode == HttpURLConnection.HTTP_MOVED_TEMP
+                        || responseCode == 307
+                        || responseCode == 308) {
+                    String location = conn.getHeaderField("Location");
+                    if (location != null && !location.isEmpty()) {
+                        targetUrl = location;
+                        conn.disconnect();
+                        redirectCount++;
+                        continue;
+                    }
+                }
+                break;
+            }
+
             if (responseCode != 200) {
                 fail(listener, "ดาวน์โหลดไม่สำเร็จ (HTTP " + responseCode + ")");
                 return;

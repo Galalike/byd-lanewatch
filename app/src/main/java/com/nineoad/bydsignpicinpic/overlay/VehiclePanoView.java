@@ -220,15 +220,15 @@ public class VehiclePanoView extends FrameLayout {
             this.cropTop = this.prefs.getFloat("bev_crop_top", DEF_CROP_TOP);
             this.cropRight = this.prefs.getFloat("bev_crop_right", DEF_CROP_RIGHT);
             this.cropBottom = this.prefs.getFloat("bev_crop_bottom", DEF_CROP_BOTTOM);
-            this.angleFront = clampAngle(this.prefs.getFloat("bev_angle_front", 0f));
-            this.angleRear = clampAngle(this.prefs.getFloat("bev_angle_rear", 0f));
-            this.angleLeft = clampAngle(this.prefs.getFloat("bev_angle_left", 0f));
-            this.angleRight = clampAngle(this.prefs.getFloat("bev_angle_right", 0f));
+            this.angleFront = clampAngle(this.prefs.getFloat("bev_angle_front", -4.8f));
+            this.angleRear = clampAngle(this.prefs.getFloat("bev_angle_rear", 15.0f));
+            this.angleLeft = clampAngle(this.prefs.getFloat("bev_angle_left", -3.0f));
+            this.angleRight = clampAngle(this.prefs.getFloat("bev_angle_right", 0.0f));
 
-            this.carScaleW = this.prefs.getFloat("bev_car_scale_w", 0.35f);
-            this.carAspectH = this.prefs.getFloat("bev_car_aspect_h", 2.41f);
+            this.carScaleW = this.prefs.getFloat("bev_car_scale_w", 0.34f);
+            this.carAspectH = this.prefs.getFloat("bev_car_aspect_h", 2.4f);
             this.carOffX = this.prefs.getFloat("bev_car_off_x", 0.0f);
-            this.carOffY = this.prefs.getFloat("bev_car_off_y", 0.008f);
+            this.carOffY = this.prefs.getFloat("bev_car_off_y", 0.035f);
             int carColor = this.prefs.getInt("car_model_color", 0);
             this.showCustomCarOverlay = this.prefs.getBoolean("bev_custom_car_overlay", false);
 

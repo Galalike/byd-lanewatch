@@ -1,0 +1,29 @@
+# Gradle & Build caches
+.gradle/
+build/
+app/build/*
+!app/build/outputs
+app/build/outputs/*
+!app/build/outputs/apk
+app/build/outputs/apk/*
+!app/build/outputs/apk/debug
+app/build/outputs/apk/debug/*
+!app/build/outputs/apk/debug/app-debug.apk
+
+*.iml
+.idea/
+local.properties
+.DS_Store
+*.swp
+*~
+
+# Keystores & sensitive credentials
+*.jks
+*.keystore
+secrets.xml
+google-services.json
+
+# Crashlytics & temporary files
+captures/
+.externalNativeBuild/
+.cxx/

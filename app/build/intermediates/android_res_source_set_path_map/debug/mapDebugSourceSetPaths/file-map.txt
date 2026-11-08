@@ -1,9 +1,0 @@
-com.nineoad.bydsignpicinpic.app-pngs-0 /Users/dee/Desktop/BYDSignalPnP/app/build/generated/res/pngs/debug
-com.nineoad.bydsignpicinpic.app-resValues-1 /Users/dee/Desktop/BYDSignalPnP/app/build/generated/res/resValues/debug
-com.nineoad.bydsignpicinpic.app-updated_navigation_xml-2 /Users/dee/Desktop/BYDSignalPnP/app/build/generated/updated_navigation_xml/debug
-com.nineoad.bydsignpicinpic.app-mergeDebugResources-3 /Users/dee/Desktop/BYDSignalPnP/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir
-com.nineoad.bydsignpicinpic.app-mergeDebugResources-4 /Users/dee/Desktop/BYDSignalPnP/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir
-com.nineoad.bydsignpicinpic.app-debug-5 /Users/dee/Desktop/BYDSignalPnP/app/build/intermediates/merged_res/debug/mergeDebugResources
-com.nineoad.bydsignpicinpic.app-debug-6 /Users/dee/Desktop/BYDSignalPnP/app/src/debug/res
-com.nineoad.bydsignpicinpic.app-main-7 /Users/dee/Desktop/BYDSignalPnP/app/src/main/res
-gradleHome-0 /Users/dee/.gradle

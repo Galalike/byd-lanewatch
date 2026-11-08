@@ -42,6 +42,16 @@
                     android:textColor="@color/lw_text_secondary" />
             </LinearLayout>
 
+            <Switch
+                android:id="@+id/swAutoCheckUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="ตรวจอัปเดตอัตโนมัติ"
+                android:textSize="12sp"
+                android:textColor="@color/lw_text_secondary"
+                android:checked="true" />
+
             <Button
                 android:id="@+id/btnConfigureOta"
                 android:layout_width="wrap_content"

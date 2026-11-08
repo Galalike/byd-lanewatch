@@ -622,14 +622,14 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
 
         // Keep root permanently VISIBLE so EGLSurface and PanoAPI never get destroyed
         this.root.setVisibility(0);
-        this.singleScale = clampScale(this.prefs.getFloat("scale", 1.0f));
-        this.hazardScale = clampScale(this.prefs.getFloat("scale_hz", 1.0f));
-        this.drivingScale = clampScale(this.prefs.getFloat("scale_dr", 1.0f));
-        this.balanceScale = clampScale(this.prefs.getFloat("scale_ba", 1.0f));
-        this.customScale = clampScale(this.prefs.getFloat("scale_cu", 1.0f));
-        this.rearScale = clampScale(this.prefs.getFloat("scale_rear", 1.0f));
-        this.bevScale = clampScale(this.prefs.getFloat("scale_bev", 1.0f));
-        dispMode = this.prefs.getInt("mode", 0);
+        this.singleScale = clampScale(this.prefs.getFloat("scale", 0.9500799f));
+        this.hazardScale = clampScale(this.prefs.getFloat("scale_hz", 0.93681604f));
+        this.drivingScale = clampScale(this.prefs.getFloat("scale_dr", 0.9500799f));
+        this.balanceScale = clampScale(this.prefs.getFloat("scale_ba", 0.9500799f));
+        this.customScale = clampScale(this.prefs.getFloat("scale_cu", 0.95554584f));
+        this.rearScale = clampScale(this.prefs.getFloat("scale_rear", 1.0796669f));
+        this.bevScale = clampScale(this.prefs.getFloat("scale_bev", 1.502741f));
+        dispMode = this.prefs.getInt("mode", 2);
         loadDrivingTuning();
         // Start parked off-screen with FLAG_NOT_FOCUSABLE (8) | FLAG_NOT_TOUCH_MODAL (32) | FLAG_NOT_TOUCHABLE (16) | FLAG_LAYOUT_NO_LIMITS (512)
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(scaled(singleWidthPx), scaled(singleHeightPx), Build.VERSION.SDK_INT >= 26 ? 2038 : 2002, 40 | 16 | 512, -3);
@@ -1638,35 +1638,35 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     public static void loadQuadWheelTuning(SharedPreferences sp, FisheyeGLView glView) {
         if (glView == null || sp == null) return;
         // 0: FL (Front Left from Left camera)
-        float[] cropFL = loadCrop(sp, "quad_crop_fl", new float[]{0.0f, 0.0f, 1.0f, 0.55f});
-        float strFL = sp.getFloat("quad_str_fl", -0.15f);
-        float zoomFL = sp.getFloat("quad_zoom_fl", 1.25f);
-        float cxFL = sp.getFloat("quad_cx_fl", 0.5f);
-        float cyFL = sp.getFloat("quad_cy_fl", 0.35f);
-        float rotFL = sp.getFloat("quad_rot_fl", 0.0f);
-        float fnFL = sp.getFloat("quad_fn_fl", 0.0f);
+        float[] cropFL = loadCrop(sp, "quad_crop_fl", new float[]{0.0f, 0.31f, 1.0f, 1.0f});
+        float strFL = sp.getFloat("quad_str_fl", -0.37f);
+        float zoomFL = sp.getFloat("quad_zoom_fl", 1.20f);
+        float cxFL = sp.getFloat("quad_cx_fl", 0.51f);
+        float cyFL = sp.getFloat("quad_cy_fl", 0.50f);
+        float rotFL = sp.getFloat("quad_rot_fl", 270.0f);
+        float fnFL = sp.getFloat("quad_fn_fl", 10.0f);
         boolean mirFL = sp.getBoolean("quad_mir_fl", false);
         boolean fvFL = sp.getBoolean("quad_fv_fl", false);
         glView.setParamsQuadWheel(0, rotFL, fnFL, mirFL, fvFL, cropFL, strFL, zoomFL, cxFL, cyFL);
 
         // 1: FR (Front Right from Right camera)
-        float[] cropFR = loadCrop(sp, "quad_crop_fr", new float[]{0.0f, 0.0f, 1.0f, 0.55f});
-        float strFR = sp.getFloat("quad_str_fr", -0.15f);
+        float[] cropFR = loadCrop(sp, "quad_crop_fr", new float[]{0.0f, 0.32f, 1.0f, 1.0f});
+        float strFR = sp.getFloat("quad_str_fr", -0.35f);
         float zoomFR = sp.getFloat("quad_zoom_fr", 1.25f);
-        float cxFR = sp.getFloat("quad_cx_fr", 0.5f);
-        float cyFR = sp.getFloat("quad_cy_fr", 0.35f);
-        float rotFR = sp.getFloat("quad_rot_fr", 0.0f);
-        float fnFR = sp.getFloat("quad_fn_fr", 0.0f);
+        float cxFR = sp.getFloat("quad_cx_fr", 0.46f);
+        float cyFR = sp.getFloat("quad_cy_fr", 0.52f);
+        float rotFR = sp.getFloat("quad_rot_fr", 90.0f);
+        float fnFR = sp.getFloat("quad_fn_fr", -24.0f);
         boolean mirFR = sp.getBoolean("quad_mir_fr", false);
         boolean fvFR = sp.getBoolean("quad_fv_fr", false);
         glView.setParamsQuadWheel(1, rotFR, fnFR, mirFR, fvFR, cropFR, strFR, zoomFR, cxFR, cyFR);
 
         // 2: RL (Rear Left from Left camera)
-        float[] cropRL = loadCrop(sp, "quad_crop_rl", new float[]{0.0f, 0.45f, 1.0f, 1.0f});
-        float strRL = sp.getFloat("quad_str_rl", -0.15f);
-        float zoomRL = sp.getFloat("quad_zoom_rl", 1.25f);
+        float[] cropRL = loadCrop(sp, "quad_crop_rl", new float[]{0.0f, 0.0f, 1.0f, 1.0f});
+        float strRL = sp.getFloat("quad_str_rl", 0.0f);
+        float zoomRL = sp.getFloat("quad_zoom_rl", 1.0f);
         float cxRL = sp.getFloat("quad_cx_rl", 0.5f);
-        float cyRL = sp.getFloat("quad_cy_rl", 0.65f);
+        float cyRL = sp.getFloat("quad_cy_rl", 0.5f);
         float rotRL = sp.getFloat("quad_rot_rl", 0.0f);
         float fnRL = sp.getFloat("quad_fn_rl", 0.0f);
         boolean mirRL = sp.getBoolean("quad_mir_rl", false);
@@ -1674,11 +1674,11 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         glView.setParamsQuadWheel(2, rotRL, fnRL, mirRL, fvRL, cropRL, strRL, zoomRL, cxRL, cyRL);
 
         // 3: RR (Rear Right from Right camera)
-        float[] cropRR = loadCrop(sp, "quad_crop_rr", new float[]{0.0f, 0.45f, 1.0f, 1.0f});
-        float strRR = sp.getFloat("quad_str_rr", -0.15f);
-        float zoomRR = sp.getFloat("quad_zoom_rr", 1.25f);
+        float[] cropRR = loadCrop(sp, "quad_crop_rr", new float[]{0.0f, 0.0f, 1.0f, 1.0f});
+        float strRR = sp.getFloat("quad_str_rr", 0.0f);
+        float zoomRR = sp.getFloat("quad_zoom_rr", 1.0f);
         float cxRR = sp.getFloat("quad_cx_rr", 0.5f);
-        float cyRR = sp.getFloat("quad_cy_rr", 0.65f);
+        float cyRR = sp.getFloat("quad_cy_rr", 0.5f);
         float rotRR = sp.getFloat("quad_rot_rr", 0.0f);
         float fnRR = sp.getFloat("quad_fn_rr", 0.0f);
         boolean mirRR = sp.getBoolean("quad_mir_rr", false);
@@ -1691,13 +1691,13 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         rearMirror = sharedPreferences.getBoolean("rear_mir_l", true);
         rearFlipV = sharedPreferences.getBoolean("rear_fv_l", false);
         rearFine = sharedPreferences.getFloat("rear_fn_l", 0.0f);
-        rearFeStrength = sharedPreferences.getFloat("rear_str_l", 0.0f);
-        rearFeZoom = sharedPreferences.getFloat("rear_zoom_l", 1.0f);
-        rearFeCx = sharedPreferences.getFloat("rear_cx_l", 0.5f);
-        rearFeCy = sharedPreferences.getFloat("rear_cy_l", 0.5f);
-        rearCrop = loadCrop(sharedPreferences, "rear_l", new float[]{0.0f, 0.20f, 1.0f, 0.80f});
+        rearFeStrength = sharedPreferences.getFloat("rear_str_l", -0.02f);
+        rearFeZoom = sharedPreferences.getFloat("rear_zoom_l", 2.30f);
+        rearFeCx = sharedPreferences.getFloat("rear_cx_l", 0.50845903f);
+        rearFeCy = sharedPreferences.getFloat("rear_cy_l", 0.6826888f);
+        rearCrop = loadCrop(sharedPreferences, "rear_l", new float[]{0.0f, 0.50f, 1.0f, 1.0f});
         rearAspect = sharedPreferences.getInt("rear_aspect", 0);
-        pipCornerRadiusDp = sharedPreferences.getInt("pip_corner_radius", 16);
+        pipCornerRadiusDp = sharedPreferences.getInt("pip_corner_radius", 22);
         rearIndex = sharedPreferences.getInt("rear_cam_index", 1);
     }
 
@@ -1709,24 +1709,24 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         String strCustomPrefix = "dr_";
         drivingRotLeft = sharedPreferences.getInt(strCustomPrefix + "rot_l", 0);
         drivingRotRight = sharedPreferences.getInt(strCustomPrefix + "rot_r", 270);
-        drivingMirrorLeft = sharedPreferences.getBoolean(strCustomPrefix + "mir_l", false);
-        drivingMirrorRight = sharedPreferences.getBoolean(strCustomPrefix + "mir_r", false);
+        drivingMirrorLeft = sharedPreferences.getBoolean(strCustomPrefix + "mir_l", true);
+        drivingMirrorRight = sharedPreferences.getBoolean(strCustomPrefix + "mir_r", true);
         drivingFlipVLeft = sharedPreferences.getBoolean(strCustomPrefix + "fv_l", false);
         drivingFlipVRight = sharedPreferences.getBoolean(strCustomPrefix + "fv_r", false);
-        drivingFineLeft = sharedPreferences.getFloat(strCustomPrefix + "fn_l", 0.0f);
-        drivingFineRight = sharedPreferences.getFloat(strCustomPrefix + "fn_r", 0.0f);
-        drivingFeStrengthLeft = sharedPreferences.getFloat(strCustomPrefix + "str_l", 0.0f);
-        drivingFeStrengthRight = sharedPreferences.getFloat(strCustomPrefix + "str_r", 0.0f);
-        drivingFeZoomLeft = sharedPreferences.getFloat(strCustomPrefix + "zoom_l", 1.0f);
-        drivingFeZoomRight = sharedPreferences.getFloat(strCustomPrefix + "zoom_r", 1.0f);
-        drivingFeCxLeft = sharedPreferences.getFloat(strCustomPrefix + "cx_l", 0.5f);
-        drivingFeCxRight = sharedPreferences.getFloat(strCustomPrefix + "cx_r", 0.5f);
-        drivingFeCyLeft = sharedPreferences.getFloat(strCustomPrefix + "cy_l", 0.5f);
-        drivingFeCyRight = sharedPreferences.getFloat(strCustomPrefix + "cy_r", 0.5f);
-        drivingCropLeft = loadCrop(sharedPreferences, strCustomPrefix + "l", new float[]{0.05f, 0.24f, 0.92f, 1.0f});
-        drivingCropRight = loadCrop(sharedPreferences, strCustomPrefix + "r", new float[]{0.08f, 0.24f, 0.95f, 1.0f});
+        drivingFineLeft = sharedPreferences.getFloat(strCustomPrefix + "fn_l", 48.0f);
+        drivingFineRight = sharedPreferences.getFloat(strCustomPrefix + "fn_r", 27.0f);
+        drivingFeStrengthLeft = sharedPreferences.getFloat(strCustomPrefix + "str_l", -0.24f);
+        drivingFeStrengthRight = sharedPreferences.getFloat(strCustomPrefix + "str_r", -0.38f);
+        drivingFeZoomLeft = sharedPreferences.getFloat(strCustomPrefix + "zoom_l", 1.14f);
+        drivingFeZoomRight = sharedPreferences.getFloat(strCustomPrefix + "zoom_r", 0.91f);
+        drivingFeCxLeft = sharedPreferences.getFloat(strCustomPrefix + "cx_l", 0.40f);
+        drivingFeCxRight = sharedPreferences.getFloat(strCustomPrefix + "cx_r", 0.66f);
+        drivingFeCyLeft = sharedPreferences.getFloat(strCustomPrefix + "cy_l", 0.5601612f);
+        drivingFeCyRight = sharedPreferences.getFloat(strCustomPrefix + "cy_r", 0.68f);
+        drivingCropLeft = loadCrop(sharedPreferences, strCustomPrefix + "l", new float[]{0.22f, 0.57f, 0.81f, 0.97f});
+        drivingCropRight = loadCrop(sharedPreferences, strCustomPrefix + "r", new float[]{0.21f, 0.62f, 0.75f, 0.89f});
         customOrient = sharedPreferences.getInt(strCustomPrefix + "orient", 0);
-        pipCornerRadiusDp = sharedPreferences.getInt("pip_corner_radius", 16);
+        pipCornerRadiusDp = sharedPreferences.getInt("pip_corner_radius", 22);
     }
 
     private static float[] loadCrop(SharedPreferences sharedPreferences, String str, float[] fArr) {

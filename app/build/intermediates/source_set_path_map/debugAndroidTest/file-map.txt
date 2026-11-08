@@ -1,4 +1,0 @@
-com.nineoad.bydsignpicinpic.test.app-androidTest-0 /Users/dee/Desktop/BYDSignalPnP/app/build/generated/res/resValues/androidTest/debug
-com.nineoad.bydsignpicinpic.test.app-mergeDebugAndroidTestResources-1 /Users/dee/Desktop/BYDSignalPnP/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
-com.nineoad.bydsignpicinpic.test.app-mergeDebugAndroidTestResources-2 /Users/dee/Desktop/BYDSignalPnP/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
-com.nineoad.bydsignpicinpic.test.app-merged_res-3 /Users/dee/Desktop/BYDSignalPnP/app/build/intermediates/merged_res/debugAndroidTest

@@ -969,53 +969,110 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
     private void applyRecommendedPreset() {
         SharedPreferences.Editor ed = prefs.edit();
         if (activeMode == 1) {
-            String side = isTurnRight ? "r" : "l";
-            float defL = isTurnRight ? 0.08f : 0.05f;
-            float defR = isTurnRight ? 0.95f : 0.92f;
-            ed.putInt("dr_rot_" + side, isTurnRight ? 270 : 0)
-              .putFloat("dr_fn_" + side, 0.0f)
-              .putBoolean("dr_mir_" + side, false)
-              .putBoolean("dr_fv_" + side, false)
-              .putFloat("dr_" + side + "0", defL)
-              .putFloat("dr_" + side + "1", 0.24f)
-              .putFloat("dr_" + side + "2", defR)
-              .putFloat("dr_" + side + "3", 1.00f)
-              .putFloat("dr_str_" + side, 0.0f)
-              .putFloat("dr_zoom_" + side, 1.0f)
-              .putFloat("dr_cx_" + side, 0.5f)
-              .putFloat("dr_cy_" + side, 0.5f);
+            if (isTurnRight) {
+                // Right Turn
+                ed.putInt("dr_rot_r", 270)
+                  .putFloat("dr_fn_r", 27.0f)
+                  .putBoolean("dr_mir_r", true)
+                  .putBoolean("dr_fv_r", false)
+                  .putFloat("dr_r0", 0.21f)
+                  .putFloat("dr_r1", 0.62f)
+                  .putFloat("dr_r2", 0.75f)
+                  .putFloat("dr_r3", 0.89f)
+                  .putFloat("dr_str_r", -0.38f)
+                  .putFloat("dr_zoom_r", 0.91f)
+                  .putFloat("dr_cx_r", 0.66f)
+                  .putFloat("dr_cy_r", 0.68f);
+            } else {
+                // Left Turn
+                ed.putInt("dr_rot_l", 0)
+                  .putFloat("dr_fn_l", 48.0f)
+                  .putBoolean("dr_mir_l", true)
+                  .putBoolean("dr_fv_l", false)
+                  .putFloat("dr_l0", 0.22f)
+                  .putFloat("dr_l1", 0.57f)
+                  .putFloat("dr_l2", 0.81f)
+                  .putFloat("dr_l3", 0.97f)
+                  .putFloat("dr_str_l", -0.24f)
+                  .putFloat("dr_zoom_l", 1.14f)
+                  .putFloat("dr_cx_l", 0.40f)
+                  .putFloat("dr_cy_l", 0.5601612f);
+            }
+            ed.putFloat("scale_dr", 0.9500799f)
+              .putInt("x_dr", 1236)
+              .putInt("y_dr", 0)
+              .putInt("pip_corner_radius", 22);
         } else if (activeMode == 2) {
             ed.putInt("rear_rot_l", 0)
               .putFloat("rear_fn_l", 0.0f)
               .putBoolean("rear_mir_l", true)
               .putBoolean("rear_fv_l", false)
               .putFloat("rear_l0", 0.00f)
-              .putFloat("rear_l1", 0.20f)
+              .putFloat("rear_l1", 0.50f)
               .putFloat("rear_l2", 1.00f)
-              .putFloat("rear_l3", 0.80f)
-              .putFloat("rear_str_l", 0.0f)
-              .putFloat("rear_zoom_l", 1.0f)
-              .putFloat("rear_cx_l", 0.50f)
-              .putFloat("rear_cy_l", 0.50f);
+              .putFloat("rear_l3", 1.00f)
+              .putFloat("rear_str_l", -0.02f)
+              .putFloat("rear_zoom_l", 2.30f)
+              .putFloat("rear_cx_l", 0.50845903f)
+              .putFloat("rear_cy_l", 0.6826888f)
+              .putFloat("scale_rear", 1.0796669f)
+              .putInt("x_rear", 768)
+              .putInt("y_rear", 22);
         } else {
             String wKey = getActiveTargetKey();
-            float[] defCrop = (selectedWheelIdx < 2)
-                    ? new float[]{0.0f, 0.0f, 1.0f, 0.55f}
-                    : new float[]{0.0f, 0.45f, 1.0f, 1.0f};
-            float defCy = (selectedWheelIdx < 2) ? 0.35f : 0.65f;
-            float defRot = (selectedWheelIdx == 0 || selectedWheelIdx == 3) ? 270f : 90f;
-            ed.putFloat("quad_rot_" + wKey, defRot)
-              .putFloat("quad_fn_" + wKey, 0.0f)
-              .putBoolean("quad_mir_" + wKey, false)
-              .putBoolean("quad_fv_" + wKey, false)
-              .putFloat("quad_crop_" + wKey + "0", defCrop[0])
-              .putFloat("quad_crop_" + wKey + "1", defCrop[1])
-              .putFloat("quad_crop_" + wKey + "2", defCrop[2])
-              .putFloat("quad_crop_" + wKey + "3", defCrop[3])
-              .putFloat("quad_str_" + wKey, -0.15f)
-              .putFloat("quad_zoom_" + wKey, 1.25f)
-              .putFloat("quad_cx_" + wKey, 0.50f)
-              .putFloat("quad_cy_" + wKey, defCy);
+            if (selectedWheelIdx == 0) { // FL
+                ed.putFloat("quad_rot_fl", 270.0f)
+                  .putFloat("quad_fn_fl", 10.0f)
+                  .putBoolean("quad_mir_fl", false)
+                  .putBoolean("quad_fv_fl", false)
+                  .putFloat("quad_crop_fl0", 0.0f)
+                  .putFloat("quad_crop_fl1", 0.31f)
+                  .putFloat("quad_crop_fl2", 1.0f)
+                  .putFloat("quad_crop_fl3", 1.0f)
+                  .putFloat("quad_str_fl", -0.37f)
+                  .putFloat("quad_zoom_fl", 1.20f)
+                  .putFloat("quad_cx_fl", 0.51f)
+                  .putFloat("quad_cy_fl", 0.50f);
+            } else if (selectedWheelIdx == 1) { // FR
+                ed.putFloat("quad_rot_fr", 90.0f)
+                  .putFloat("quad_fn_fr", -24.0f)
+                  .putBoolean("quad_mir_fr", false)
+                  .putBoolean("quad_fv_fr", false)
+                  .putFloat("quad_crop_fr0", 0.0f)
+                  .putFloat("quad_crop_fr1", 0.32f)
+                  .putFloat("quad_crop_fr2", 1.0f)
+                  .putFloat("quad_crop_fr3", 1.0f)
+                  .putFloat("quad_str_fr", -0.35f)
+                  .putFloat("quad_zoom_fr", 1.25f)
+                  .putFloat("quad_cx_fr", 0.46f)
+                  .putFloat("quad_cy_fr", 0.52f);
+            } else if (selectedWheelIdx == 2) { // RL
+                ed.putFloat("quad_rot_rl", 0.0f)
+                  .putFloat("quad_fn_rl", 0.0f)
+                  .putBoolean("quad_mir_rl", false)
+                  .putBoolean("quad_fv_rl", false)
+                  .putFloat("quad_crop_rl0", 0.0f)
+                  .putFloat("quad_crop_rl1", 0.0f)
+                  .putFloat("quad_crop_rl2", 1.0f)
+                  .putFloat("quad_crop_rl3", 1.0f)
+                  .putFloat("quad_str_rl", 0.0f)
+                  .putFloat("quad_zoom_rl", 1.0f)
+                  .putFloat("quad_cx_rl", 0.50f)
+                  .putFloat("quad_cy_rl", 0.50f);
+            } else { // RR
+                ed.putFloat("quad_rot_rr", 0.0f)
+                  .putFloat("quad_fn_rr", 0.0f)
+                  .putBoolean("quad_mir_rr", false)
+                  .putBoolean("quad_fv_rr", false)
+                  .putFloat("quad_crop_rr0", 0.0f)
+                  .putFloat("quad_crop_rr1", 0.0f)
+                  .putFloat("quad_crop_rr2", 1.0f)
+                  .putFloat("quad_crop_rr3", 1.0f)
+                  .putFloat("quad_str_rr", 0.0f)
+                  .putFloat("quad_zoom_rr", 1.0f)
+                  .putFloat("quad_cx_rr", 0.50f)
+                  .putFloat("quad_cy_rr", 0.50f);
+            }
         }
         ed.apply();
         loadCurrentModeIntoControls();
