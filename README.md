@@ -1,78 +1,100 @@
 # BYD LaneWatch (Blind Spot Picture-in-Picture)
 
-แอปพลิเคชันสำหรับจอ Android (DiLink) บนรถยนต์ **BYD** สำหรับแสดงภาพมุมอับสายตาจากกล้องมองข้างแบบ Picture-in-Picture (PiP) ซ้อนทับหน้าจอเมื่อผู้ขับเปิดไฟเลี้ยว
+[![Platform](https://img.shields.io/badge/Platform-BYD%20DiLink%20%7C%20Android-green.svg)](https://github.com/Galalike/byd-lanewatch)
+[![Latest Release](https://img.shields.io/github/v/release/Galalike/byd-lanewatch?color=blue)](https://github.com/Galalike/byd-lanewatch/releases/latest)
+[![License](https://img.shields.io/badge/License-Proprietary-orange.svg)](#)
+
+An intelligent camera overlay application tailored for **BYD DiLink** Android infotainment screens. **BYD LaneWatch** provides real-time blind spot camera feeds in a Picture-in-Picture (PiP) floating window whenever the driver signals or turns the steering wheel, seamlessly enhancing driving safety without disrupting navigation or multimedia apps.
 
 ---
 
-## 📥 ดาวน์โหลดติดตั้ง (Downloads)
+## 🌟 Key Features
 
-| เวอร์ชัน | ประเภท | ดาวน์โหลด APK | ไฮไลท์สำคัญ |
+- **Automatic LaneWatch Overlay (PiP):** Displays the corresponding side mirror camera immediately when the left or right turn signal is activated.
+- **Front-Wheel Camera Attachment:** Automatically activates front-wheel side views when turning the steering wheel past the threshold angle at low speeds (parking and narrow alley maneuvers).
+- **Digital Rearview Mirror:** Dedicated full-time or on-demand digital rearview camera streaming.
+- **OEM Calibrated Presets:** Pre-tuned angles, aspect ratios, and fisheye dewarping parameters calibrated directly on BYD vehicles.
+- **Smart Reverse Protection:** Automatically yields to the native 360° AVM system when shifting into Reverse (`R`).
+- **ADAS Blind Spot Integration:** Dynamic visual warning frames that activate only when actual obstacles or vehicles are detected in the blind zone.
+- **Self-Healing Autostart:** Automatically resolves BYD DiLink background restrictions to ensure the service runs continuously upon vehicle start.
+- **Built-in OTA Update Checker:** Notifies and downloads the latest releases directly from within the app.
+
+---
+
+## 📥 Downloads
+
+| Version | Channel | Direct APK Download | Release Highlights |
 | :--- | :---: | :--- | :--- |
-| **v1.0.3** | 🛡️ **Stable (ล่าสุด)** | [⬇️ ดาวน์โหลด BYDLaneWatch_v1.0.3.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.3/BYDLaneWatch_v1.0.3.apk) | ค่าแนะนำมาตรฐานจากรถจริง (OEM Preset), ตรวจอัปเดตอัตโนมัติ, Vehicle Signal Probe, และยกระดับความปลอดภัย |
-| **v1.0.2** | 🛡️ **Stable** | [⬇️ ดาวน์โหลด BYDLaneWatch_v1.0.2.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.2/BYDLaneWatch_v1.0.2.apk) | ปลดล็อก Autostart อัตโนมัติด้วย Physical Gesture Scrolling |
+| **v1.0.4** | 🛡️ **Stable (Latest)** | [⬇️ **Download BYDLaneWatch_v1.0.4.apk**](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.4/BYDLaneWatch_v1.0.4.apk) | Autostart recovery & duplicate lock, front-wheel camera steering mode, instant aspect calibration |
+| **v1.0.3** | 🛡️ **Stable** | [⬇️ Download BYDLaneWatch_v1.0.3.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.3/BYDLaneWatch_v1.0.3.apk) | Recommended OEM calibrated presets, auto OTA check, vehicle signal probe |
+| **v1.0.2** | 🛡️ **Stable** | [⬇️ Download BYDLaneWatch_v1.0.2.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.2/BYDLaneWatch_v1.0.2.apk) | Autostart unblock automation via physical gesture scrolling |
 
-> 📌 หรือไปที่หน้า **[GitHub Releases ทั้งหมด](https://github.com/Galalike/byd-lanewatch/releases)** เพื่อเลือกดาวน์โหลดทุกเวอร์ชันย้อนหลัง
+> 📌 Browse all previous versions and change logs on the **[GitHub Releases Page](https://github.com/Galalike/byd-lanewatch/releases)**.
 
 ---
 
-## 🛠️ โครงสร้างโค้ดหลัก (Key Architecture)
+## 🚗 How to Install on Your BYD Vehicle
+
+Installing BYD LaneWatch on your car is straightforward and does not require complex tools:
+
+1. **Download the APK:**
+   - **Option A (Direct on Car):** Open the built-in Web Browser on your BYD infotainment screen, navigate to this page, and tap the download link for the latest APK.
+   - **Option B (USB Flash Drive):** Download the APK file on your computer or phone, copy it to a standard USB flash drive (FAT32/NTFS), and plug it into the vehicle's USB port.
+
+2. **Install the Package:**
+   - Open the **File Manager** (or Downloads) app on the BYD screen.
+   - Locate `BYDLaneWatch_v1.0.4.apk` and tap to install.
+   - If prompted to allow installation from unknown sources, select **Allow**.
+
+3. **Grant Required Permissions:**
+   - Open **BYD LaneWatch** from the vehicle's app launcher.
+   - **Display Over Other Apps (Overlay):** Tap the prompt and toggle the permission to **ON**.
+   - **Accessibility Service:** Tap to enable `BYD LaneWatch Service` (used for steering wheel button remap and automatic autostart configuration).
+
+4. **Ready to Drive:**
+   - The application comes pre-configured with recommended OEM vehicle presets.
+   - The background monitoring service automatically starts and remains active whenever the car is turned on.
+
+---
+
+## 🛠️ Architecture & Core Components
 
 ```
 app/src/main/java/
 ├── android/hardware/
-│   ├── JNIBMMCamera.java          # JNI Stub สำหรับเชื่อมต่อ Framework กล้องของ BYD
-│   └── watermark/                 # Watermark renderer สำหรับกล้อง
+│   ├── JNIBMMCamera.java          # JNI bridge for BYD camera HAL & framework
+│   └── watermark/                 # Hardware camera watermark renderer
 └── com/nineoad/
     ├── avc/
-    │   └── AvcClient.java         # ตัวเชื่อมต่อ Service กล้องรอบคันของ BYD (com.byd.action.AVCSERVICE)
+    │   └── AvcClient.java         # BYD 360 AVC camera service connector (com.byd.action.AVCSERVICE)
     └── bydsignpicinpic/
-        ├── App.java               # Application class
-        ├── BootReceiver.java      # ดักจับการเปิดสวิตช์กุญแจรถ (BOOT_COMPLETED, ACC_ON)
-        ├── HiddenApi.java         # ปลดล็อคข้อจำกัด Hidden API ของ Android
+        ├── App.java               # Global application state and lifecycle
+        ├── BootReceiver.java      # Boot & ignition receiver (BOOT_COMPLETED, ACC_ON, MY_PACKAGE_REPLACED)
+        ├── HiddenApi.java         # Android hidden API bypass for system integrations
         ├── autoservice/
-        │   ├── AutoserviceClient.java # IPC เรียกคำสั่ง service call autoservice ดักข้อมูลรถ
-        │   ├── SentinelDecoder.java   # ถอดรหัสค่าตัวเลข Sentinel จากระบบรถ
-        │   └── TurnFids.java          # ตารางรหัส Feature ID สัญญาณไฟเลี้ยว (Left=2/3, Right=4/5, Hazard=6)
+        │   ├── AutoserviceClient.java # IPC connector for vehicle signal telemetry
+        │   ├── SentinelDecoder.java   # Telemetry decoder for CAN signal frames
+        │   └── TurnFids.java          # Signal ID table (Turn Signals, Hazard, Steering, Speed)
         ├── camera/
-        │   ├── CameraFeed.java        # จัดการ Surface และ Feed ภาพวิดีโอกล้อง
-        │   └── PreviewTestActivity.java # หน้าทดสอบ Feed กล้องและปรับองศาหมุน
+        │   ├── CameraFeed.java        # Camera surface allocator & video feed manager
+        │   └── PreviewTestActivity.java # Visual diagnostic & orientation calibration tool
         ├── overlay/
-        │   ├── FisheyeGLView.java     # OpenGL ES Shader แก้มุมมองเลนส์ตาปลา (Fisheye dewarping)
-        │   └── OverlayService.java    # Foreground Service จัดการ Floating Window ลอยทับหน้าจอ
+        │   ├── FisheyeGLView.java     # OpenGL ES shader for fisheye lens dewarping & aspect scaling
+        │   ├── OverlayService.java    # Core foreground service managing the floating PiP window
+        │   └── OemPanoProfile.java    # OEM surround camera resources & calibrations
         ├── signal/
-        │   ├── CarContext.java        # Context สภาพแวดล้อมรถยนต์ BYD
-        │   ├── TurnProbeActivity.java # เครื่องมือ Scan ตรวจหา ID สัญญาณไฟเลี้ยวสำหรับรถรุ่นใหม่
-        │   └── TurnSignalListener.java# Thread ดักฟังสัญญาณไฟเลี้ยวและหลีกทางให้เกียร์ถอย (R)
+        │   ├── BydKeyRemapService.java# Accessibility service for wheel buttons & autostart automation
+        │   ├── TurnSignalListener.java# High-frequency signal polling with reverse-gear detection
+        │   └── AdasBlindSpotMonitor.java # ADAS BSD radar signal evaluator
         ├── ui/
-        │   └── MainActivity.java      # หน้าจอตั้งค่าการทำงาน (ภาษาไทย)
+        │   ├── MainActivity.java      # Main control & configuration dashboard
+        │   └── CameraStudioActivity.java # Real-time interactive camera alignment studio
         └── update/
-            └── UpdateChecker.java     # ตรวจสอบอัปเดตเวอร์ชันใหม่
+            └── UpdateChecker.java     # OTA version verification & background downloader
 ```
 
 ---
 
-## 💻 วิธีเปิดโปรเจกต์ใน Android Studio
+## 📄 License & Disclaimer
 
-1. เปิดโปรแกรม **Android Studio**
-2. เลือก **Open** หรือ **File > Open...**
-3. เลือกโฟลเดอร์โปรเจกต์:
-   `/Users/dee/Desktop/BYDSignalPnP`
-4. รอให้ Android Studio ทำการ Sync Gradle จนเสร็จสมบูรณ์
-5. สามารถกดปุ่ม **Build > Build Bundle(s) / APK(s) > Build APK(s)** เพื่อคอมไพล์เป็นไฟล์ APK นำไปติดตั้งบนรถได้ทันที
-
----
-
-## 🚗 วิธีนำไฟล์ APK ไปติดตั้งและทดสอบบนรถ BYD
-
-1. **เปิดโหมดผู้พัฒนา (Developer Options) & USB Debugging บนจอรถ BYD**
-   * เข้าการตั้งค่าระบบบนจอรถ > ซอฟต์แวร์ > กดที่เวอร์ชันซ้ำๆ 7 ครั้งจนเปิดโหมดนักพัฒนา
-   * เปิด USB Debugging (หรือ Wireless ADB)
-2. **ติดตั้งแอปผ่านสาย USB หรือ Wi-Fi:**
-   ```bash
-   adb install -r app-debug.apk
-   ```
-3. **ให้สิทธิ์ Overlay Window (จำเป็น):**
-   * เข้าไปที่การตั้งค่าแอปบนจอรถ และเปิดสิทธิ์ **"แสดงทับแอปอื่น" (Display over other apps)**
-4. **เปิดแอป BYD Signal PnP และตั้งค่า:**
-   * เลือกโหมดที่ต้องการ (Safety / Driving / Balance / Custom)
-   * หากเป็นรถรุ่นใหม่ที่ไฟเลี้ยวไม่ติด ให้เปิดหน้า **TurnProbeActivity** เพื่อทดสอบอ่านค่า ID สัญญาณ
+- **Disclaimer:** This software is an independent third-party tool developed for BYD DiLink systems. Drive safely and always verify your surroundings using your vehicle's physical mirrors and built-in safety systems.
