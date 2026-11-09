@@ -1,17 +1,16 @@
 {
-  "versionCode": 110,
-  "versionName": "1.0.8",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.8/BYDLaneWatch_v1.0.8.apk",
-  "size": 63288559,
+  "versionCode": 111,
+  "versionName": "1.0.8.1",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.8.1/BYDLaneWatch_v1.0.8.1.apk",
+  "size": 63198447,
   "releaseDate": "2026-11-09",
   "channel": "stable",
-  "whatsNew": "• Camera Slot Index Mapping: Users can now independently customize hardware camera slot index mapping (Index 0..5) for Rear View, Left PIP, and Right PIP directly from Settings, solving camera misalignment on models like BYD Atto 3 where slot 1 is front camera.\n• Fixed BYD Dolphin False Red Flashing Alert: Completely decoupled generic cluster blind-area flags and uncalibrated Area 1000 registers from directional PIP red alert borders.\n• Canonical ADAS Hardware Radar Binding: Radar warnings bind directly to Area 1038 registers (1098907692 FL / 1098907694 FR / 1098907664 LCA Left / 1098907666 LCA Right) with 1500ms CAN pulse hold smoothing.\n• New Radar Warning Frame Preference Switch: Added toggle switch in Settings allowing users to easily enable or disable visual red alert frames as desired.\n• Full Bilingual Localization: Updated base English strings and full Thai localization across all settings, diagnostics, and probe interfaces.",
+  "whatsNew": "• Fixed Multi-Camera Slot Fallback Bug: Resolved an issue where selecting alternative camera slot indexes (Left/Right/Rear) mistakenly fell back to the front camera (slot 0) on some BYD models.\n• Live Camera Slot Mapping in Studio: Users can now switch and preview hardware camera slots (Index 0..5) live inside Calibration Studio with real-time screen update.\n• Instant Hot-Swap Feed: Instant camera feed reconnection when changing AVM Camera ID or slot mapping without needing to exit the app.\n• Fixed BYD Dolphin False Red Flashing Alert: Completely decoupled generic cluster blind-area flags and uncalibrated Area 1000 registers from directional PIP red alert borders.",
   "notes": [
-    "Stable Release v1.0.8",
-    "Hardware Camera Slot Index Mapping for Rear, Left, and Right views in System Settings",
-    "Resolved Dolphin & Atto 3 persistent red flashing frame during turn signal PIP",
-    "Canonical Area 1038 ADAS radar alarm integration with 1500ms pulse smoothing",
-    "User toggle switch in Settings for ADAS Blind Spot Warning Frame",
+    "Stable Release v1.0.8.1",
+    "Fixed camera slot index fallback bug (forcing front camera on Atto 3 / Dolphin)",
+    "Live Camera Slot Index Mapping in Touch Calibration Studio with Realtime Preview",
+    "Instant Hot-Swap Camera Feed across settings changes without restarting app",
     "Full bilingual English and Thai localization across all UI elements"
   ]
 }

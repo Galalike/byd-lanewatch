@@ -1851,6 +1851,36 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         }
     }
 
+    public static void restartCameraFeed() {
+        final OverlayService overlayService = sInstance;
+        if (overlayService == null) {
+            return;
+        }
+        overlayService.main.post(new Runnable() {
+            @Override
+            public final void run() {
+                Log.i(TAG, "Hot-restarting CameraFeed with avmCamId=" + avmCamId + " (left=" + leftIndex + ", right=" + rightIndex + ", rear=" + rearIndex + ")");
+                overlayService.detachGl();
+                overlayService.detachPanels();
+                overlayService.stopFeed();
+                if (overlayService.glView != null) {
+                    overlayService.glView.resetWarmState();
+                }
+                overlayService.ensureFeed();
+                if (overlayService.feed != null) {
+                    overlayService.feed.setFps(overlayService.pendingSide == 0 ? 1 : 25);
+                }
+                overlayService.syncGl();
+                overlayService.pushGlParams();
+
+                // If Studio is currently active, re-attach studio surfaces immediately
+                if (isStudioActive && (overlayService.studioSurfaceL != null || overlayService.studioSurfaceR != null || overlayService.studioSurfaceRear != null)) {
+                    overlayService.attachStudioSurfaces(overlayService.studioSurfaceL, overlayService.studioSurfaceR, overlayService.studioSurfaceRear);
+                }
+            }
+        });
+    }
+
     public static void applyRenderSize() {
         FisheyeGLView fisheyeGLView;
         OverlayService overlayService = sInstance;

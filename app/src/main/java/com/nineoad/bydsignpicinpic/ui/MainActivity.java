@@ -3340,6 +3340,7 @@ public class MainActivity extends AppCompatActivity {
                 prefs.edit().putInt("avm_cam_id", newCamId).apply();
                 OverlayService.avmCamId = (newCamId >= 0) ? newCamId : (OverlayService.detectAvmCameraId() >= 0 ? OverlayService.detectAvmCameraId() : 1);
                 OverlayService.reapplyLive();
+                OverlayService.restartCameraFeed();
                 Toast.makeText(MainActivity.this,
                     tr("ตั้งค่ารหัสกล้อง 360 เป็น " + (newCamId >= 0 ? "Camera ID " + newCamId : "อัตโนมัติ"),
                        "360 Camera ID set to " + (newCamId >= 0 ? "Camera ID " + newCamId : "Auto")),
@@ -3366,6 +3367,7 @@ public class MainActivity extends AppCompatActivity {
                         prefs.edit().putInt("rear_cam_index", position).apply();
                         OverlayService.rearIndex = position;
                         OverlayService.reapplyLive();
+                        OverlayService.restartCameraFeed();
                         Intent intent = new Intent(MainActivity.this, OverlayService.class);
                         intent.setAction("RELOAD_PREFS");
                         startService(intent);
@@ -3385,6 +3387,7 @@ public class MainActivity extends AppCompatActivity {
                         prefs.edit().putInt("left_cam_index", position).apply();
                         OverlayService.leftIndex = position;
                         OverlayService.reapplyLive();
+                        OverlayService.restartCameraFeed();
                         Intent intent = new Intent(MainActivity.this, OverlayService.class);
                         intent.setAction("RELOAD_PREFS");
                         startService(intent);
@@ -3404,6 +3407,7 @@ public class MainActivity extends AppCompatActivity {
                         prefs.edit().putInt("right_cam_index", position).apply();
                         OverlayService.rightIndex = position;
                         OverlayService.reapplyLive();
+                        OverlayService.restartCameraFeed();
                         Intent intent = new Intent(MainActivity.this, OverlayService.class);
                         intent.setAction("RELOAD_PREFS");
                         startService(intent);

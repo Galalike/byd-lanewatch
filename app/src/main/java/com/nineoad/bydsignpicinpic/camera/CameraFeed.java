@@ -113,14 +113,11 @@ public class CameraFeed {
         }
         try {
             boolean zNativeAddPreviewSurface = jNIBMMCamera.nativeAddPreviewSurface(surface, i);
-            if (!zNativeAddPreviewSurface && i != this.activeSurfaceMode) {
-                zNativeAddPreviewSurface = jNIBMMCamera.nativeAddPreviewSurface(surface, this.activeSurfaceMode);
-            }
             try {
                 this.cam.nativeSetDisplayOrientation(surface, 0);
             } catch (Throwable unused) {
             }
-            Log.i(TAG, "addSurface idx=" + i + " (activeMode=" + this.activeSurfaceMode + ") ok=" + zNativeAddPreviewSurface);
+            Log.i(TAG, "addSurface idx=" + i + " ok=" + zNativeAddPreviewSurface);
             return zNativeAddPreviewSurface;
         } catch (Throwable th) {
             Log.e(TAG, "addSurface(" + i + ") failed: " + th);
