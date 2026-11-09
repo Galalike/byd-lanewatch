@@ -98,6 +98,35 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     private static final int ROLE_RIGHT = 2;
     private static final String TAG = "OverlayService";
     public static volatile int avmCamId = 1;
+    public static final int[] CANDIDATES_PANO = {1, 0};
+    public static final int[] CANDIDATES_LEFT = {1, 4, 2, 0};
+    public static final int[] CANDIDATES_RIGHT = {1, 5, 3, 0};
+
+    public static boolean isDilink4Platform() {
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= 31) {
+                return true;
+            }
+            String platform = android.os.Build.HARDWARE;
+            if (platform != null) {
+                String lower = platform.toLowerCase();
+                if (lower.contains("lito") || lower.contains("bengal") || lower.contains("sm6350")) {
+                    return true;
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return false;
+    }
+
+    private static int getNextCandidateId(int[] candidates, int currentId) {
+        for (int i = 0; i < candidates.length; i++) {
+            if (candidates[i] == currentId) {
+                return candidates[(i + 1) % candidates.length];
+            }
+        }
+        return candidates[0];
+    }
     public static volatile boolean directMode = true;
     public static volatile int dispMode = 0;
     public static volatile int drivingHeightPx = 405;
@@ -303,7 +332,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             Log.i(TAG, "Auto-detected avmCamId=" + avmCamId + " (detected=" + detected + ")");
         }
         this.avc = new AvcClient(this);
-        if (!directMode) {
+        if (!directMode && !isDilink4Platform()) {
             this.avc.bind();
         }
         this.bevAutomation = new BevAutomationManager(this, new BevAutomationManager.Callback() {
@@ -1034,25 +1063,34 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             }
             if (OverlayService.this.glView != null) {
                 long lastFrame = OverlayService.this.glView.getLastFrameArrivalMs();
-                long age = android.os.SystemClock.uptimeMillis() - lastFrame;
+                long now = android.os.SystemClock.elapsedRealtime();
+                long age = (lastFrame == 0L) ? 0L : (now - lastFrame);
                 if (lastFrame == 0L || age > 650L) {
                     if (lastFrame == 0L) {
                         OverlayService.this.deadSlotRestarts++;
                         Log.w(TAG, "Camera producer health check: zero frames delivered (count=" + OverlayService.this.deadSlotRestarts + ")");
                         if (OverlayService.this.deadSlotRestarts >= 2) {
-                            int altId = (OverlayService.avmCamId == 1) ? 0 : 1;
-                            Log.w(TAG, "Auto-switching camera ID " + OverlayService.avmCamId + " -> " + altId + " due to zero frames on Dolphin/DiLink!");
-                            OverlayService.avmCamId = altId;
-                            OverlayService.this.prefs.edit().putInt("avm_cam_id", altId).apply();
+                            int currentId = OverlayService.avmCamId;
+                            int nextId;
+                            if (OverlayService.this.pendingSide == 1) {
+                                nextId = getNextCandidateId(CANDIDATES_LEFT, currentId);
+                            } else if (OverlayService.this.pendingSide == 2) {
+                                nextId = getNextCandidateId(CANDIDATES_RIGHT, currentId);
+                            } else {
+                                nextId = (currentId == 1) ? 0 : 1;
+                            }
+                            Log.w(TAG, "Auto-switching camera ID " + currentId + " -> " + nextId + " due to zero frames on Dolphin/Atto 3/DiLink!");
+                            OverlayService.avmCamId = nextId;
+                            OverlayService.this.prefs.edit().putInt("avm_cam_id", nextId).apply();
                             OverlayService.this.deadSlotRestarts = 0;
-                            if (OverlayService.this.avc != null && !OverlayService.this.avc.isBound()) {
+                            if (OverlayService.this.avc != null && !OverlayService.this.avc.isBound() && !isDilink4Platform()) {
                                 OverlayService.this.avc.bind();
                             }
                         }
                     } else {
                         OverlayService.this.deadSlotRestarts = 0;
                     }
-                    Log.w(TAG, "Camera producer health check: no frame in " + age + "ms -> self-healing CameraFeed");
+                    Log.w(TAG, "Camera producer health check: no frame in " + age + "ms -> self-healing CameraFeed (camId=" + OverlayService.avmCamId + ")");
                     OverlayService.this.detachGl();
                     OverlayService.this.stopFeed();
                     OverlayService.this.glView.resetWarmState();
@@ -1066,6 +1104,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                     OverlayService.this.main.postDelayed(OverlayService.this.feedHealthCheckRunnable, 800L);
                 } else {
                     OverlayService.this.deadSlotRestarts = 0;
+                    OverlayService.this.prefs.edit().putInt("confirmed_avm_cam_id", OverlayService.avmCamId).apply();
                 }
             }
         }
@@ -1176,10 +1215,12 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             }
             return;
         }
-        if (!this.avc.isBound()) {
-            this.avc.bind();
+        if (!isDilink4Platform()) {
+            if (!this.avc.isBound()) {
+                this.avc.bind();
+            }
+            this.avc.send(i == 1 ? 2 : 3);
         }
-        this.avc.send(i == 1 ? 2 : 3);
     }
 
     private void syncGl() {
@@ -1283,13 +1324,18 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                 this.feed = cameraFeed;
                 boolean ok = cameraFeed.start(baseSurface, avmCamId, 0);
                 if (!ok) {
-                    int altId = (avmCamId == 1) ? 0 : 1;
-                    CameraFeed altFeed = new CameraFeed();
-                    if (altFeed.start(baseSurface, altId, 0)) {
-                        this.feed = altFeed;
-                        avmCamId = altId;
-                        this.prefs.edit().putInt("avm_cam_id", altId).apply();
-                        ok = true;
+                    int[] candidates = (this.pendingSide == 1) ? CANDIDATES_LEFT 
+                                     : (this.pendingSide == 2 ? CANDIDATES_RIGHT : CANDIDATES_PANO);
+                    for (int cand : candidates) {
+                        if (cand == avmCamId) continue;
+                        CameraFeed altFeed = new CameraFeed();
+                        if (altFeed.start(baseSurface, cand, 0)) {
+                            this.feed = altFeed;
+                            avmCamId = cand;
+                            this.prefs.edit().putInt("avm_cam_id", cand).apply();
+                            ok = true;
+                            break;
+                        }
                     }
                 }
                 Log.i(TAG, "fallback feed start: " + ok);
@@ -1416,22 +1462,32 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             boolean zStart = cameraFeed.start(surface, avmCamId, 0);
             Log.i(TAG, "AVM feed (cam " + avmCamId + ") start = " + zStart);
             if (!zStart) {
-                int altId = (avmCamId == 1) ? 0 : 1;
-                Log.w(TAG, "AVM feed cam " + avmCamId + " failed! Trying alternate cam " + altId);
-                CameraFeed altFeed = new CameraFeed();
-                boolean altStart = altFeed.start(surface, altId, 0);
-                Log.i(TAG, "AVM feed (alt cam " + altId + ") start = " + altStart);
-                if (altStart) {
-                    this.feed = altFeed;
-                    avmCamId = altId;
-                    this.prefs.edit().putInt("avm_cam_id", altId).apply();
-                    return;
+                int[] candidates = (this.pendingSide == 1) ? CANDIDATES_LEFT 
+                                 : (this.pendingSide == 2 ? CANDIDATES_RIGHT : CANDIDATES_PANO);
+                boolean recovered = false;
+                for (int cand : candidates) {
+                    if (cand == avmCamId) continue;
+                    Log.w(TAG, "AVM feed cam " + avmCamId + " failed! Trying candidate cam " + cand);
+                    CameraFeed altFeed = new CameraFeed();
+                    boolean altStart = altFeed.start(surface, cand, 0);
+                    Log.i(TAG, "AVM feed (alt cam " + cand + ") start = " + altStart);
+                    if (altStart) {
+                        this.feed = altFeed;
+                        avmCamId = cand;
+                        this.prefs.edit().putInt("avm_cam_id", cand).apply();
+                        recovered = true;
+                        break;
+                    }
                 }
-                this.feed = null;
-                if (!this.avc.isBound()) {
-                    this.avc.bind();
+                if (!recovered) {
+                    this.feed = null;
+                    if (!isDilink4Platform()) {
+                        if (!this.avc.isBound()) {
+                            this.avc.bind();
+                        }
+                        this.avc.send(this.pendingSide == 1 ? 2 : 3);
+                    }
                 }
-                this.avc.send(this.pendingSide == 1 ? 2 : 3);
             }
         }
     }
@@ -1968,7 +2024,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             this.btnSwitchCam.setVisibility(8);
         }
 
-        if (directMode || !this.avc.isBound()) {
+        if (directMode || !this.avc.isBound() || isDilink4Platform()) {
             return;
         }
         this.avc.send(52);

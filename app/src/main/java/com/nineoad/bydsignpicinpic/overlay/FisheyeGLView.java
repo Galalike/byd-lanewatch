@@ -158,6 +158,10 @@ public class FisheyeGLView extends GLSurfaceView {
         this.hasWarmFrameL = false;
         this.hasWarmFrameR = false;
         this.hasWarmFrameRear = false;
+        this.freshFrameL = false;
+        this.freshFrameR = false;
+        this.freshFrameRear = false;
+        this.lastFrameArrivalMs = 0L;
     }
 
     // Rear parameters

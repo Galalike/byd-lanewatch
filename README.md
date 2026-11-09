@@ -25,7 +25,8 @@ An intelligent camera overlay application tailored for **BYD DiLink** Android in
 
 | Version | Channel | Direct APK Download | Release Highlights |
 | :--- | :---: | :--- | :--- |
-| **v1.0.6** | 🛡️ **Stable (Latest)** | [⬇️ **Download BYDLaneWatch_v1.0.6.apk**](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.6/BYDLaneWatch_v1.0.6.apk) | Global localization (English base, auto Thai default on Thai cars), Dolphin black screen fix (ID 0/1 auto-detect), persistent expanded PIP view |
+| **v1.0.7-beta** | 🧪 **Beta (Latest)** | [⬇️ **Download BYDLaneWatch_v1.0.7-beta.apk**](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.7-beta/BYDLaneWatch_v1.0.7-beta.apk) | Universal Atto 3 / Dolphin black screen fix, multi-camera candidate discovery, DiLink 4 safe HAL path, watchdog clock sync |
+| **v1.0.6** | 🛡️ **Stable** | [⬇️ Download BYDLaneWatch_v1.0.6.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.6/BYDLaneWatch_v1.0.6.apk) | Global localization (English base, auto Thai default on Thai cars), Dolphin black screen fix (ID 0/1 auto-detect), persistent expanded PIP view |
 | **v1.0.5** | 🛡️ **Stable** | [⬇️ Download BYDLaneWatch_v1.0.5.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.5/BYDLaneWatch_v1.0.5.apk) | Modern Noto Sans Thai typography, full weight support, enhanced touchscreen legibility |
 | **v1.0.4** | 🛡️ **Stable** | [⬇️ Download BYDLaneWatch_v1.0.4.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.4/BYDLaneWatch_v1.0.4.apk) | Autostart recovery & duplicate lock, front-wheel camera steering mode, instant aspect calibration |
 | **v1.0.3** | 🛡️ **Stable** | [⬇️ Download BYDLaneWatch_v1.0.3.apk](https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.3/BYDLaneWatch_v1.0.3.apk) | Recommended OEM calibrated presets, auto OTA check, vehicle signal probe |

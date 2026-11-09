@@ -1,17 +1,17 @@
 {
-  "versionCode": 107,
-  "versionName": "1.0.6",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.6/BYDLaneWatch_v1.0.6.apk",
-  "size": 63090547,
+  "versionCode": 108,
+  "versionName": "1.0.7-beta",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.7-beta/BYDLaneWatch_v1.0.7-beta.apk",
+  "size": 63104688,
   "releaseDate": "2026-11-09",
   "channel": "beta",
-  "whatsNew": "• Global Localization Architecture: English is now the base default language across all screens, buttons, and settings; automatically uses Thai if the vehicle's system locale is Thai.\n• BYD Dolphin Black Screen Auto-Resolution: Dynamic AVM camera detection (ID 0 vs ID 1 fallback), dead-slot frame watchdog, and manual AVM Camera ID selector in System Settings.\n• Expanded Camera Persistent View: Single tap or '+ Right / + Left' expands camera and stays persistent on screen until closed via double-tap.\n• Front Wheels Sub-Automations: Exit Park, steering angle threshold, and speed limit cutoff work independently of the turn-signal wheel attachment switch.\n• Localized Diagnostic Report: System diagnostics and summary report adapt dynamically to English or Thai.",
+  "whatsNew": "• BYD Atto 3 / Dolphin Black Screen Universal Fix: Multi-camera candidate ID failover ([1, 4, 2, 0] Left / [1, 5, 3, 0] Right), automatic surface mode 0-3 negotiation, and active frame verification.\n• DiLink 4.0 / Android 12 Safe HAL Path: Bypasses AVC process contention to preserve HAL mosaic mode on 2024+ Atto 3 and newer BYD vehicles.\n• Watchdog Clock Mismatch Bug Fix: Synchronized elapsedRealtime() across OpenGL pipeline and watchdog to guarantee self-healing after vehicle sleep.\n• Confirmed Camera ID Caching: Remembers active camera ID in SharedPreferences for instant zero-latency PIP launch on subsequent turn signals.",
   "notes": [
-    "Latest Release v1.0.6",
-    "Complete English default localization with automatic Thai fallback for Thai vehicles",
-    "BYD Dolphin / Atto 1 / Qin Plus black screen fix (dynamic ID 0 / ID 1 probe & auto-recovery)",
-    "Persistent expanded PIP camera mode across turn signal cancellation (dismiss with double-tap)",
-    "Independent front wheels sub-automations (Exit Park, steering angle, speed guard)",
-    "Fully localized System Diagnostics summary report & 360° Camera Signal Code selector"
+    "Beta Release v1.0.7-beta",
+    "Universal BYD Atto 3 / Dolphin / Qin Plus camera black screen resolution",
+    "Multi-candidate camera ID discovery & automatic surface mode 0-3 negotiation",
+    "DiLink 4.0 / Android 12 safe HAL integration (prevents camera HAL mosaic disruption)",
+    "Watchdog clock synchronization (elapsedRealtime fix for vehicle sleep recovery)",
+    "Confirmed camera ID caching for instant zero-delay PIP launch"
   ]
 }
