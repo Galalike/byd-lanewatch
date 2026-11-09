@@ -219,6 +219,11 @@
     <string name="settings_avm_cam_auto">Auto Detect (Live Probe)</string>
     <string name="settings_avm_cam_1">ID 1 (Seal, Atto 3, Tang)</string>
     <string name="settings_avm_cam_0">ID 0 (Dolphin, Qin Plus)</string>
+    <string name="settings_cam_mapping_title">Camera Index Slot Mapping</string>
+    <string name="settings_cam_mapping_desc">Customize hardware camera slot index mapping for Left, Right, and Rear cameras</string>
+    <string name="settings_cam_map_rear">Rear View Slot</string>
+    <string name="settings_cam_map_left">Left PIP Slot</string>
+    <string name="settings_cam_map_right">Right PIP Slot</string>
     <string name="studio_btn_back">← Back</string>
     <string name="studio_title_header">Touch Calibration Studio</string>
     <string name="studio_btn_grid">📏 PIP Grid</string>

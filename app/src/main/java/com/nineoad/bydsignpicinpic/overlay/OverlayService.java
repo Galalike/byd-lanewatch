@@ -864,6 +864,8 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         pipCornerRadiusDp = this.prefs.getInt("pip_corner_radius", 16);
         rearAspect = this.prefs.getInt("rear_aspect", 0);
         rearIndex = this.prefs.getInt("rear_cam_index", 1);
+        leftIndex = this.prefs.getInt("left_cam_index", 2);
+        rightIndex = this.prefs.getInt("right_cam_index", 3);
         applyCornerRadius();
         this.main.postDelayed(new Runnable() { // from class: com.nineoad.bydsignpicinpic.overlay.OverlayService$$ExternalSyntheticLambda4
             @Override // java.lang.Runnable
@@ -1916,6 +1918,8 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         rearAspect = sharedPreferences.getInt("rear_aspect", 0);
         pipCornerRadiusDp = sharedPreferences.getInt("pip_corner_radius", 22);
         rearIndex = sharedPreferences.getInt("rear_cam_index", 1);
+        leftIndex = sharedPreferences.getInt("left_cam_index", 2);
+        rightIndex = sharedPreferences.getInt("right_cam_index", 3);
     }
 
     public static void loadCustomTuning(SharedPreferences sharedPreferences, int i) {

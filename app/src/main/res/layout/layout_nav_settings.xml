@@ -168,6 +168,107 @@
                     android:layout_marginBottom="14dp"
                     android:background="@color/lw_divider" />
 
+                <!-- Camera Slot Index Mapping -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_cam_mapping_title"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lw_text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_cam_mapping_desc"
+                    android:textSize="11sp"
+                    android:textColor="@color/lw_text_secondary"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="14dp">
+
+                    <!-- Rear Cam Slot -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_cam_map_rear"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lw_text_primary"
+                            android:layout_marginBottom="4dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerRearCamSlot"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_spinner_box" />
+                    </LinearLayout>
+
+                    <!-- Left Cam Slot -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_cam_map_left"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lw_text_primary"
+                            android:layout_marginBottom="4dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerLeftCamSlot"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_spinner_box" />
+                    </LinearLayout>
+
+                    <!-- Right Cam Slot -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_cam_map_right"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/lw_text_primary"
+                            android:layout_marginBottom="4dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerRightCamSlot"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_spinner_box" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="@color/lw_divider" />
+
                 <!-- Language and Theme Row -->
                 <LinearLayout
                     android:layout_width="match_parent"

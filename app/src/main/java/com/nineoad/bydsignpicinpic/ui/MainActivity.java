@@ -3347,6 +3347,71 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        // Camera Slot Mapping Spinners (Rear, Left, Right)
+        final String[] slotOptions = new String[]{
+            "Index 0", "Index 1", "Index 2", "Index 3", "Index 4", "Index 5"
+        };
+        Spinner spRearSlot = findViewById(R.id.spinnerRearCamSlot);
+        Spinner spLeftSlot = findViewById(R.id.spinnerLeftCamSlot);
+        Spinner spRightSlot = findViewById(R.id.spinnerRightCamSlot);
+
+        if (spRearSlot != null) {
+            spRearSlot.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, slotOptions));
+            int savedRear = prefs.getInt("rear_cam_index", 1);
+            spRearSlot.setSelection(Math.max(0, Math.min(5, savedRear)));
+            spRearSlot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override public void onNothingSelected(AdapterView<?> parent) {}
+                @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (prefs.getInt("rear_cam_index", 1) != position) {
+                        prefs.edit().putInt("rear_cam_index", position).apply();
+                        OverlayService.rearIndex = position;
+                        OverlayService.reapplyLive();
+                        Intent intent = new Intent(MainActivity.this, OverlayService.class);
+                        intent.setAction("RELOAD_PREFS");
+                        startService(intent);
+                    }
+                }
+            });
+        }
+
+        if (spLeftSlot != null) {
+            spLeftSlot.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, slotOptions));
+            int savedLeft = prefs.getInt("left_cam_index", 2);
+            spLeftSlot.setSelection(Math.max(0, Math.min(5, savedLeft)));
+            spLeftSlot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override public void onNothingSelected(AdapterView<?> parent) {}
+                @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (prefs.getInt("left_cam_index", 2) != position) {
+                        prefs.edit().putInt("left_cam_index", position).apply();
+                        OverlayService.leftIndex = position;
+                        OverlayService.reapplyLive();
+                        Intent intent = new Intent(MainActivity.this, OverlayService.class);
+                        intent.setAction("RELOAD_PREFS");
+                        startService(intent);
+                    }
+                }
+            });
+        }
+
+        if (spRightSlot != null) {
+            spRightSlot.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, slotOptions));
+            int savedRight = prefs.getInt("right_cam_index", 3);
+            spRightSlot.setSelection(Math.max(0, Math.min(5, savedRight)));
+            spRightSlot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override public void onNothingSelected(AdapterView<?> parent) {}
+                @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (prefs.getInt("right_cam_index", 3) != position) {
+                        prefs.edit().putInt("right_cam_index", position).apply();
+                        OverlayService.rightIndex = position;
+                        OverlayService.reapplyLive();
+                        Intent intent = new Intent(MainActivity.this, OverlayService.class);
+                        intent.setAction("RELOAD_PREFS");
+                        startService(intent);
+                    }
+                }
+            });
+        }
+
         Spinner spLang = findViewById(R.id.spinnerSettingsLang);
         if (spLang != null) {
             String[] langs = isEn() ? new String[]{

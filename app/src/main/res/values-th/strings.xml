@@ -219,6 +219,11 @@
     <string name="settings_avm_cam_auto">อัตโนมัติ (ตรวจจับสด)</string>
     <string name="settings_avm_cam_1">ID 1 (Seal, Atto 3, Tang)</string>
     <string name="settings_avm_cam_0">ID 0 (Dolphin, Qin Plus)</string>
+    <string name="settings_cam_mapping_title">กำหนดช่องสัญญาณกล้อง (Camera Slot Mapping)</string>
+    <string name="settings_cam_mapping_desc">สลับหมายเลข Index ของพอร์ตกล้องหลัง, กล้องซ้าย, กล้องขวา สำหรับรถแต่ละรุ่น</string>
+    <string name="settings_cam_map_rear">ช่องกล้องหลัง (Rear View)</string>
+    <string name="settings_cam_map_left">ช่องกล้องซ้าย (Left PIP)</string>
+    <string name="settings_cam_map_right">ช่องกล้องขวา (Right PIP)</string>
     <string name="studio_btn_back">← ย้อนกลับ</string>
     <string name="studio_title_header">สตูดิโอตั้งค่ามุมกล้อง (Touch Calibration Studio)</string>
     <string name="studio_btn_grid">📏 เส้นตาราง PIP</string>
