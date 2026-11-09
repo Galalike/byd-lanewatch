@@ -400,6 +400,21 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
             });
         }
 
+        View layoutStudioAdasToggle = findViewById(R.id.layoutStudioAdasToggle);
+        Switch swStudioAdasBsdAlert = findViewById(R.id.swStudioAdasBsdAlert);
+        if (layoutStudioAdasToggle != null) {
+            layoutStudioAdasToggle.setVisibility(activeMode == 1 ? View.VISIBLE : View.GONE);
+        }
+        if (swStudioAdasBsdAlert != null) {
+            swStudioAdasBsdAlert.setChecked(prefs.getBoolean("adas_bsd_warning_enabled", true));
+            swStudioAdasBsdAlert.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                prefs.edit().putBoolean("adas_bsd_warning_enabled", isChecked).apply();
+                Intent intent = new Intent(CameraStudioActivity.this, OverlayService.class);
+                intent.setAction("RELOAD_PREFS");
+                startService(intent);
+            });
+        }
+
         View layoutStudioAutomation = findViewById(R.id.layoutStudioAutomation);
         if (layoutStudioAutomation != null) {
             layoutStudioAutomation.setVisibility(activeMode == 3 ? View.VISIBLE : View.GONE);

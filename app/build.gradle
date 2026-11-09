@@ -10,8 +10,8 @@ android {
         applicationId "com.byd.lanewatch"
         minSdk 24
         targetSdk 28
-        versionCode 108
-        versionName "1.0.7-beta"
+        versionCode 109
+        versionName "1.0.8-beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

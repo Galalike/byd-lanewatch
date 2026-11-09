@@ -16,6 +16,8 @@
     <string name="col1_trig_left">Left Turn Signal</string>
     <string name="col1_trig_right">Right Turn Signal</string>
     <string name="col1_trig_hazard">Hazard Lights</string>
+    <string name="col1_trig_adas_bsd">Blind Spot Warning Frame (Radar)</string>
+    <string name="col1_trig_adas_bsd_desc">Flashing red warning border when vehicles are detected in blind spot</string>
     <string name="col1_btn_drop_show">Settings &amp; Tuning [v]</string>
     <string name="col1_test_header">QUICK PREVIEW TEST</string>
     <string name="btn_left">Left</string>

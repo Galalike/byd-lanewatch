@@ -511,6 +511,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                         OverlayService.this.bevAutomation.reloadPreferences();
                     }
                     OverlayService.this.refreshView();
+                    OverlayService.this.updateBlindSpotViews(OverlayService.this.pendingSide);
                 }
             });
         } else if ("TEST_ADAS".equals(action)) {
@@ -2491,15 +2492,23 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             return;
         }
 
+        boolean alertEnabled = this.prefs == null || this.prefs.getBoolean("adas_bsd_warning_enabled", true);
+        if (!alertEnabled) {
+            this.blindSpotLeftView.setVisibility(View.GONE);
+            this.blindSpotRightView.setVisibility(View.GONE);
+            stopPulse(this.blindSpotLeftView, true);
+            stopPulse(this.blindSpotRightView, false);
+            return;
+        }
+
         boolean alertLeft = (this.adasMonitor != null && this.adasMonitor.isLeftAlert()) || testAdasAlertLeft;
         boolean alertRight = (this.adasMonitor != null && this.adasMonitor.isRightAlert()) || testAdasAlertRight;
-        boolean alertAny = (this.adasMonitor != null && this.adasMonitor.isAnyAlert());
         boolean isDualMode = this.isDualView;
         int activeTurnSignal = (this.listener != null) ? this.listener.getState() : 0;
 
-        // 1. เลเยอร์สีแดงฝั่งซ้าย: แสดงเฉพาะเมื่อได้รับสัญญาณเตือนจริง (alertLeft หรือ alertAny เมื่อเปิดกล้อง/ไฟเลี้ยวซ้าย)
+        // 1. เลเยอร์สีแดงฝั่งซ้าย: แสดงเฉพาะเมื่อได้รับสัญญาณเตือนจากฝั่งซ้ายจริง (alertLeft)
         boolean leftAllowed = (side == 1 || side == 21 || activeTurnSignal == 1 || isDualMode || side == 3 || side == 11 || (side == 5 && this.steeringWheelSide == 1));
-        boolean showLeftRed = leftAllowed && (alertLeft || alertAny);
+        boolean showLeftRed = leftAllowed && alertLeft;
         if (showLeftRed) {
             this.blindSpotLeftView.setVisibility(View.VISIBLE);
             this.blindSpotLeftView.bringToFront();
@@ -2512,9 +2521,9 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             stopPulse(this.blindSpotLeftView, true);
         }
 
-        // 2. เลเยอร์สีแดงฝั่งขวา: แสดงเฉพาะเมื่อได้รับสัญญาณเตือนจริง (alertRight หรือ alertAny เมื่อเปิดกล้อง/ไฟเลี้ยวขวา)
+        // 2. เลเยอร์สีแดงฝั่งขวา: แสดงเฉพาะเมื่อได้รับสัญญาณเตือนจากฝั่งขวาจริง (alertRight)
         boolean rightAllowed = (side == 2 || side == 22 || activeTurnSignal == 2 || isDualMode || side == 3 || side == 12 || (side == 5 && this.steeringWheelSide == 2));
-        boolean showRightRed = rightAllowed && (alertRight || alertAny);
+        boolean showRightRed = rightAllowed && alertRight;
         if (showRightRed) {
             this.blindSpotRightView.setVisibility(View.VISIBLE);
             this.blindSpotRightView.bringToFront();

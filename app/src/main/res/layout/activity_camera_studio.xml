@@ -800,6 +800,32 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:text="@string/studio_btn_test_adas"/>
 
+                <!-- ADAS Warning Frame Toggle (Shown for Mode 1) -->
+                <LinearLayout
+                    android:id="@+id/layoutStudioAdasToggle"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp">
+                    <TextView
+                        android:id="@+id/tvStudioAdasLabel"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_primary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/col1_trig_adas_bsd"/>
+                    <Switch
+                        android:id="@+id/swStudioAdasBsdAlert"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
                 <!-- Automatic Triggers Box (Active for Mode 3 Front Wheels) -->
                 <LinearLayout
                     android:id="@+id/layoutStudioAutomation"

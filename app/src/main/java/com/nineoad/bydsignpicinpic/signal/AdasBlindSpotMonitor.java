@@ -2,20 +2,28 @@ package com.nineoad.bydsignpicinpic.signal;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import com.nineoad.bydsignpicinpic.autoservice.AutoserviceClient;
 
 /**
  * ADAS Blind Spot Detection (BSD / BSM) monitor for BYD vehicles.
- * Analyzes live hardware register channels as proven in Overdrive / BYD Auto platform:
- *  - Area 1000, Property 0x12d0002a (Cluster / ADAS Left Blind Spot Warning)
- *  - Area 1000, Property 0x40d00010 (Cluster / ADAS Right Blind Spot Warning)
- *  - Area 1038, Property 1098907692 (ADAS_FL_BLIND_SPOT_ALARM)
- *  - Area 1038, Property 1098907694 (ADAS_FR_BLIND_SPOT_ALARM)
+ * Analyzes live hardware register channels from BYD Auto ADAS service (Area 1038):
+ *  - Area 1038, Property 1098907692 (ADAS_FL_BLIND_SPOT_ALARM_ACTIVE_SIGNAL_STATUS)
+ *  - Area 1038, Property 1098907694 (ADAS_FR_BLIND_SPOT_ALARM_ACTIVE_SIGNAL_STATUS)
+ *  - Area 1038, Property 1098907664 (ADAS_RIGHT_RADAR_LCA_WARNINGLEFT)
+ *  - Area 1038, Property 1098907666 (ADAS_RIGHT_RADAR_LCA_WARNINGRIGHT)
+ *  - Area 1038, Property 1098907680 (ADAS_DOW_WARN_LEFT)
+ *  - Area 1038, Property 1098907682 (ADAS_DOW_WARN_RIGHT)
+ *
+ * NOTE: Area 1000 properties (cluster display/trip registers) and BSD system status
+ * (ADAS_BSD_STATE / INSTRUMENT_BLIND_AREA) are NOT active alarms and are excluded
+ * to prevent constant false positive flashing on BYD Dolphin / Atto 3 / Seal.
  */
 public class AdasBlindSpotMonitor {
     private static final String TAG = "AdasBlindSpot";
-    private static final long POLL_INTERVAL_MS = 100;
+    private static final long POLL_INTERVAL_MS = 100L;
+    private static final long ALERT_HOLD_MS = 1500L; // Smooth momentary CAN radar pulses
 
     public interface Callback {
         void onAlertChanged(boolean alertLeft, boolean alertRight);
@@ -27,11 +35,12 @@ public class AdasBlindSpotMonitor {
     private volatile boolean running = false;
     private volatile boolean lastLeftAlert = false;
     private volatile boolean lastRightAlert = false;
-    private volatile boolean lastAnyAlert = false;
-    private long lastDaemonPollMs = 0;
+    private long lastAlertLTimeMs = 0L;
+    private long lastAlertRTimeMs = 0L;
+
+    private long lastDaemonPollMs = 0L;
     private boolean daemonAlertL = false;
     private boolean daemonAlertR = false;
-    private boolean daemonAlertAny = false;
 
     public AdasBlindSpotMonitor(Callback callback) {
         this.callback = callback;
@@ -57,54 +66,44 @@ public class AdasBlindSpotMonitor {
     private void pollLoop() {
         while (this.running) {
             try {
-                // 1. Check Left Blind Spot
-                Integer leftProp = AutoserviceClient.getInt(1000, 0x12d0002a);
-                if (leftProp == null) {
-                    leftProp = AutoserviceClient.getInt(1038, 1098907692);
-                }
+                // 1. Check genuine Left Blind Spot Radar & LCA/DOW alarms
+                Integer flAlarm = AutoserviceClient.getInt(1038, 1098907692); // ADAS_FL_BLIND_SPOT_ALARM
+                Integer lcaL = AutoserviceClient.getInt(1038, 1098907664);    // ADAS_LCA_WARNING_LEFT
+                Integer dowL = AutoserviceClient.getInt(1038, 1098907680);    // ADAS_DOW_WARN_LEFT
 
-                // 2. Check Right Blind Spot
-                Integer rightProp = AutoserviceClient.getInt(1000, 0x40d00010);
-                if (rightProp == null) {
-                    rightProp = AutoserviceClient.getInt(1038, 1098907694);
-                }
+                boolean rawAlertL = (flAlarm != null && flAlarm > 0 && flAlarm != 65535)
+                        || (lcaL != null && lcaL > 0 && lcaL != 65535)
+                        || (dowL != null && dowL > 0 && dowL != 65535);
 
-                // Threshold: 0 / -10011 / null = clear/idle; values > 0 indicate active detection/warning
-                // Note: on some clusters, baseline is recorded at boot; alert is signaled when > 0
-                boolean alertL = (leftProp != null && leftProp > 0 && leftProp != 65535 && leftProp != 2); // 2 is idle baseline on some firmware
-                boolean alertR = (rightProp != null && rightProp > 0 && rightProp != 65535 && rightProp != 128); // 128 is idle baseline on some firmware
+                // 2. Check genuine Right Blind Spot Radar & LCA/DOW alarms
+                Integer frAlarm = AutoserviceClient.getInt(1038, 1098907694); // ADAS_FR_BLIND_SPOT_ALARM
+                Integer lcaR = AutoserviceClient.getInt(1038, 1098907666);    // ADAS_LCA_WARNING_RIGHT
+                Integer dowR = AutoserviceClient.getInt(1038, 1098907682);    // ADAS_DOW_WARN_RIGHT
 
-                // Also check LCA / DOW warnings if available
-                if (!alertL) {
-                    Integer lcaL = AutoserviceClient.getInt(1038, 1098907664); // ADAS_LCA_WARNING_LEFT
-                    if (lcaL != null && lcaL > 0 && lcaL != 65535) alertL = true;
-                }
-                if (!alertR) {
-                    Integer lcaR = AutoserviceClient.getInt(1038, 1098907666); // ADAS_LCA_WARNING_RIGHT
-                    if (lcaR != null && lcaR > 0 && lcaR != 65535) alertR = true;
-                }
+                boolean rawAlertR = (frAlarm != null && frAlarm > 0 && frAlarm != 65535)
+                        || (lcaR != null && lcaR > 0 && lcaR != 65535)
+                        || (dowR != null && dowR > 0 && dowR != 65535);
 
-                // Check generic / any-side blind spot warning (BSD state > 2, Instrument detection, or daemon blindSpot:side=any)
-                boolean alertAny = false;
-                Integer bsdState = AutoserviceClient.getInt(1038, 1098907656); // ADAS_BSD_STATE
-                if (bsdState != null && bsdState > 2 && bsdState != 65535) {
-                    alertAny = true;
-                }
-                Integer instBsd = AutoserviceClient.getInt(1000, 107920); // INSTRUMENT_BLIND_AREA_DETECTION_SYSTEM
-                if (instBsd != null && instBsd > 0 && instBsd != 65535) {
-                    alertAny = true;
-                }
-
-                // Check local Overdrive daemon loopback states if running
+                // 3. Check local Overdrive daemon loopback states if running
                 checkDaemonAlerts();
-                if (this.daemonAlertL) alertL = true;
-                if (this.daemonAlertR) alertR = true;
-                if (this.daemonAlertAny) alertAny = true;
+                if (this.daemonAlertL) rawAlertL = true;
+                if (this.daemonAlertR) rawAlertR = true;
 
-                if (alertL != this.lastLeftAlert || alertR != this.lastRightAlert || alertAny != this.lastAnyAlert) {
+                // 4. Hold smoothing so fast CAN pulse remains steady during the hazard window
+                long now = SystemClock.elapsedRealtime();
+                if (rawAlertL) {
+                    this.lastAlertLTimeMs = now;
+                }
+                if (rawAlertR) {
+                    this.lastAlertRTimeMs = now;
+                }
+
+                boolean alertL = (this.lastAlertLTimeMs > 0 && (now - this.lastAlertLTimeMs) < ALERT_HOLD_MS);
+                boolean alertR = (this.lastAlertRTimeMs > 0 && (now - this.lastAlertRTimeMs) < ALERT_HOLD_MS);
+
+                if (alertL != this.lastLeftAlert || alertR != this.lastRightAlert) {
                     this.lastLeftAlert = alertL;
                     this.lastRightAlert = alertR;
-                    this.lastAnyAlert = alertAny;
                     final boolean fL = alertL;
                     final boolean fR = alertR;
                     this.mainHandler.post(() -> {
@@ -154,7 +153,6 @@ public class AdasBlindSpotMonitor {
                     this.daemonAlertR = "on".equalsIgnoreCase(state.optString("blindSpot:side=right"))
                             || "on".equalsIgnoreCase(state.optString("rearCrossTraffic:side=right"))
                             || "on".equalsIgnoreCase(state.optString("doorOpenWarning:side=right"));
-                    this.daemonAlertAny = "on".equalsIgnoreCase(state.optString("blindSpot:side=any"));
                     return;
                 }
             }
@@ -162,7 +160,6 @@ public class AdasBlindSpotMonitor {
         }
         this.daemonAlertL = false;
         this.daemonAlertR = false;
-        this.daemonAlertAny = false;
     }
 
     public boolean isLeftAlert() {
@@ -174,6 +171,6 @@ public class AdasBlindSpotMonitor {
     }
 
     public boolean isAnyAlert() {
-        return this.lastAnyAlert || this.daemonAlertAny;
+        return this.lastLeftAlert || this.lastRightAlert;
     }
 }

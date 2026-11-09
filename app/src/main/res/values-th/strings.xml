@@ -16,6 +16,8 @@
     <string name="col1_trig_left">ไฟเลี้ยวซ้าย</string>
     <string name="col1_trig_right">ไฟเลี้ยวขวา</string>
     <string name="col1_trig_hazard">ไฟฉุกเฉิน</string>
+    <string name="col1_trig_adas_bsd">กรอบสีแดงเตือนมุมอับสายตา (เรดาร์)</string>
+    <string name="col1_trig_adas_bsd_desc">กระพริบขอบสีแดงเตือนเมื่อตรวจพบรถหรือสิ่งกีดขวางในมุมอับ</string>
     <string name="col1_btn_drop_show">ตั้งค่าเพิ่มเติมและทดสอบ [v]</string>
     <string name="col1_test_header">ทดสอบแสดงผลทันที</string>
     <string name="btn_left">ซ้าย</string>

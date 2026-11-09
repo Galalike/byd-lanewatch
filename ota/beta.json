@@ -1,17 +1,16 @@
 {
-  "versionCode": 108,
-  "versionName": "1.0.7-beta",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.7-beta/BYDLaneWatch_v1.0.7-beta.apk",
-  "size": 63104688,
+  "versionCode": 109,
+  "versionName": "1.0.8-beta",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.8-beta/BYDLaneWatch_v1.0.8-beta.apk",
+  "size": 64268928,
   "releaseDate": "2026-11-09",
   "channel": "beta",
-  "whatsNew": "• BYD Atto 3 / Dolphin Black Screen Universal Fix: Multi-camera candidate ID failover ([1, 4, 2, 0] Left / [1, 5, 3, 0] Right), automatic surface mode 0-3 negotiation, and active frame verification.\n• DiLink 4.0 / Android 12 Safe HAL Path: Bypasses AVC process contention to preserve HAL mosaic mode on 2024+ Atto 3 and newer BYD vehicles.\n• Watchdog Clock Mismatch Bug Fix: Synchronized elapsedRealtime() across OpenGL pipeline and watchdog to guarantee self-healing after vehicle sleep.\n• Confirmed Camera ID Caching: Remembers active camera ID in SharedPreferences for instant zero-latency PIP launch on subsequent turn signals.",
+  "whatsNew": "• Fixed BYD Dolphin & Atto 3 Flashing Red Border on Turn Signal: Purged uncalibrated Area 1000 cluster registers and decoupled generic BSD system state (ADAS_BSD_STATE / INSTRUMENT_BLIND_AREA) from directional visual alert layers.\n• Canonical BYD Radar Alarm Architecture: Directional warning indicators now strictly bind to genuine Area 1038 ADAS hardware registers (1098907692 FL / 1098907694 FR / 1098907664 LCA Left / 1098907666 LCA Right) with 1500ms CAN pulse hold smoothing.\n• New Radar Warning Frame Preference Switch: Added toggle switch in Settings (adas_bsd_warning_enabled) allowing users to easily enable or disable visual red alert frames as desired.\n• Full Bilingual Localization: Updated base English strings and full Thai localization across all settings, diagnostics, and probe interfaces.",
   "notes": [
-    "Beta Release v1.0.7-beta",
-    "Universal BYD Atto 3 / Dolphin / Qin Plus camera black screen resolution",
-    "Multi-candidate camera ID discovery & automatic surface mode 0-3 negotiation",
-    "DiLink 4.0 / Android 12 safe HAL integration (prevents camera HAL mosaic disruption)",
-    "Watchdog clock synchronization (elapsedRealtime fix for vehicle sleep recovery)",
-    "Confirmed camera ID caching for instant zero-delay PIP launch"
+    "Beta Release v1.0.8-beta",
+    "Resolved Dolphin & Atto 3 persistent red flashing frame during turn signal PIP",
+    "Canonical Area 1038 ADAS radar alarm integration with 1500ms pulse smoothing",
+    "New user toggle switch in Settings for ADAS Blind Spot Warning Frame",
+    "Full bilingual English and Thai localization across all UI elements"
   ]
 }
