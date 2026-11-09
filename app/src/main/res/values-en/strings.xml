@@ -198,4 +198,37 @@
     <string name="about_arch_desc">• Graphic Engine: OpenGL ES 2.0 Real-time Shaders\n• Inter-Process Communication: Android Binder to BYDAutoServer (autoservice)\n• Vehicle Integration: Native BYD Hardware Sensors &amp; CAN Radar Properties\n• Platform: Engineered specifically for BYD DiLink 3.0 / 4.0 / 5.0 Infotainment systems</string>
     <string name="about_sec_credits">CREDITS &amp; LICENSES</string>
     <string name="about_credits_desc">• Developed by: Galalike,NineOAD &amp; BYD Automotive Community Thailand\n• Open Source Libraries: AndroidX, Google Material Components, KaTeX, WebRTC\n• Software License: Dedicated for BYD vehicle infotainment integration without modifying vehicle safety systems.</string>
+
+    <!-- Added UI & Studio Localization Strings -->
+    <string name="btn_col_settings">⚙️ Settings</string>
+    <string name="btn_signal_probe">📡 Signal Probe</string>
+    <string name="diag_btn_probe">📡 Live Signal Probe</string>
+    <string name="update_auto_check">Auto-Check for Updates</string>
+    <string name="col1_aspect_landscape">Frame: Landscape</string>
+    <string name="col3_select_wheel">Select Wheel to Tune</string>
+    <string name="wheel_fl">Front-Left (FL)</string>
+    <string name="wheel_fr">Front-Right (FR)</string>
+    <string name="wheel_rl">Rear-Left (RL)</string>
+    <string name="wheel_rr">Rear-Right (RR)</string>
+    <string name="btn_reset_this_wheel">Reset This Wheel</string>
+    <string name="btn_reset_all_wheels">Reset All 4 Wheels</string>
+    <string name="settings_avm_cam_id_title">360° Camera Signal Code (AVM Camera ID)</string>
+    <string name="settings_avm_cam_id_desc">Fix black camera screen on BYD Dolphin / Qin Plus or select your car\'s camera ID</string>
+    <string name="settings_avm_cam_auto">Auto Detect (Live Probe)</string>
+    <string name="settings_avm_cam_1">ID 1 (Seal, Atto 3, Tang)</string>
+    <string name="settings_avm_cam_0">ID 0 (Dolphin, Qin Plus)</string>
+    <string name="studio_btn_back">← Back</string>
+    <string name="studio_title_header">Touch Calibration Studio</string>
+    <string name="studio_btn_grid">📏 PIP Grid</string>
+    <string name="studio_btn_recommended">⭐ Load Presets</string>
+    <string name="studio_btn_reset">↺ Reset</string>
+    <string name="studio_btn_save">💾 Save &amp; Finish</string>
+    <string name="studio_cam_left">Left Camera (Left)</string>
+    <string name="studio_cam_right">Right Camera (Right)</string>
+    <string name="studio_select_wheel_header">Select front wheel to calibrate</string>
+    <string name="studio_transform_header">Rotation &amp; Flip</string>
+    <string name="studio_btn_test_pip">📺 Test Floating PiP Window</string>
+    <string name="studio_btn_test_adas">🚨 Test ADAS Warning (5s)</string>
+    <string name="studio_auto_triggers_header">AUTOMATIC TRIGGERS</string>
+    <string name="studio_live_status_waiting">📡 Live Status: Waiting for vehicle connection...</string>
 </resources>

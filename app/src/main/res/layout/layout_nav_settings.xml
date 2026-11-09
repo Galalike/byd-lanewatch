@@ -110,6 +110,64 @@
                     android:layout_marginBottom="14dp"
                     android:background="@color/lw_divider" />
 
+                <!-- AVM Camera ID Selector (Fix for BYD Dolphin / Atto 1 / Qin Plus) -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_avm_cam_id_title"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lw_text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_avm_cam_id_desc"
+                    android:textSize="11sp"
+                    android:textColor="@color/lw_text_secondary"
+                    android:layout_marginBottom="8dp" />
+
+                <RadioGroup
+                    android:id="@+id/rgCamId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="14dp">
+
+                    <RadioButton
+                        android:id="@+id/rbCamAuto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_avm_cam_auto"
+                        android:textSize="12sp"
+                        android:textColor="@color/lw_text_primary"
+                        android:checked="true" />
+
+                    <RadioButton
+                        android:id="@+id/rbCam1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="@string/settings_avm_cam_1"
+                        android:textSize="12sp"
+                        android:textColor="@color/lw_text_primary" />
+
+                    <RadioButton
+                        android:id="@+id/rbCam0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="@string/settings_avm_cam_0"
+                        android:textSize="12sp"
+                        android:textColor="@color/lw_text_primary" />
+                </RadioGroup>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="@color/lw_divider" />
+
                 <!-- Language and Theme Row -->
                 <LinearLayout
                     android:layout_width="match_parent"

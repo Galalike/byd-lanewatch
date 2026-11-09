@@ -90,6 +90,25 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
     private boolean suppressSync = false;
 
+    private boolean isEn() {
+        return !MainActivity.isThaiLocale(this);
+    }
+
+    private String tr(String th, String en) {
+        return isEn() ? en : th;
+    }
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        boolean isThai = MainActivity.isThaiLocale(newBase);
+        java.util.Locale locale = new java.util.Locale(isThai ? "th" : "en");
+        java.util.Locale.setDefault(locale);
+        android.content.res.Configuration config = new android.content.res.Configuration(newBase.getResources().getConfiguration());
+        config.setLocale(locale);
+        android.content.Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -270,7 +289,8 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
             prefs.edit().putInt("mode", activeMode).apply();
             updateStudioGlParams();
             OverlayService.reapplyLive();
-            Toast.makeText(this, "บันทึกค่ามุมกล้องและนำไปใช้กับหน้าต่าง PIP เรียบร้อย", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, tr("บันทึกค่ามุมกล้องและนำไปใช้กับหน้าต่าง PIP เรียบร้อย",
+                "Camera calibration saved and applied to PIP window"), Toast.LENGTH_SHORT).show();
             finish();
         });
 
@@ -375,7 +395,8 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
                 Intent testIntent = new Intent(CameraStudioActivity.this, OverlayService.class);
                 testIntent.setAction("TEST_ADAS");
                 startService(testIntent);
-                Toast.makeText(CameraStudioActivity.this, "🚨 จำลองเตือนจุดอับสายตา ADAS 5 วินาที", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CameraStudioActivity.this, tr("🚨 จำลองเตือนจุดอับสายตา ADAS 5 วินาที",
+                    "🚨 Simulated ADAS Blind Spot Alert (5s)"), Toast.LENGTH_SHORT).show();
             });
         }
 
@@ -406,14 +427,16 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
                         double angle = mgr.getSteeringAngle();
                         double speed = mgr.getSpeed();
                         int activeTrig = mgr.getActiveTrigger();
-                        String trigStr = activeTrig == BevAutomationManager.TRIGGER_EXIT_PARK ? " [ทำงาน: ออกจาก P]" :
-                                        (activeTrig == BevAutomationManager.TRIGGER_STEERING ? " [ทำงาน: เลี้ยวพวงมาลัย]" :
-                                        (activeTrig == BevAutomationManager.TRIGGER_MANUAL ? " [เปิดเอง]" : ""));
+                        String trigStr = activeTrig == BevAutomationManager.TRIGGER_EXIT_PARK ? tr(" [ทำงาน: ออกจาก P]", " [Trigger: Exit P]") :
+                                        (activeTrig == BevAutomationManager.TRIGGER_STEERING ? tr(" [ทำงาน: เลี้ยวพวงมาลัย]", " [Trigger: Steering]") :
+                                        (activeTrig == BevAutomationManager.TRIGGER_MANUAL ? tr(" [เปิดเอง]", " [Manual]") : ""));
                         tvStudioLiveStatus.setText(String.format(java.util.Locale.getDefault(),
-                            "📡 สถานะสด: เกียร์ %s · พวงมาลัย %.0f° · ความเร็ว %.0f กม./ชม.%s",
+                            tr("📡 สถานะสด: เกียร์ %s · พวงมาลัย %.0f° · ความเร็ว %.0f กม./ชม.%s",
+                               "📡 Live Status: Gear %s · Steer %.0f° · Speed %.0f km/h%s"),
                             gearStr, angle, speed, trigStr));
                     } else {
-                        tvStudioLiveStatus.setText("📡 สถานะสด: กำลังรอการเชื่อมต่อระบบรถ...");
+                        tvStudioLiveStatus.setText(tr("📡 สถานะสด: กำลังรอการเชื่อมต่อระบบรถ...",
+                            "📡 Live Status: Waiting for vehicle connection..."));
                     }
                     if (studioStatusHandler != null && studioStatusRunnable != null) {
                         studioStatusHandler.postDelayed(this, 350L);
@@ -440,7 +463,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         Runnable updateExitDurText = () -> {
             if (tvStudioExitDuration != null) {
                 int s = Math.round(getSafeFloat("bev_exit_park_duration_sec", 8.0f));
-                tvStudioExitDuration.setText("ระยะเวลาแสดงผล: " + s + " วินาที");
+                tvStudioExitDuration.setText(tr("ระยะเวลาแสดงผล: " + s + " วินาที", "Duration: " + s + " s"));
             }
         };
         updateExitDurText.run();
@@ -476,7 +499,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         if (swStudioSteering != null) {
             swStudioSteering.setChecked(prefs.getBoolean("bev_auto_steering", true));
             swStudioSteering.setOnCheckedChangeListener((btn, isChecked) -> {
-                prefs.edit().putBoolean("bev_auto_steering", isChecked).putBoolean("wheel_trigger_enabled", isChecked).apply();
+                prefs.edit().putBoolean("bev_auto_steering", isChecked).apply();
                 OverlayService.reapplyLive();
             });
         }
@@ -484,7 +507,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         Runnable updateSteerText = () -> {
             int deg = getSafeInt("bev_steering_angle", 90);
             if (tvStudioSteeringAngle != null) {
-                tvStudioSteeringAngle.setText("องศาเลี้ยวที่เริ่มทำงาน: " + deg + "°");
+                tvStudioSteeringAngle.setText(tr("องศาเลี้ยวที่เริ่มทำงาน: " + deg + "°", "Trigger Angle: " + deg + "°"));
             }
             if (sbStudioSteeringAngle != null && sbStudioSteeringAngle.getProgress() != deg) {
                 sbStudioSteeringAngle.setProgress(deg);
@@ -520,7 +543,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
                         int snap = Math.max(30, Math.round(progress / 10.0f) * 10);
                         prefs.edit().putInt("bev_steering_angle", snap).apply();
                         if (tvStudioSteeringAngle != null) {
-                            tvStudioSteeringAngle.setText("องศาเลี้ยวที่เริ่มทำงาน: " + snap + "°");
+                            tvStudioSteeringAngle.setText(tr("องศาเลี้ยวที่เริ่มทำงาน: " + snap + "°", "Trigger Angle: " + snap + "°"));
                         }
                         OverlayService.reapplyLive();
                     }
@@ -545,7 +568,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         Runnable updateSpeedText = () -> {
             int kmh = Math.round(getSafeFloat("bev_speed_limit_kmh", 20.0f));
             if (tvStudioSpeedLimit != null) {
-                tvStudioSpeedLimit.setText("ความเร็วจำกัด: " + kmh + " กม./ชม.");
+                tvStudioSpeedLimit.setText(tr("ความเร็วจำกัด: " + kmh + " กม./ชม.", "Cutoff Speed: " + kmh + " km/h"));
             }
         };
         updateSpeedText.run();
@@ -646,16 +669,16 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         }
         updatePreviewAspectRatio(getTargetPipAspect());
         if (activeMode == 1) {
-            tvStudioTitle.setText("สตูดิโอตั้งค่า: กล้องช่วยเลี้ยว (Turn Signal Camera)");
+            tvStudioTitle.setText(tr("สตูดิโอตั้งค่า: กล้องช่วยเลี้ยว (Turn Signal Camera)", "Calibration Studio: Turn Signal Camera"));
             dockTurnTabs.setVisibility(View.VISIBLE);
             dockWheelGrid.setVisibility(View.GONE);
             selectTurnSide(false);
         } else if (activeMode == 2) {
-            tvStudioTitle.setText("สตูดิโอตั้งค่า: กระจกมองหลังดิจิทัล (Digital Rearview)");
+            tvStudioTitle.setText(tr("สตูดิโอตั้งค่า: กระจกมองหลังดิจิทัล (Digital Rearview)", "Calibration Studio: Digital Rearview Mirror"));
             dockTurnTabs.setVisibility(View.GONE);
             dockWheelGrid.setVisibility(View.GONE);
         } else {
-            tvStudioTitle.setText("สตูดิโอตั้งค่า: มุมล้อหน้าซ้ายและขวา (Front Wheels)");
+            tvStudioTitle.setText(tr("สตูดิโอตั้งค่า: มุมล้อหน้าซ้ายและขวา (Front Wheels)", "Calibration Studio: Front Wheels (FL & FR)"));
             dockTurnTabs.setVisibility(View.GONE);
             dockWheelGrid.setVisibility(View.VISIBLE);
             selectWheel(0);
@@ -704,11 +727,11 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
     private String getTargetLabel() {
         if (activeMode == 1) {
-            return isTurnRight ? "กล้องขวา (Right)" : "กล้องซ้าย (Left)";
+            return isTurnRight ? tr("กล้องขวา (Right)", "Right Camera (Right)") : tr("กล้องซ้าย (Left)", "Left Camera (Left)");
         } else if (activeMode == 2) {
-            return "กระจกมองหลัง (Rearview)";
+            return tr("กระจกมองหลัง (Rearview)", "Rearview Mirror (Rear)");
         } else {
-            return selectedWheelIdx == 0 ? "ล้อหน้าซ้าย (FL)" : "ล้อหน้าขวา (FR)";
+            return selectedWheelIdx == 0 ? tr("ล้อหน้าซ้าย (FL)", "Front-Left (FL)") : tr("ล้อหน้าขวา (FR)", "Front-Right (FR)");
         }
     }
 
@@ -1078,7 +1101,8 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         loadCurrentModeIntoControls();
         updateStudioGlParams();
         OverlayService.reapplyLive();
-        Toast.makeText(this, "โหลดค่าแนะนำสำหรับ " + getTargetLabel() + " เรียบร้อย", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, tr("โหลดค่าแนะนำสำหรับ " + getTargetLabel() + " เรียบร้อย",
+            "Loaded recommended presets for " + getTargetLabel()), Toast.LENGTH_SHORT).show();
     }
 
     private void resetCurrentToDefaults() {
@@ -1129,7 +1153,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         loadCurrentModeIntoControls();
         updateStudioGlParams();
         OverlayService.reapplyLive();
-        Toast.makeText(this, "รีเซ็ตค่ากลับสู่ค่ากลางแล้ว", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, tr("รีเซ็ตค่ากลับสู่ค่ากลางแล้ว", "Reset to default values"), Toast.LENGTH_SHORT).show();
     }
 
     private void cycleRotate90() {

@@ -249,6 +249,40 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         customOrient = i2;
     }
 
+    public static int detectAvmCameraId() {
+        try {
+            Class<?> cls = Class.forName("android.hardware.BmmCameraInfo");
+            java.lang.reflect.Method m = cls.getDeclaredMethod("getCameraId", String.class);
+            m.setAccessible(true);
+            String[] tags = {"pano_h", "pano_l", "apa", "byd_apa"};
+            for (String tag : tags) {
+                Object res = m.invoke(null, tag);
+                if (res instanceof Integer) {
+                    int id = (Integer) res;
+                    if (id >= 0) {
+                        Log.i(TAG, "BmmCameraInfo detected camera tag " + tag + " -> ID " + id);
+                        return id;
+                    }
+                }
+            }
+        } catch (Throwable t) {
+            Log.d(TAG, "detectAvmCameraId via BmmCameraInfo: " + t.getMessage());
+        }
+        try {
+            Class<?> spCls = Class.forName("android.os.SystemProperties");
+            java.lang.reflect.Method getM = spCls.getMethod("get", String.class);
+            String prop = (String) getM.invoke(null, "vehicle.config.cam_sort");
+            if (prop != null && !prop.isEmpty()) {
+                Log.i(TAG, "vehicle.config.cam_sort=" + prop);
+                if (prop.contains("pano_h=0") || prop.contains("pano_l=0")) return 0;
+                if (prop.contains("pano_h=1") || prop.contains("pano_l=1")) return 1;
+            }
+        } catch (Throwable t) {
+            Log.d(TAG, "detectAvmCameraId via SystemProperties: " + t.getMessage());
+        }
+        return -1;
+    }
+
     @Override // android.app.Service
     public void onCreate() {
         super.onCreate();
@@ -259,6 +293,15 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             TurnSignalListener.lingerMs = (long) (this.prefs.getFloat("lingerSec", 3.5f) * 1000.0f);
         } catch (Throwable unused) {
         }
+        int savedCamId = this.prefs.getInt("avm_cam_id", -1);
+        if (savedCamId >= 0) {
+            avmCamId = savedCamId;
+            Log.i(TAG, "Using saved avmCamId=" + avmCamId);
+        } else {
+            int detected = detectAvmCameraId();
+            avmCamId = (detected >= 0) ? detected : 1;
+            Log.i(TAG, "Auto-detected avmCamId=" + avmCamId + " (detected=" + detected + ")");
+        }
         this.avc = new AvcClient(this);
         if (!directMode) {
             this.avc.bind();
@@ -266,10 +309,37 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         this.bevAutomation = new BevAutomationManager(this, new BevAutomationManager.Callback() {
             @Override
             public void onBevTriggerShow(final int triggerReason) {
+                OverlayService.this.main.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isOemCameraForeground) return;
+                        if (isStudioActive && !allowStudioPipTest) return;
+                        if (OverlayService.this.hazardMode || OverlayService.this.pendingSide == 1 || OverlayService.this.pendingSide == 2 || OverlayService.this.pendingSide == 3) {
+                            return;
+                        }
+                        Log.i(TAG, "BEV Automation triggered show (reason=" + triggerReason + ")");
+                        OverlayService.this.isBevActive = true;
+                        OverlayService.this.show(5);
+                    }
+                });
             }
 
             @Override
             public void onBevTriggerHide(final int triggerReason) {
+                OverlayService.this.main.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (OverlayService.this.pendingSide == 5) {
+                            Log.i(TAG, "BEV Automation triggered hide (reason=" + triggerReason + ")");
+                            OverlayService.this.isBevActive = false;
+                            if (OverlayService.this.isRearviewActive && !OverlayService.this.userDismissedRear) {
+                                OverlayService.this.show(4);
+                            } else {
+                                OverlayService.this.hide();
+                            }
+                        }
+                    }
+                });
             }
 
             @Override
@@ -552,10 +622,11 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         quadOverlay.addView(divV, lpV);
 
         // 4 Wheel Corner Badges
-        quadOverlay.addView(createWheelBadge("FL · หน้าซ้าย", android.view.Gravity.TOP | android.view.Gravity.LEFT));
-        quadOverlay.addView(createWheelBadge("FR · หน้าขวา", android.view.Gravity.TOP | android.view.Gravity.RIGHT));
-        quadOverlay.addView(createWheelBadge("RL · หลังซ้าย", android.view.Gravity.BOTTOM | android.view.Gravity.LEFT));
-        quadOverlay.addView(createWheelBadge("RR · หลังขวา", android.view.Gravity.BOTTOM | android.view.Gravity.RIGHT));
+        boolean en = !com.nineoad.bydsignpicinpic.ui.MainActivity.isThaiLocale(this);
+        quadOverlay.addView(createWheelBadge(en ? "FL · Front-Left" : "FL · หน้าซ้าย", android.view.Gravity.TOP | android.view.Gravity.LEFT));
+        quadOverlay.addView(createWheelBadge(en ? "FR · Front-Right" : "FR · หน้าขวา", android.view.Gravity.TOP | android.view.Gravity.RIGHT));
+        quadOverlay.addView(createWheelBadge(en ? "RL · Rear-Left" : "RL · หลังซ้าย", android.view.Gravity.BOTTOM | android.view.Gravity.LEFT));
+        quadOverlay.addView(createWheelBadge(en ? "RR · Rear-Right" : "RR · หลังขวา", android.view.Gravity.BOTTOM | android.view.Gravity.RIGHT));
 
         this.root.addView(quadOverlay, new FrameLayout.LayoutParams(-1, -1));
 
@@ -595,7 +666,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
 
         Button button = new Button(this);
         this.btnSwitchCam = button;
-        button.setText("+ 2 กล้อง");
+        button.setText(en ? "+ Dual" : "+ 2 กล้อง");
         this.btnSwitchCam.setTextSize(13.0f);
         this.btnSwitchCam.setTypeface(null, android.graphics.Typeface.BOLD);
         this.btnSwitchCam.setTextColor(-1);
@@ -669,11 +740,22 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                 OverlayService.this.isRearviewActive = false;
                 OverlayService.this.userDismissedRear = true;
                 OverlayService.this.isBevActive = false;
+                OverlayService.this.isDualView = false;
                 if (OverlayService.this.bevAutomation != null) {
                     OverlayService.this.bevAutomation.setManualActive(false);
                 }
                 OverlayService.this.hide();
                 return true;
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                if (OverlayService.this.pendingSide == 1 || OverlayService.this.pendingSide == 2 || OverlayService.this.isDualView) {
+                    Log.i(OverlayService.TAG, "Single tap confirmed on turn-signal PiP -> toggling expand/dual view");
+                    OverlayService.this.toggleDualView();
+                    return true;
+                }
+                return false;
             }
         });
         this.root.setOnTouchListener(new View.OnTouchListener() { // from class: com.nineoad.bydsignpicinpic.overlay.OverlayService.2
@@ -826,6 +908,11 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$onSignal$5(int i) {
         if (i == 0) {
+            if (this.isDualView) {
+                // Expanded dual-camera mode remains active until user double-clicks to dismiss!
+                Log.i(TAG, "Turn signal ended but camera is expanded (dual view) -> keeping open until double tap");
+                return;
+            }
             if (this.isRearviewActive && !this.userDismissedRear) {
                 show(4);
             } else {
@@ -845,14 +932,14 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             return;
         }
 
-        boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true)
-                && this.prefs.getBoolean("bev_auto_steering", true);
-        if (!wheelEnabled) {
-            return;
-        }
+        boolean wheelOnTurnSignal = this.prefs.getBoolean("wheel_trigger_enabled", true);
+        boolean bevAutoSteering = this.prefs.getBoolean("bev_auto_steering", true);
 
         this.steeringWheelSide = side;
         if (this.pendingSide == 1 || this.pendingSide == 2) {
+            if (!wheelOnTurnSignal) {
+                return;
+            }
             if (this.isDualView) {
                 // Expanded dual-camera mode active: do not stretch or attach 3rd camera
                 return;
@@ -867,8 +954,12 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             pushGlParams();
             Log.i(TAG, "Attached front wheel (" + side + ") to active turn signal PIP");
         } else {
-            // Front wheel camera is only attached when turn signal is active; do not popup standalone
-            Log.d(TAG, "Wheel trigger ignored because turn signal is not active (pendingSide=" + this.pendingSide + ")");
+            // Standalone trigger when turn signal is not active
+            if (bevAutoSteering) {
+                Log.i(TAG, "Showing standalone front wheel PIP (" + side + ") from steering trigger");
+                this.isBevActive = true;
+                show(5);
+            }
         }
     }
 
@@ -891,6 +982,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             pushGlParams();
             Log.i(TAG, "Detached front wheel from turn signal PIP");
         } else if (this.pendingSide == 5) {
+            this.isBevActive = false;
             // Standalone wheel finished: restore rearview or hide
             if (this.isRearviewActive && !this.userDismissedRear) {
                 show(4);
@@ -931,16 +1023,35 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         }
     }
 
+    private int deadSlotRestarts = 0;
+
     private final Runnable feedHealthCheckRunnable = new Runnable() {
         @Override
         public void run() {
             if (OverlayService.this.pendingSide == 0 || OverlayService.this.pendingSide == 5 || OverlayService.isOemCameraForeground || !OverlayService.directMode) {
+                OverlayService.this.deadSlotRestarts = 0;
                 return;
             }
             if (OverlayService.this.glView != null) {
                 long lastFrame = OverlayService.this.glView.getLastFrameArrivalMs();
                 long age = android.os.SystemClock.uptimeMillis() - lastFrame;
                 if (lastFrame == 0L || age > 650L) {
+                    if (lastFrame == 0L) {
+                        OverlayService.this.deadSlotRestarts++;
+                        Log.w(TAG, "Camera producer health check: zero frames delivered (count=" + OverlayService.this.deadSlotRestarts + ")");
+                        if (OverlayService.this.deadSlotRestarts >= 2) {
+                            int altId = (OverlayService.avmCamId == 1) ? 0 : 1;
+                            Log.w(TAG, "Auto-switching camera ID " + OverlayService.avmCamId + " -> " + altId + " due to zero frames on Dolphin/DiLink!");
+                            OverlayService.avmCamId = altId;
+                            OverlayService.this.prefs.edit().putInt("avm_cam_id", altId).apply();
+                            OverlayService.this.deadSlotRestarts = 0;
+                            if (OverlayService.this.avc != null && !OverlayService.this.avc.isBound()) {
+                                OverlayService.this.avc.bind();
+                            }
+                        }
+                    } else {
+                        OverlayService.this.deadSlotRestarts = 0;
+                    }
                     Log.w(TAG, "Camera producer health check: no frame in " + age + "ms -> self-healing CameraFeed");
                     OverlayService.this.detachGl();
                     OverlayService.this.stopFeed();
@@ -951,6 +1062,10 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                     }
                     OverlayService.this.syncGl();
                     OverlayService.this.pushGlParams();
+                    OverlayService.this.main.removeCallbacks(OverlayService.this.feedHealthCheckRunnable);
+                    OverlayService.this.main.postDelayed(OverlayService.this.feedHealthCheckRunnable, 800L);
+                } else {
+                    OverlayService.this.deadSlotRestarts = 0;
                 }
             }
         }
@@ -1167,6 +1282,16 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                 CameraFeed cameraFeed = new CameraFeed();
                 this.feed = cameraFeed;
                 boolean ok = cameraFeed.start(baseSurface, avmCamId, 0);
+                if (!ok) {
+                    int altId = (avmCamId == 1) ? 0 : 1;
+                    CameraFeed altFeed = new CameraFeed();
+                    if (altFeed.start(baseSurface, altId, 0)) {
+                        this.feed = altFeed;
+                        avmCamId = altId;
+                        this.prefs.edit().putInt("avm_cam_id", altId).apply();
+                        ok = true;
+                    }
+                }
                 Log.i(TAG, "fallback feed start: " + ok);
             }
         }
@@ -1290,14 +1415,24 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             this.feed = cameraFeed;
             boolean zStart = cameraFeed.start(surface, avmCamId, 0);
             Log.i(TAG, "AVM feed (cam " + avmCamId + ") start = " + zStart);
-            if (zStart) {
-                return;
+            if (!zStart) {
+                int altId = (avmCamId == 1) ? 0 : 1;
+                Log.w(TAG, "AVM feed cam " + avmCamId + " failed! Trying alternate cam " + altId);
+                CameraFeed altFeed = new CameraFeed();
+                boolean altStart = altFeed.start(surface, altId, 0);
+                Log.i(TAG, "AVM feed (alt cam " + altId + ") start = " + altStart);
+                if (altStart) {
+                    this.feed = altFeed;
+                    avmCamId = altId;
+                    this.prefs.edit().putInt("avm_cam_id", altId).apply();
+                    return;
+                }
+                this.feed = null;
+                if (!this.avc.isBound()) {
+                    this.avc.bind();
+                }
+                this.avc.send(this.pendingSide == 1 ? 2 : 3);
             }
-            this.feed = null;
-            if (!this.avc.isBound()) {
-                this.avc.bind();
-            }
-            this.avc.send(this.pendingSide == 1 ? 2 : 3);
         }
     }
 
@@ -2200,14 +2335,15 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             return;
         }
         this.btnSwitchCam.setVisibility(0);
+        boolean en = !com.nineoad.bydsignpicinpic.ui.MainActivity.isThaiLocale(this);
         if (this.isDualView) {
-            this.btnSwitchCam.setText("− มุมเดี่ยว");
+            this.btnSwitchCam.setText(en ? "− Single View" : "− มุมเดี่ยว");
         } else if (this.pendingSide == 1) {
-            this.btnSwitchCam.setText("+ ขวา");
+            this.btnSwitchCam.setText(en ? "+ Right" : "+ ขวา");
         } else if (this.pendingSide == 2) {
-            this.btnSwitchCam.setText("+ ซ้าย");
+            this.btnSwitchCam.setText(en ? "+ Left" : "+ ซ้าย");
         } else {
-            this.btnSwitchCam.setText("+ 2 กล้อง");
+            this.btnSwitchCam.setText(en ? "+ Dual" : "+ 2 กล้อง");
         }
         updateButtonPosition();
     }

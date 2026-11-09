@@ -198,4 +198,37 @@
     <string name="about_arch_desc">• Graphic Engine: OpenGL ES 2.0 Real-time Shaders\n• Inter-Process Communication: Android Binder to BYDAutoServer (autoservice)\n• Vehicle Integration: Native BYD Hardware Sensors &amp; CAN Radar Properties\n• Platform: ออกแบบเพื่อระบบ Infotainment BYD DiLink 3.0 / 4.0 / 5.0 โดยเฉพาะ</string>
     <string name="about_sec_credits">ทีมพัฒนาและผู้มีส่วนร่วม (CREDITS &amp; LICENSES)</string>
     <string name="about_credits_desc">• พัฒนาโดย: Galalike,NineOAD &amp; BYD Automotive Community Thailand\n• Open Source Libraries: AndroidX, Google Material Components, KaTeX, WebRTC\n• ลิขสิทธิ์ซอฟต์แวร์: พัฒนาเพื่อการใช้งานร่วมกับรถยนต์ BYD โดยไม่ดัดแปลงความปลอดภัยของระบบตัวรถ</string>
+
+    <!-- Added UI & Studio Localization Strings -->
+    <string name="btn_col_settings">⚙️ ตั้งค่า</string>
+    <string name="btn_signal_probe">📡 ตรวจสัญญาณ</string>
+    <string name="diag_btn_probe">📡 ตรวจสัญญาณสด</string>
+    <string name="update_auto_check">ตรวจอัปเดตอัตโนมัติ</string>
+    <string name="col1_aspect_landscape">กรอบ: แนวนอน</string>
+    <string name="col3_select_wheel">เลือกมุมล้อที่ต้องการปรับแต่ง</string>
+    <string name="wheel_fl">หน้าซ้าย (FL)</string>
+    <string name="wheel_fr">หน้าขวา (FR)</string>
+    <string name="wheel_rl">หลังซ้าย (RL)</string>
+    <string name="wheel_rr">หลังขวา (RR)</string>
+    <string name="btn_reset_this_wheel">รีเซ็ตล้อนี้</string>
+    <string name="btn_reset_all_wheels">รีเซ็ตทั้ง 4 ล้อ</string>
+    <string name="settings_avm_cam_id_title">รหัสสัญญาณกล้อง 360 (AVM Camera ID)</string>
+    <string name="settings_avm_cam_id_desc">แก้ไขปัญหากล้องจอมืดใน BYD Dolphin หรือเลือกรหัสกล้องของรถคุณ</string>
+    <string name="settings_avm_cam_auto">อัตโนมัติ (ตรวจจับสด)</string>
+    <string name="settings_avm_cam_1">ID 1 (Seal, Atto 3, Tang)</string>
+    <string name="settings_avm_cam_0">ID 0 (Dolphin, Qin Plus)</string>
+    <string name="studio_btn_back">← ย้อนกลับ</string>
+    <string name="studio_title_header">สตูดิโอตั้งค่ามุมกล้อง (Touch Calibration Studio)</string>
+    <string name="studio_btn_grid">📏 เส้นตาราง PIP</string>
+    <string name="studio_btn_recommended">⭐ โหลดค่าแนะนำ</string>
+    <string name="studio_btn_reset">↺ คืนค่าเดิม</string>
+    <string name="studio_btn_save">💾 บันทึกและเสร็จสิ้น</string>
+    <string name="studio_cam_left">กล้องด้านซ้าย (Left)</string>
+    <string name="studio_cam_right">กล้องด้านขวา (Right)</string>
+    <string name="studio_select_wheel_header">เลือกมุมล้อหน้าที่ต้องการตั้งค่า</string>
+    <string name="studio_transform_header">การหมุนและกลับด้านภาพ</string>
+    <string name="studio_btn_test_pip">📺 ทดสอบสลับหน้าต่าง PiP ลอย</string>
+    <string name="studio_btn_test_adas">🚨 ทดสอบเตือนจุดอับสายตา ADAS (5 วินาที)</string>
+    <string name="studio_auto_triggers_header">ระบบสั่งเปิดอัตโนมัติ (AUTOMATIC TRIGGERS)</string>
+    <string name="studio_live_status_waiting">📡 สถานะสด: กำลังรอการเชื่อมต่อระบบรถ...</string>
 </resources>

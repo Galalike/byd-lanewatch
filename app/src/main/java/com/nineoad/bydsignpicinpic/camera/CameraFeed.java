@@ -10,6 +10,21 @@ public class CameraFeed {
     private JNIBMMCamera cam;
     private volatile boolean running;
     private volatile int currentFps = 25;
+    private volatile int previewWidth = 1920;
+    private volatile int previewHeight = 1080;
+    private volatile int currentCamId = 1;
+
+    public int getPreviewWidth() {
+        return this.previewWidth;
+    }
+
+    public int getPreviewHeight() {
+        return this.previewHeight;
+    }
+
+    public int getCurrentCamId() {
+        return this.currentCamId;
+    }
 
     public void setFps(int fps) {
         JNIBMMCamera jNIBMMCamera = this.cam;
@@ -27,6 +42,7 @@ public class CameraFeed {
 
     public boolean start(Surface surface, int i, int i2) {
         try {
+            this.currentCamId = i;
             JNIBMMCamera jNIBMMCamera = new JNIBMMCamera(i);
             this.cam = jNIBMMCamera;
             try {
@@ -41,6 +57,8 @@ public class CameraFeed {
                     iNativeGetPreviewWidth = 1920;
                     iNativeGetPreviewHeight = 1080;
                 }
+                this.previewWidth = iNativeGetPreviewWidth;
+                this.previewHeight = iNativeGetPreviewHeight;
                 this.cam.nativeSetPreviewSize(iNativeGetPreviewWidth, iNativeGetPreviewHeight);
                 this.cam.nativeSetCameraFPS(25);
                 Log.i(TAG, "addPreviewSurface=" + this.cam.nativeAddPreviewSurface(surface, 0) + " size=" + iNativeGetPreviewWidth + "x" + iNativeGetPreviewHeight);

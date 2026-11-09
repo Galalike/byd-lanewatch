@@ -229,11 +229,30 @@ public class MainActivity extends AppCompatActivity {
         return i == 3;
     }
 
+    public static boolean isSystemThai() {
+        try {
+            java.util.Locale sys = android.content.res.Resources.getSystem().getConfiguration().locale;
+            if (sys != null && "th".equalsIgnoreCase(sys.getLanguage())) {
+                return true;
+            }
+        } catch (Exception ignored) {}
+        return false;
+    }
+
+    public static boolean isThaiLocale(android.content.Context ctx) {
+        if (ctx == null) return isSystemThai();
+        SharedPreferences sp = ctx.getSharedPreferences("pnp", 0);
+        int lang = sp.getInt("app_lang", 0);
+        if (lang == 0) {
+            return isSystemThai();
+        }
+        return lang == 2;
+    }
+
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
-        SharedPreferences sp = newBase.getSharedPreferences("pnp", 0);
-        int langIdx = sp.getInt("app_lang", 0);
-        java.util.Locale locale = new java.util.Locale(langIdx == 1 ? "en" : "th");
+        boolean isThai = isThaiLocale(newBase);
+        java.util.Locale locale = new java.util.Locale(isThai ? "th" : "en");
         java.util.Locale.setDefault(locale);
         android.content.res.Configuration config = new android.content.res.Configuration(newBase.getResources().getConfiguration());
         config.setLocale(locale);
@@ -242,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isEn() {
-        return this.prefs != null && this.prefs.getInt("app_lang", 0) == 1;
+        return !isThaiLocale(this);
     }
 
     private String tr(String th, String en) {
@@ -250,8 +269,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void applyLocaleToResources() {
-        int langIdx = this.prefs.getInt("app_lang", 0);
-        java.util.Locale locale = new java.util.Locale(langIdx == 1 ? "en" : "th");
+        boolean isThai = isThaiLocale(this);
+        java.util.Locale locale = new java.util.Locale(isThai ? "th" : "en");
         java.util.Locale.setDefault(locale);
         android.content.res.Resources res = getResources();
         android.content.res.Configuration config = new android.content.res.Configuration(res.getConfiguration());
@@ -519,13 +538,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupLanguageSpinner() {
         if (this.spinnerLanguage == null) return;
-        String[] langs = new String[]{
-            "ภาษาไทย (TH)",
-            "English (EN)"
+        String[] langs = isEn() ? new String[]{
+            "Auto (Vehicle System)",
+            "English (EN)",
+            "ภาษาไทย (TH)"
+        } : new String[]{
+            "อัตโนมัติ (ตามระบบรถ)",
+            "English (EN)",
+            "ภาษาไทย (TH)"
         };
         this.spinnerLanguage.setAdapter((SpinnerAdapter) new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, langs));
         final int saved = this.prefs.getInt("app_lang", 0);
-        this.spinnerLanguage.setSelection(Math.max(0, Math.min(1, saved)));
+        this.spinnerLanguage.setSelection(Math.max(0, Math.min(2, saved)));
         this.spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
@@ -649,8 +673,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         if (this.swMasterBev != null) {
-            boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true)
-                    && this.prefs.getBoolean("bev_auto_steering", true);
+            boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true);
             this.swMasterBev.setChecked(wheelEnabled);
             this.swMasterBev.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -658,7 +681,6 @@ public class MainActivity extends AppCompatActivity {
                     if (MainActivity.this.suppressMasterSwitches) return;
                     MainActivity.this.prefs.edit()
                             .putBoolean("wheel_trigger_enabled", isChecked)
-                            .putBoolean("bev_auto_steering", isChecked)
                             .apply();
                     Intent intent = new Intent(MainActivity.this, OverlayService.class);
                     intent.setAction("RELOAD_PREFS");
@@ -666,7 +688,7 @@ public class MainActivity extends AppCompatActivity {
                     OverlayService.reapplyLive();
                     Toast.makeText(MainActivity.this, isChecked
                             ? MainActivity.this.tr("เปิดใช้มุมกล้องล้อหน้าเมื่อเปิดไฟเลี้ยวและหมุนพวงมาลัยแล้ว", "Front wheel camera on turn signal enabled")
-                            : MainActivity.this.tr("ปิดใช้มุมกล้องล้อหน้าแล้ว", "Front wheel camera disabled"), Toast.LENGTH_SHORT).show();
+                            : MainActivity.this.tr("ปิดมุมกล้องล้อหน้าเมื่อเปิดไฟเลี้ยวแล้ว (ระบบอัตโนมัติยังทำงานตามเงื่อนไขข้อย่อย)", "Front wheel camera on turn signal disabled (Sub-automations remain active)"), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -678,8 +700,7 @@ public class MainActivity extends AppCompatActivity {
             this.swMasterRear.setChecked(OverlayService.isRearviewActive);
         }
         if (this.swMasterBev != null) {
-            boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true)
-                    && this.prefs.getBoolean("bev_auto_steering", true);
+            boolean wheelEnabled = this.prefs.getBoolean("wheel_trigger_enabled", true);
             if (this.swMasterBev.isChecked() != wheelEnabled) {
                 this.swMasterBev.setChecked(wheelEnabled);
             }
@@ -3283,15 +3304,52 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        RadioGroup rgCamId = findViewById(R.id.rgCamId);
+        RadioButton rbCamAuto = findViewById(R.id.rbCamAuto);
+        RadioButton rbCam1 = findViewById(R.id.rbCam1);
+        RadioButton rbCam0 = findViewById(R.id.rbCam0);
+
+        if (rgCamId != null) {
+            int savedCamId = prefs.getInt("avm_cam_id", -1);
+            if (savedCamId == 0) {
+                if (rbCam0 != null) rbCam0.setChecked(true);
+            } else if (savedCamId == 1) {
+                if (rbCam1 != null) rbCam1.setChecked(true);
+            } else {
+                if (rbCamAuto != null) rbCamAuto.setChecked(true);
+            }
+
+            rgCamId.setOnCheckedChangeListener((group, checkedId) -> {
+                int newCamId = -1;
+                if (checkedId == R.id.rbCam0) {
+                    newCamId = 0;
+                } else if (checkedId == R.id.rbCam1) {
+                    newCamId = 1;
+                }
+                prefs.edit().putInt("avm_cam_id", newCamId).apply();
+                OverlayService.avmCamId = (newCamId >= 0) ? newCamId : (OverlayService.detectAvmCameraId() >= 0 ? OverlayService.detectAvmCameraId() : 1);
+                OverlayService.reapplyLive();
+                Toast.makeText(MainActivity.this,
+                    tr("ตั้งค่ารหัสกล้อง 360 เป็น " + (newCamId >= 0 ? "Camera ID " + newCamId : "อัตโนมัติ"),
+                       "360 Camera ID set to " + (newCamId >= 0 ? "Camera ID " + newCamId : "Auto")),
+                    Toast.LENGTH_SHORT).show();
+            });
+        }
+
         Spinner spLang = findViewById(R.id.spinnerSettingsLang);
         if (spLang != null) {
-            String[] langs = new String[]{
-                "ภาษาไทย (TH)",
-                "English (EN)"
+            String[] langs = isEn() ? new String[]{
+                "Auto (Vehicle System)",
+                "English (EN)",
+                "ภาษาไทย (TH)"
+            } : new String[]{
+                "อัตโนมัติ (ตามระบบรถ)",
+                "English (EN)",
+                "ภาษาไทย (TH)"
             };
             spLang.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, langs));
             final int saved = this.prefs.getInt("app_lang", 0);
-            spLang.setSelection(Math.max(0, Math.min(1, saved)));
+            spLang.setSelection(Math.max(0, Math.min(2, saved)));
             spLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override public void onNothingSelected(AdapterView<?> parent) {}
                 @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -3407,8 +3465,10 @@ public class MainActivity extends AppCompatActivity {
             tvCamBlind.setTextColor(ok ? Color.parseColor("#16A34A") : Color.parseColor("#EAB308"));
             if (ok) passedCount++; else {
                 issueCount++;
-                issuesSummary.append("• Blind Spot Camera: สิทธิ์กล้องหรือฮาร์ดแวร์ยังไม่พร้อม\n");
-                remediationSummary.append("• กรุณาอนุมัติสิทธิ์กล้องใน Android Settings\n");
+                issuesSummary.append(tr("• กล้องช่วยเลี้ยว (Blind Spot Camera): ขาดสิทธิ์กล้องหรือฮาร์ดแวร์ยังไม่พร้อม\n",
+                    "• Blind Spot Camera: Camera permission or hardware not ready\n"));
+                remediationSummary.append(tr("• กรุณาอนุมัติสิทธิ์กล้องใน Android Settings\n",
+                    "• Please grant Camera permission in Android Settings\n"));
             }
         }
 
@@ -3433,7 +3493,8 @@ public class MainActivity extends AppCompatActivity {
             tvCamConn.setTextColor(hasCams ? Color.parseColor("#16A34A") : Color.parseColor("#EF4444"));
             if (hasCams) passedCount++; else {
                 issueCount++;
-                issuesSummary.append("• Camera Connection: ไม่พบอุปกรณ์กล้องใน CameraManager\n");
+                issuesSummary.append(tr("• การเชื่อมต่อกล้อง (Camera Connection): ไม่พบอุปกรณ์กล้องใน CameraManager\n",
+                    "• Camera Connection: No camera hardware device detected in CameraManager\n"));
             }
         }
 
@@ -3455,7 +3516,8 @@ public class MainActivity extends AppCompatActivity {
             tvVehApi.setTextColor(hasRudder ? Color.parseColor("#16A34A") : Color.parseColor("#EAB308"));
             if (hasRudder) passedCount++; else {
                 issueCount++;
-                issuesSummary.append("• Vehicle API: ไม่สามารถอ่านค่า rudder จาก persist.sys ได้\n");
+                issuesSummary.append(tr("• Vehicle API: ไม่สามารถอ่านค่า rudder จาก persist.sys ได้\n",
+                    "• Vehicle API: Unable to read vehicle rudder status from persist.sys properties\n"));
             }
         }
 
@@ -3496,8 +3558,10 @@ public class MainActivity extends AppCompatActivity {
             tvPermOverlay.setTextColor(overlayPerm ? Color.parseColor("#16A34A") : Color.parseColor("#EF4444"));
             if (overlayPerm) passedCount++; else {
                 issueCount++;
-                issuesSummary.append("• System Overlay Permission: ขาดสิทธิ์วาดทับหน้าจอ\n");
-                remediationSummary.append("• เปิดสิทธิ์วาดทับแอปอื่น (Display over other apps)\n");
+                issuesSummary.append(tr("• สิทธิ์วาดทับหน้าจอ (System Overlay): ขาดสิทธิ์วาดทับหน้าจอ\n",
+                    "• System Overlay Permission: Overlay permission missing\n"));
+                remediationSummary.append(tr("• เปิดสิทธิ์วาดทับแอปอื่น (Display over other apps)\n",
+                    "• Enable 'Display over other apps' in Android System Settings\n"));
             }
         }
 
@@ -3508,8 +3572,10 @@ public class MainActivity extends AppCompatActivity {
             tvPermAcc.setTextColor(accRunning ? Color.parseColor("#16A34A") : Color.parseColor("#EAB308"));
             if (accRunning) passedCount++; else {
                 issueCount++;
-                issuesSummary.append("• Accessibility Service: บริการ Autostart/Key Remap ปิดอยู่\n");
-                remediationSummary.append("• เปิดสิทธิ์ Accessibility ผ่านคำสั่ง ADB หรือเปิดในระบบ\n");
+                issuesSummary.append(tr("• บริการ Accessibility Service: บริการ Autostart/Key Remap ปิดอยู่\n",
+                    "• Accessibility Service: Autostart and Key Remap service is inactive\n"));
+                remediationSummary.append(tr("• เปิดสิทธิ์ Accessibility ในการตั้งค่าระบบหรือผ่านคำสั่ง ADB\n",
+                    "• Enable BYD LaneWatch under Accessibility Settings or via ADB\n"));
             }
         }
 
@@ -3574,25 +3640,39 @@ public class MainActivity extends AppCompatActivity {
         if (tvReport != null) {
             StringBuilder report = new StringBuilder();
             report.append("=========================================\n");
-            report.append("  BYD LaneWatch System Diagnostic Report\n");
+            report.append(tr("  รายงานผลการวินิจฉัยระบบ BYD LaneWatch\n",
+                             "  BYD LaneWatch System Diagnostic Report\n"));
             report.append("=========================================\n");
-            report.append("วันที่ตรวจสอบ: ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date())).append("\n");
-            report.append("ผลลัพธ์รวม: ผ่าน ").append(passedCount).append(" รายการ | พบข้อสังเกต ").append(issueCount).append(" รายการ\n\n");
+            report.append(tr("วันที่ตรวจสอบ: ", "Date Checked: "))
+                  .append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", isEn() ? Locale.US : Locale.getDefault()).format(new Date()))
+                  .append("\n");
+            report.append(tr("ผลลัพธ์รวม: ผ่าน ", "Total Result: "))
+                  .append(passedCount)
+                  .append(tr(" รายการ | พบข้อสังเกต ", " Passed | "))
+                  .append(issueCount)
+                  .append(tr(" รายการ\n\n", " Issues Found\n\n"));
 
-            report.append("[รายการที่ผ่านการตรวจสอบ (PASSED)]\n");
-            report.append("✓ สิทธิ์การทำงานพื้นฐานและระบบกล้องพร้อมทำงาน\n");
-            report.append("✓ การเรนเดอร์กราฟิกมุมกว้าง (OpenGL ES Fisheye) พร้อมทำงาน\n");
-            report.append("✓ การเข้าถึงสถานะสัญญาณรถยนต์และ ADAS Radar พร้อมทำงาน\n");
-            report.append("✓ หน่วยความจำและทรัพยากรระบบอยู่ในเกณฑ์มาตรฐาน OEM\n\n");
+            report.append(tr("[รายการที่ผ่านการตรวจสอบ (PASSED)]\n", "[PASSED CHECKS]\n"));
+            report.append(tr("✓ สิทธิ์การทำงานพื้นฐานและระบบกล้องพร้อมทำงาน\n",
+                             "✓ Core system permissions and camera pipeline operational\n"));
+            report.append(tr("✓ การเรนเดอร์กราฟิกมุมกว้าง (OpenGL ES Fisheye) พร้อมทำงาน\n",
+                             "✓ Wide-angle OpenGL ES Fisheye shader rendering pipeline operational\n"));
+            report.append(tr("✓ การเข้าถึงสถานะสัญญาณรถยนต์และ ADAS Radar พร้อมทำงาน\n",
+                             "✓ Vehicle CAN bus integration and ADAS radar monitoring operational\n"));
+            report.append(tr("✓ หน่วยความจำและทรัพยากรระบบอยู่ในเกณฑ์มาตรฐาน OEM\n\n",
+                             "✓ Memory allocation and system resources within OEM tolerances\n\n"));
 
             if (issueCount > 0) {
-                report.append("[รายการที่พบข้อสังเกตหรือปัญหา (ISSUES FOUND)]\n");
+                report.append(tr("[รายการที่พบข้อสังเกตหรือปัญหา (ISSUES FOUND)]\n",
+                                 "[ISSUES FOUND]\n"));
                 report.append(issuesSummary.toString()).append("\n");
-                report.append("[แนวทางการแก้ไขเบื้องต้น (REMEDIATION)]\n");
+                report.append(tr("[แนวทางการแก้ไขเบื้องต้น (REMEDIATION)]\n",
+                                 "[RECOMMENDED REMEDIATION]\n"));
                 report.append(remediationSummary.toString());
             } else {
-                report.append("[สถานะความสมบูรณ์]\n");
-                report.append("ระบบทำงานได้เต็มประสิทธิภาพตามมาตรฐาน OEM และพร้อมใช้งานอย่างปลอดภัย 100%\n");
+                report.append(tr("[สถานะความสมบูรณ์]\n", "[SYSTEM INTEGRITY STATUS]\n"));
+                report.append(tr("ระบบทำงานได้เต็มประสิทธิภาพตามมาตรฐาน OEM และพร้อมใช้งานอย่างปลอดภัย 100%\n",
+                                 "All subsystems operating nominally at OEM standards. Safe to operate 100%.\n"));
             }
 
             tvReport.setText(report.toString());

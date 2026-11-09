@@ -79,6 +79,25 @@ public class TurnProbeActivity extends AppCompatActivity {
 
     private IBinder autoservice;
 
+    private boolean isEn() {
+        return !com.nineoad.bydsignpicinpic.ui.MainActivity.isThaiLocale(this);
+    }
+
+    private String tr(String th, String en) {
+        return isEn() ? en : th;
+    }
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        boolean isThai = com.nineoad.bydsignpicinpic.ui.MainActivity.isThaiLocale(newBase);
+        java.util.Locale locale = new java.util.Locale(isThai ? "th" : "en");
+        java.util.Locale.setDefault(locale);
+        android.content.res.Configuration config = new android.content.res.Configuration(newBase.getResources().getConfiguration());
+        config.setLocale(locale);
+        android.content.Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -96,12 +115,12 @@ public class TurnProbeActivity extends AppCompatActivity {
         header.setGravity(Gravity.CENTER_VERTICAL);
         header.setPadding(0, 0, 0, dp(10));
 
-        Button btnBack = createButton("⬅️ กลับ", Color.parseColor("#334155"), Color.WHITE);
+        Button btnBack = createButton(tr("⬅️ กลับ", "⬅️ Back"), Color.parseColor("#334155"), Color.WHITE);
         btnBack.setOnClickListener(v -> finish());
         header.addView(btnBack);
 
         TextView tvTitle = new TextView(this);
-        tvTitle.setText(" 📡 Vehicle Signal Probe (ตัวตรวจเช็คสัญญาณสด)");
+        tvTitle.setText(tr(" 📡 Vehicle Signal Probe (ตัวตรวจเช็คสัญญาณสด)", " 📡 Vehicle Live Signal Probe"));
         tvTitle.setTextColor(Color.WHITE);
         tvTitle.setTextSize(16f);
         tvTitle.setTypeface(Typeface.DEFAULT_BOLD);
@@ -110,28 +129,28 @@ public class TurnProbeActivity extends AppCompatActivity {
         tvTitle.setLayoutParams(lpTitle);
         header.addView(tvTitle);
 
-        Button btnTestLeft = createButton("🚨 ทดสอบเตือนซ้าย", Color.parseColor("#991B1B"), Color.WHITE);
+        Button btnTestLeft = createButton(tr("🚨 ทดสอบเตือนซ้าย", "🚨 Test Left"), Color.parseColor("#991B1B"), Color.WHITE);
         btnTestLeft.setOnClickListener(v -> testAlert(true, false));
         header.addView(btnTestLeft);
 
-        Button btnTestRight = createButton("🚨 ทดสอบเตือนขวา", Color.parseColor("#991B1B"), Color.WHITE);
+        Button btnTestRight = createButton(tr("🚨 ทดสอบเตือนขวา", "🚨 Test Right"), Color.parseColor("#991B1B"), Color.WHITE);
         LinearLayout.LayoutParams lpBtnR = (LinearLayout.LayoutParams) btnTestRight.getLayoutParams();
         if (lpBtnR != null) lpBtnR.setMarginStart(dp(6));
         btnTestRight.setOnClickListener(v -> testAlert(false, true));
         header.addView(btnTestRight);
 
-        Button btnCopy = createButton("📋 คัดลอก Report", Color.parseColor("#2563EB"), Color.WHITE);
+        Button btnCopy = createButton(tr("📋 คัดลอก Report", "📋 Copy Report"), Color.parseColor("#2563EB"), Color.WHITE);
         LinearLayout.LayoutParams lpBtnCopy = (LinearLayout.LayoutParams) btnCopy.getLayoutParams();
         if (lpBtnCopy != null) lpBtnCopy.setMarginStart(dp(6));
         btnCopy.setOnClickListener(v -> copyReportToClipboard());
         header.addView(btnCopy);
 
-        Button btnClearLog = createButton("🧹 ล้าง Log", Color.parseColor("#475569"), Color.WHITE);
+        Button btnClearLog = createButton(tr("🧹 ล้าง Log", "🧹 Clear Log"), Color.parseColor("#475569"), Color.WHITE);
         LinearLayout.LayoutParams lpBtnClear = (LinearLayout.LayoutParams) btnClearLog.getLayoutParams();
         if (lpBtnClear != null) lpBtnClear.setMarginStart(dp(6));
         btnClearLog.setOnClickListener(v -> {
             changeLogs.clear();
-            tvLiveLogs.setText("Log ถูกล้างเรียบร้อย... กำลังดักฟังสัญญาณใหม่");
+            tvLiveLogs.setText(tr("Log ถูกล้างเรียบร้อย... กำลังดักฟังสัญญาณใหม่", "Logs cleared... Listening for live signals"));
         });
         header.addView(btnClearLog);
 
@@ -151,36 +170,37 @@ public class TurnProbeActivity extends AppCompatActivity {
 
         // Subtitle instructions
         TextView tvSub = new TextView(this);
-        tvSub.setText("💡 เปิดหน้าจอนี้ไว้ขณะขับขี่ หรือเปิดไฟเลี้ยว แล้วสังเกตว่าสัญญาณตัวไหนเปลี่ยนค่าแบบเรียลไทม์");
+        tvSub.setText(tr("💡 เปิดหน้าจอนี้ไว้ขณะขับขี่ หรือเปิดไฟเลี้ยว แล้วสังเกตว่าสัญญาณตัวไหนเปลี่ยนค่าแบบเรียลไทม์",
+            "💡 Keep this screen open while driving or using turn signals to observe live CAN property changes"));
         tvSub.setTextColor(Color.parseColor("#94A3B8"));
         tvSub.setTextSize(12f);
         tvSub.setPadding(0, 0, 0, dp(10));
         content.addView(tvSub);
 
         // Card 1: Turn Signals & Switches
-        content.addView(createSectionHeader("🚦 ก้านไฟเลี้ยว & ไฟฉุกเฉิน (Turn & Hazard Signals)"));
+        content.addView(createSectionHeader(tr("🚦 ก้านไฟเลี้ยว & ไฟฉุกเฉิน (Turn & Hazard Signals)", "🚦 Turn & Hazard Signals")));
         this.tvTurnSignals = createMonospaceCard();
         content.addView(this.tvTurnSignals);
 
         // Card 2: Blind Spot & ADAS Radar
-        content.addView(createSectionHeader("👁️ จุดอับสายตา & เรดาร์ (Blind Spot / BSD & Radar)"));
+        content.addView(createSectionHeader(tr("👁️ จุดอับสายตา & เรดาร์ (Blind Spot / BSD & Radar)", "👁️ Blind Spot BSD & Radar")));
         this.tvBsdRadar = createMonospaceCard();
         content.addView(this.tvBsdRadar);
 
         // Card 3: Overdrive Loopback Daemon
-        content.addView(createSectionHeader("🔄 Overdrive Local Daemon Loopback (Port 8080)"));
+        content.addView(createSectionHeader(tr("🔄 Overdrive Local Daemon Loopback (Port 8080)", "🔄 Overdrive Daemon Loopback (Port 8080)")));
         this.tvDaemonStatus = createMonospaceCard();
         content.addView(this.tvDaemonStatus);
 
         // Card 4: Vehicle Dynamics (Speed, Gear, Steering)
-        content.addView(createSectionHeader("🏎️ การเคลื่อนที่ของรถ (Speed / Gear / Steering)"));
+        content.addView(createSectionHeader(tr("🏎️ การเคลื่อนที่ของรถ (Speed / Gear / Steering)", "🏎️ Vehicle Dynamics (Speed / Gear / Steering)")));
         this.tvVehicleDynamics = createMonospaceCard();
         content.addView(this.tvVehicleDynamics);
 
         // Card 5: Live Change Watcher Log
-        content.addView(createSectionHeader("📜 บันทึกเหตุการณ์สดเมื่อสัญญาณเปลี่ยนค่า (Live Event Stream)"));
+        content.addView(createSectionHeader(tr("📜 บันทึกเหตุการณ์สดเมื่อสัญญาณเปลี่ยนค่า (Live Event Stream)", "📜 Live Signal Change Event Stream")));
         this.tvLiveLogs = createMonospaceCard();
-        this.tvLiveLogs.setText("กำลังเริ่มต้นดักฟังสัญญาณ...");
+        this.tvLiveLogs.setText(tr("กำลังเริ่มต้นดักฟังสัญญาณ...", "Listening for CAN bus signals..."));
         this.tvLiveLogs.setTextColor(Color.parseColor("#FDE047")); // Warm yellow
         content.addView(this.tvLiveLogs);
 
@@ -523,9 +543,10 @@ public class TurnProbeActivity extends AppCompatActivity {
         OverlayService os = OverlayService.getInstance();
         if (os != null) {
             os.testAdasAlert(left, right, 3000L);
-            Toast.makeText(this, "🚨 จำลองเตือน " + (left ? "ซ้าย" : "ขวา") + " 3 วินาที", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, tr("🚨 จำลองเตือน " + (left ? "ซ้าย" : "ขวา") + " 3 วินาที",
+                "🚨 Simulated " + (left ? "Left" : "Right") + " warning for 3s"), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "OverlayService ยังไม่ทำงาน", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, tr("OverlayService ยังไม่ทำงาน", "OverlayService is inactive"), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -540,7 +561,7 @@ public class TurnProbeActivity extends AppCompatActivity {
         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (cm != null) {
             cm.setPrimaryClip(ClipData.newPlainText("SignalProbeReport", rep.toString()));
-            Toast.makeText(this, "📋 คัดลอก Report ทั้งหมดลงคลิปบอร์ดแล้ว", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, tr("📋 คัดลอก Report ทั้งหมดลงคลิปบอร์ดแล้ว", "📋 Copied report to clipboard"), Toast.LENGTH_SHORT).show();
         }
     }
 

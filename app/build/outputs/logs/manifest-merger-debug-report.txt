@@ -14,18 +14,18 @@ MERGED from [androidx.core:core:1.12.0] /Users/dee/.gradle/caches/9.4.1/transfor
 		INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml
 		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:19:22-94
 provider#androidx.core.content.FileProvider
-INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:79:9-87:20
+INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:81:9-89:20
 	android:grantUriPermissions
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:83:13-47
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:85:13-47
 	android:authorities
 		INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:82:13-66
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:84:13-66
 	android:exported
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:81:13-37
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:83:13-37
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:80:13-62
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:82:13-62
 provider#androidx.startup.InitializationProvider
-INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:98:9-108:20
+INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:100:9-110:20
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/dee/.gradle/caches/9.4.1/transforms/57565bbb3ec9a6d1f7c09582b83cc0f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/dee/.gradle/caches/9.4.1/transforms/57565bbb3ec9a6d1f7c09582b83cc0f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
 MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /Users/dee/.gradle/caches/9.4.1/transforms/ca1a500a775dd35e597a8a083700dde0/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:24:9-32:20
@@ -36,16 +36,16 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/dee/.gradle/caches/9
 MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/dee/.gradle/caches/9.4.1/transforms/54a730e1dbc6b0e50dd48bcb7507b39c/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
 	android:authorities
 		INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:101:13-68
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:103:13-68
 	android:exported
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:100:13-37
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:102:13-37
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:99:13-67
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:101:13-67
 manifest
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:1:1-110:12
-INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:1:1-110:12
-INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:1:1-110:12
-INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:1:1-110:12
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:1:1-112:12
+INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:1:1-112:12
+INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:1:1-112:12
+INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:1:1-112:12
 MERGED from [com.google.android.material:material:1.11.0] /Users/dee/.gradle/caches/9.4.1/transforms/c3d5dd8a4441f770cf34550b47a9f69b/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/dee/.gradle/caches/9.4.1/transforms/ca874313ddc5107deb2a90d842f8f753/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /Users/dee/.gradle/caches/9.4.1/transforms/3b356ae6922fafae7e28329fa4d19a74/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
@@ -149,8 +149,8 @@ ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:15:5
 	android:name
 		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:15:22-77
 application
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:20:5-109:19
-INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:20:5-109:19
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:20:5-111:19
+INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:20:5-111:19
 MERGED from [com.google.android.material:material:1.11.0] /Users/dee/.gradle/caches/9.4.1/transforms/c3d5dd8a4441f770cf34550b47a9f69b/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] /Users/dee/.gradle/caches/9.4.1/transforms/c3d5dd8a4441f770cf34550b47a9f69b/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/dee/.gradle/caches/9.4.1/transforms/ca874313ddc5107deb2a90d842f8f753/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
@@ -208,139 +208,143 @@ ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:37:9
 	android:launchMode
 		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:40:13-43
 	android:exported
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:39:13-36
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:39:13-37
 	android:theme
 		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:42:13-54
 	android:name
 		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:38:13-79
 activity#com.nineoad.bydsignpicinpic.signal.TurnProbeActivity
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:43:9-45:38
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:43:9-47:56
+	android:screenOrientation
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:46:13-56
 	android:exported
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:45:13-36
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:45:13-37
+	android:theme
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:47:13-54
 	android:name
 		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:44:13-80
 activity#com.nineoad.bydsignpicinpic.bev.studio.CalibrationStudioActivity
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:46:9-51:74
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:48:9-53:56
 	android:screenOrientation
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:49:13-56
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:51:13-56
 	android:exported
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:48:13-36
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:50:13-37
 	android:configChanges
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:50:13-91
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:52:13-91
 	android:theme
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:51:13-72
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:53:13-54
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:47:13-92
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:49:13-92
 service#com.nineoad.bydsignpicinpic.overlay.OverlayService
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:52:9-66:19
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:54:9-68:19
 	android:exported
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:54:13-36
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:56:13-36
 	android:foregroundServiceType
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:55:13-51
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:57:13-51
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:53:13-78
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:55:13-78
 intent-filter#action:name:HIDE+action:name:HIDE_BEV+action:name:SHOW_BEV+action:name:SHOW_HAZARD+action:name:SHOW_LEFT+action:name:SHOW_REAR+action:name:SHOW_RIGHT+action:name:TOGGLE_BEV
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:56:13-65:29
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:58:13-67:29
 action#SHOW_LEFT
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:57:17-51
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:59:17-51
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:57:25-49
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:59:25-49
 action#SHOW_RIGHT
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:58:17-52
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:60:17-52
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:58:25-50
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:60:25-50
 action#SHOW_HAZARD
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:59:17-53
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:61:17-53
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:59:25-51
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:61:25-51
 action#SHOW_REAR
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:60:17-51
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:62:17-51
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:60:25-49
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:62:25-49
 action#SHOW_BEV
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:61:17-50
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:63:17-50
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:61:25-48
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:63:25-48
 action#HIDE_BEV
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:62:17-50
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:64:17-50
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:62:25-48
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:64:25-48
 action#TOGGLE_BEV
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:63:17-52
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:65:17-52
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:63:25-50
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:65:25-50
 action#HIDE
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:64:17-46
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:66:17-46
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:64:25-44
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:66:25-44
 service#com.nineoad.bydsignpicinpic.signal.BydKeyRemapService
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:67:9-78:19
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:69:9-80:19
 	android:enabled
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:70:13-35
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:72:13-35
 	android:exported
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:71:13-37
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:73:13-37
 	android:permission
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:69:13-79
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:71:13-79
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:68:13-81
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:70:13-81
 intent-filter#action:name:android.accessibilityservice.AccessibilityService
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:72:13-74:29
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:74:13-76:29
 action#android.accessibilityservice.AccessibilityService
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:73:17-91
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:75:17-91
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:73:25-89
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:75:25-89
 meta-data#android.accessibilityservice
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:75:13-77:71
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:77:13-79:71
 	android:resource
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:77:17-69
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:79:17-69
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:76:17-60
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:78:17-60
 receiver#com.nineoad.bydsignpicinpic.BootReceiver
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:88:9-97:20
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:90:9-99:20
 	android:exported
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:90:13-36
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:92:13-36
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:89:13-68
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:91:13-68
 intent-filter#action:name:ACC_ON+action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.MY_PACKAGE_REPLACED+action:name:android.intent.action.QUICKBOOT_POWERON
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:91:13-96:29
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:93:13-98:29
 action#android.intent.action.BOOT_COMPLETED
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:92:17-78
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:94:17-78
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:92:25-76
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:94:25-76
 action#android.intent.action.QUICKBOOT_POWERON
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:93:17-81
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:95:17-81
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:93:25-79
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:95:25-79
 action#android.intent.action.MY_PACKAGE_REPLACED
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:94:17-83
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:96:17-83
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:94:25-81
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:96:25-81
 action#ACC_ON
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:95:17-48
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:97:17-48
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:95:25-46
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:97:25-46
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:84:13-86:53
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:86:13-88:53
 	android:resource
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:86:17-51
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:88:17-51
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:85:17-67
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:87:17-67
 meta-data#androidx.emoji2.text.EmojiCompatInitializer
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:102:13-104:51
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:104:13-106:51
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/dee/.gradle/caches/9.4.1/transforms/57565bbb3ec9a6d1f7c09582b83cc0f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
 MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/dee/.gradle/caches/9.4.1/transforms/57565bbb3ec9a6d1f7c09582b83cc0f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
 	android:value
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:104:17-49
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:106:17-49
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:103:17-75
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:105:17-75
 meta-data#androidx.lifecycle.ProcessLifecycleInitializer
-ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:105:13-107:51
+ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:107:13-109:51
 MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /Users/dee/.gradle/caches/9.4.1/transforms/ca1a500a775dd35e597a8a083700dde0/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
 MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /Users/dee/.gradle/caches/9.4.1/transforms/ca1a500a775dd35e597a8a083700dde0/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
 	android:value
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:107:17-49
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:109:17-49
 	android:name
-		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:106:17-78
+		ADDED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml:108:17-78
 uses-sdk
 INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/dee/Desktop/BYDSignalPnP/app/src/main/AndroidManifest.xml

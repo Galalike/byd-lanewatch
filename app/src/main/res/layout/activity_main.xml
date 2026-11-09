@@ -367,7 +367,7 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 app:cornerRadius="10dp"
-                android:text="📡 ตรวจสัญญาณ"/>
+                android:text="@string/btn_signal_probe"/>
         </LinearLayout>
 
         <!-- 3-COLUMN MAIN DASHBOARD (1920x1080 Landscape Optimized) -->
@@ -434,7 +434,7 @@
                             android:layout_height="wrap_content"/>
                         <Button
                             android:id="@+id/btnCalibrateTurn"
-                            android:text="⚙️ ตั้งค่า"
+                            android:text="@string/btn_col_settings"
                             android:textSize="11sp"
                             android:textStyle="bold"
                             android:textColor="@color/lw_btn_outline_text"
@@ -830,7 +830,7 @@
                                 android:insetBottom="0dp"
                                 app:strokeColor="@color/lw_btn_outline_stroke"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:text="กรอบ: แนวนอน"/>
+                                android:text="@string/col1_aspect_landscape"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -1549,7 +1549,7 @@
                             android:layout_height="wrap_content"/>
                         <Button
                             android:id="@+id/btnCalibrateRear"
-                            android:text="⚙️ ตั้งค่า"
+                            android:text="@string/btn_col_settings"
                             android:textSize="11sp"
                             android:textStyle="bold"
                             android:textColor="@color/lw_btn_outline_text"
@@ -2200,7 +2200,7 @@
                             android:layout_height="wrap_content"/>
                         <Button
                             android:id="@+id/btnCalibrateBev"
-                            android:text="⚙️ ตั้งค่า"
+                            android:text="@string/btn_col_settings"
                             android:textSize="11sp"
                             android:textStyle="bold"
                             android:textColor="@color/lw_btn_outline_text"
@@ -2324,7 +2324,7 @@
                         android:paddingBottom="6dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="เลือกมุมล้อที่ต้องการปรับแต่ง"/>
+                        android:text="@string/col3_select_wheel"/>
 
                     <!-- Row 1: FL & FR -->
                     <LinearLayout
@@ -2343,7 +2343,7 @@
                             android:insetBottom="0dp"
                             app:strokeColor="@color/lw_btn_outline_stroke"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:text="หน้าซ้าย (FL)"/>
+                            android:text="@string/wheel_fl"/>
                         <Button
                             android:id="@+id/btnWheelFR"
                             android:textSize="11sp"
@@ -2357,7 +2357,7 @@
                             android:insetBottom="0dp"
                             app:strokeColor="@color/lw_btn_outline_stroke"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:text="หน้าขวา (FR)"/>
+                            android:text="@string/wheel_fr"/>
                     </LinearLayout>
 
                     <!-- Row 2: RL & RR -->
@@ -2378,7 +2378,7 @@
                             android:insetBottom="0dp"
                             app:strokeColor="@color/lw_btn_outline_stroke"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:text="หลังซ้าย (RL)"/>
+                            android:text="@string/wheel_rl"/>
                         <Button
                             android:id="@+id/btnWheelRR"
                             android:textSize="11sp"
@@ -2392,7 +2392,7 @@
                             android:insetBottom="0dp"
                             app:strokeColor="@color/lw_btn_outline_stroke"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:text="หลังขวา (RR)"/>
+                            android:text="@string/wheel_rr"/>
                     </LinearLayout>
 
                     <!-- Divider -->
@@ -3012,7 +3012,7 @@
                             android:insetBottom="0dp"
                             app:strokeColor="@color/lw_btn_outline_stroke"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:text="รีเซ็ตล้อนี้"/>
+                            android:text="@string/btn_reset_this_wheel"/>
                         <Button
                             android:id="@+id/btnWheelResetAll"
                             android:textSize="11sp"
@@ -3025,7 +3025,7 @@
                             android:insetBottom="0dp"
                             app:strokeColor="@color/lw_btn_outline_stroke"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:text="รีเซ็ตทั้ง 4 ล้อ"/>
+                            android:text="@string/btn_reset_all_wheels"/>
                     </LinearLayout>
 
                 </LinearLayout>

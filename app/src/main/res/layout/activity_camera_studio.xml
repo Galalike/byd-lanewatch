@@ -31,7 +31,7 @@
             app:cornerRadius="8dp"
             app:strokeColor="@color/lw_btn_outline_stroke"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:text="← ย้อนกลับ"/>
+            android:text="@string/studio_btn_back"/>
 
         <TextView
             android:id="@+id/tvStudioTitle"
@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="สตูดิโอตั้งค่ามุมกล้อง (Touch Calibration Studio)"/>
+            android:text="@string/studio_title_header"/>
 
         <!-- Grid Toggle -->
         <Button
@@ -57,7 +57,7 @@
             app:cornerRadius="8dp"
             app:strokeColor="@color/lw_btn_outline_stroke"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:text="📏 เส้นตาราง PIP"/>
+            android:text="@string/studio_btn_grid"/>
 
         <!-- Load Recommended Values Button -->
         <Button
@@ -72,7 +72,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             app:cornerRadius="8dp"
-            android:text="⭐ โหลดค่าแนะนำ"/>
+            android:text="@string/studio_btn_recommended"/>
 
         <!-- Reset Button -->
         <Button
@@ -87,7 +87,7 @@
             app:cornerRadius="8dp"
             app:strokeColor="@color/lw_btn_outline_stroke"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:text="↺ คืนค่าเดิม"/>
+            android:text="@string/studio_btn_reset"/>
 
         <!-- Save Button -->
         <Button
@@ -101,7 +101,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             app:cornerRadius="8dp"
-            android:text="💾 บันทึกและเสร็จสิ้น"/>
+            android:text="@string/studio_btn_save"/>
     </LinearLayout>
 
     <!-- MAIN BODY: Split View (Left = Interactive Touch Preview, Right = Configuration Controls) -->
@@ -180,7 +180,7 @@
                         android:insetTop="0dp"
                         android:insetBottom="0dp"
                         app:cornerRadius="8dp"
-                        android:text="กล้องด้านซ้าย (Left)"/>
+                        android:text="@string/studio_cam_left"/>
                     <Button
                         android:id="@+id/btnStudioSideRight"
                         android:textSize="12sp"
@@ -195,7 +195,7 @@
                         app:cornerRadius="8dp"
                         app:strokeColor="@color/lw_btn_outline_stroke"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:text="กล้องด้านขวา (Right)"/>
+                        android:text="@string/studio_cam_right"/>
                 </LinearLayout>
 
                 <!-- Mode 3: Front Wheels Buttons (FL & FR) -->
@@ -206,7 +206,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="เลือกมุมล้อหน้าที่ต้องการตั้งค่า"
+                        android:text="@string/studio_select_wheel_header"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:textColor="@color/lw_text_accent"
@@ -229,7 +229,7 @@
                             android:insetTop="0dp"
                             android:insetBottom="0dp"
                             app:cornerRadius="8dp"
-                            android:text="ล้อหน้าซ้าย (FL)"/>
+                            android:text="@string/wheel_fl"/>
                         <Button
                             android:id="@+id/btnStudioWheelFR"
                             android:textSize="11sp"
@@ -244,13 +244,13 @@
                             app:cornerRadius="8dp"
                             app:strokeColor="@color/lw_btn_outline_stroke"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:text="ล้อหน้าขวา (FR)"/>
+                            android:text="@string/wheel_fr"/>
                     </LinearLayout>
                 </LinearLayout>
 
                 <!-- 2. Rotation & Mirror Controls -->
                 <TextView
-                    android:text="การหมุนและกลับด้านภาพ"
+                    android:text="@string/studio_transform_header"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     android:textColor="@color/lw_text_accent"
@@ -275,7 +275,7 @@
                         app:cornerRadius="6dp"
                         app:strokeColor="@color/lw_btn_outline_stroke"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:text="หมุน 90°"/>
+                        android:text="@string/col1_tune_rotate"/>
                     <TextView
                         android:id="@+id/tvStudioRotateVal"
                         android:textSize="12sp"
@@ -332,7 +332,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="พลิกซ้าย-ขวา"
+                        android:text="@string/col1_tune_mirror"
                         android:textSize="12sp"
                         android:textColor="@color/lw_text_primary"
                         android:layout_width="wrap_content"
@@ -343,7 +343,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:text="พลิกบน-ล่าง"
+                        android:text="@string/col1_tune_flipv"
                         android:textSize="12sp"
                         android:textColor="@color/lw_text_primary"
                         android:layout_marginStart="20dp"
@@ -358,7 +358,7 @@
 
                 <!-- 3. Crop Controls -->
                 <TextView
-                    android:text="ตัดกรอบภาพ (Crop Bounds)"
+                    android:text="@string/col1_crop_header"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     android:textColor="@color/lw_text_accent"
@@ -373,7 +373,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="บน"
+                        android:text="@string/lbl_top"
                         android:textSize="11sp"
                         android:textColor="@color/lw_text_secondary"
                         android:layout_width="40dp"
@@ -421,7 +421,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="ล่าง"
+                        android:text="@string/lbl_bottom"
                         android:textSize="11sp"
                         android:textColor="@color/lw_text_secondary"
                         android:layout_width="40dp"
@@ -469,7 +469,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="ซ้าย"
+                        android:text="@string/lbl_left"
                         android:textSize="11sp"
                         android:textColor="@color/lw_text_secondary"
                         android:layout_width="40dp"
@@ -517,7 +517,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="ขวา"
+                        android:text="@string/lbl_right"
                         android:textSize="11sp"
                         android:textColor="@color/lw_text_secondary"
                         android:layout_width="40dp"
@@ -560,7 +560,7 @@
 
                 <!-- 4. Fisheye Distortion & Zoom -->
                 <TextView
-                    android:text="แก้เลนส์ตาปลา (Fisheye Correction &amp; Zoom)"
+                    android:text="@string/col1_fe_header"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     android:textColor="@color/lw_text_accent"
@@ -575,7 +575,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="ความแรง"
+                        android:text="@string/lbl_strength"
                         android:textSize="11sp"
                         android:textColor="@color/lw_text_secondary"
                         android:layout_width="50dp"
@@ -625,7 +625,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="ซูม"
+                        android:text="@string/lbl_zoom"
                         android:textSize="11sp"
                         android:textColor="@color/lw_text_secondary"
                         android:layout_width="50dp"
@@ -675,7 +675,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="ศูนย์ X"
+                        android:text="@string/lbl_center_x"
                         android:textSize="11sp"
                         android:textColor="@color/lw_text_secondary"
                         android:layout_width="50dp"
@@ -725,7 +725,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:text="ศูนย์ Y"
+                        android:text="@string/lbl_center_y"
                         android:textSize="11sp"
                         android:textColor="@color/lw_text_secondary"
                         android:layout_width="50dp"
@@ -792,7 +792,7 @@
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     app:cornerRadius="8dp"
-                    android:text="📺 ทดสอบสลับหน้าต่าง PiP ลอย"/>
+                    android:text="@string/studio_btn_test_pip"/>
 
                 <!-- ADAS Live Test Button (Shown for Mode 1) -->
                 <Button
@@ -809,7 +809,7 @@
                     app:strokeColor="@color/lw_btn_outline_stroke"
                     app:cornerRadius="8dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:text="🚨 ทดสอบเตือนจุดอับสายตา ADAS (5 วินาที)"/>
+                    android:text="@string/studio_btn_test_adas"/>
 
                 <!-- Automatic Triggers Box (Active for Mode 3 Front Wheels) -->
                 <LinearLayout
@@ -829,7 +829,7 @@
                         android:paddingBottom="6dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ระบบสั่งเปิดอัตโนมัติ (AUTOMATIC TRIGGERS)"/>
+                        android:text="@string/studio_auto_triggers_header"/>
 
                     <!-- Live Vehicle Telemetry Banner in Studio -->
                     <TextView
@@ -848,7 +848,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="📡 สถานะสด: กำลังรอการเชื่อมต่อ..."/>
+                        android:text="@string/studio_live_status_waiting"/>
 
                     <!-- Auto 1: Exit Park (P) -->
                     <LinearLayout
@@ -863,7 +863,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="เปิดเมื่อออกจากเกียร์ P"/>
+                            android:text="@string/col3_auto_exit_p"/>
                         <Switch
                             android:id="@+id/swStudioExitPark"
                             android:layout_width="wrap_content"
@@ -936,7 +936,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="เปิดอัตโนมัติเมื่อหักเลี้ยวพวงมาลัย"/>
+                            android:text="@string/col3_auto_steer"/>
                         <Switch
                             android:id="@+id/swStudioSteering"
                             android:layout_width="wrap_content"
@@ -1017,7 +1017,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="ซ่อนเมื่อความเร็วเกินกำหนด"/>
+                            android:text="@string/col3_auto_speed"/>
                         <Switch
                             android:id="@+id/swStudioSpeedLimit"
                             android:layout_width="wrap_content"

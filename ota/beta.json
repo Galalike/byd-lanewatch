@@ -1,15 +1,17 @@
 {
-  "versionCode": 106,
-  "versionName": "1.0.5",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.5/BYDLaneWatch_v1.0.5.apk",
-  "size": 63075627,
+  "versionCode": 107,
+  "versionName": "1.0.6",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.6/BYDLaneWatch_v1.0.6.apk",
+  "size": 63090547,
   "releaseDate": "2026-11-09",
   "channel": "beta",
-  "whatsNew": "• Noto Sans Thai Font Integration: Updated Thai typography to modern, sleek Noto Sans Thai across all app UI elements and dialogs.\n• Enhanced Readability on Automotive Displays: Full weight support (Regular, Medium, SemiBold, Bold) optimized for high-resolution BYD touchscreens.\n• Autostart Recovery & State Persistence: Seamless automatic continuation of MainActivity and OverlayService after system updates.",
+  "whatsNew": "• Global Localization Architecture: English is now the base default language across all screens, buttons, and settings; automatically uses Thai if the vehicle's system locale is Thai.\n• BYD Dolphin Black Screen Auto-Resolution: Dynamic AVM camera detection (ID 0 vs ID 1 fallback), dead-slot frame watchdog, and manual AVM Camera ID selector in System Settings.\n• Expanded Camera Persistent View: Single tap or '+ Right / + Left' expands camera and stays persistent on screen until closed via double-tap.\n• Front Wheels Sub-Automations: Exit Park, steering angle threshold, and speed limit cutoff work independently of the turn-signal wheel attachment switch.\n• Localized Diagnostic Report: System diagnostics and summary report adapt dynamically to English or Thai.",
   "notes": [
-    "Latest Release v1.0.5",
-    "Noto Sans Thai font integration for clean, modern automotive typography",
-    "Full weight support (Regular, Medium, SemiBold, Bold) across all dialogs and screens",
-    "Self-recovering autostart automation and persistent background service"
+    "Latest Release v1.0.6",
+    "Complete English default localization with automatic Thai fallback for Thai vehicles",
+    "BYD Dolphin / Atto 1 / Qin Plus black screen fix (dynamic ID 0 / ID 1 probe & auto-recovery)",
+    "Persistent expanded PIP camera mode across turn signal cancellation (dismiss with double-tap)",
+    "Independent front wheels sub-automations (Exit Park, steering angle, speed guard)",
+    "Fully localized System Diagnostics summary report & 360° Camera Signal Code selector"
   ]
 }
