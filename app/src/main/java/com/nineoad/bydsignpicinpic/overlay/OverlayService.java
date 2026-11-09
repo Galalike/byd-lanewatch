@@ -1358,6 +1358,24 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         }
     }
 
+    public void updateStudioSlot(int targetType, int oldIndex, int newIndex) {
+        Log.i(TAG, "updateStudioSlot targetType=" + targetType + " old=" + oldIndex + " new=" + newIndex);
+        if (this.feed == null) return;
+        Surface s = null;
+        if (targetType == 1) { // Left
+            s = this.studioSurfaceL;
+        } else if (targetType == 2) { // Right
+            s = this.studioSurfaceR;
+        } else if (targetType == 4) { // Rear
+            s = this.studioSurfaceRear;
+        }
+        if (s != null) {
+            this.feed.rmSurface(s, oldIndex);
+            boolean ok = this.feed.addSurface(s, newIndex);
+            Log.i(TAG, "updateStudioSlot reattached s=" + s + " idx=" + newIndex + " ok=" + ok);
+        }
+    }
+
     public void detachStudioSurfaces() {
         Log.i(TAG, "detachStudioSurfaces");
         if (this.feed != null) {

@@ -222,6 +222,7 @@
     <string name="settings_cam_map_rear">Rear View Slot</string>
     <string name="settings_cam_map_left">Left PIP Slot</string>
     <string name="settings_cam_map_right">Right PIP Slot</string>
+    <string name="studio_cam_slot_label">Camera Hardware Slot:</string>
     <string name="studio_btn_back">← Back</string>
     <string name="studio_title_header">Touch Calibration Studio</string>
     <string name="studio_btn_grid">📏 PIP Grid</string>

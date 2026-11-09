@@ -2,7 +2,7 @@
   "versionCode": 110,
   "versionName": "1.0.8",
   "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.8/BYDLaneWatch_v1.0.8.apk",
-  "size": 61403772,
+  "size": 63198447,
   "releaseDate": "2026-11-09",
   "channel": "stable",
   "whatsNew": "• Camera Slot Index Mapping: Users can now independently customize hardware camera slot index mapping (Index 0..5) for Rear View, Left PIP, and Right PIP directly from Settings, solving camera misalignment on models like BYD Atto 3 where slot 1 is front camera.\n• Fixed BYD Dolphin False Red Flashing Alert: Completely decoupled generic cluster blind-area flags and uncalibrated Area 1000 registers from directional PIP red alert borders.\n• Canonical ADAS Hardware Radar Binding: Radar warnings bind directly to Area 1038 registers (1098907692 FL / 1098907694 FR / 1098907664 LCA Left / 1098907666 LCA Right) with 1500ms CAN pulse hold smoothing.\n• New Radar Warning Frame Preference Switch: Added toggle switch in Settings allowing users to easily enable or disable visual red alert frames as desired.\n• Full Bilingual Localization: Updated base English strings and full Thai localization across all settings, diagnostics, and probe interfaces.",

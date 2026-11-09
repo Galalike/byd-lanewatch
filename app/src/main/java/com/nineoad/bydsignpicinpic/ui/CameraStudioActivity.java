@@ -13,6 +13,9 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Surface;
@@ -84,6 +87,9 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
     private Button btnStudioFeCyMinus, btnStudioFeCyPlus;
 
     private Button btnStudioTestPip;
+    private Spinner spinnerStudioCamSlot;
+    private TextView tvStudioCamSlotLabel;
+    private View layoutStudioCamSlot;
 
     private Handler studioStatusHandler;
     private Runnable studioStatusRunnable;
@@ -377,7 +383,42 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         btnStudioTestPip = findViewById(R.id.btnStudioTestPip);
         btnStudioTestPip.setOnClickListener(v -> triggerLivePipTest());
 
+        layoutStudioCamSlot = findViewById(R.id.layoutStudioCamSlot);
+        tvStudioCamSlotLabel = findViewById(R.id.tvStudioCamSlotLabel);
+        spinnerStudioCamSlot = findViewById(R.id.spinnerStudioCamSlot);
+        setupCamSlotSelector();
+
         setupStudioExtraFeatures();
+    }
+
+    private void setupCamSlotSelector() {
+        if (spinnerStudioCamSlot == null) return;
+        final String[] slotOptions = new String[]{
+            "Index 0", "Index 1", "Index 2", "Index 3", "Index 4", "Index 5"
+        };
+        spinnerStudioCamSlot.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, slotOptions));
+        spinnerStudioCamSlot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (suppressSync) return;
+                int targetType = (activeMode == 2) ? 4 : (isTurnRight ? 2 : 1);
+                String prefKey = (activeMode == 2) ? "rear_cam_index" : (isTurnRight ? "right_cam_index" : "left_cam_index");
+                int defVal = (activeMode == 2) ? 1 : (isTurnRight ? 3 : 2);
+                int oldVal = prefs.getInt(prefKey, defVal);
+                if (oldVal != position) {
+                    prefs.edit().putInt(prefKey, position).apply();
+                    if (targetType == 1) OverlayService.leftIndex = position;
+                    else if (targetType == 2) OverlayService.rightIndex = position;
+                    else if (targetType == 4) OverlayService.rearIndex = position;
+
+                    OverlayService overlay = OverlayService.getInstance();
+                    if (overlay != null) {
+                        overlay.updateStudioSlot(targetType, oldVal, position);
+                    }
+                    updateStudioGlParams();
+                }
+            }
+        });
     }
 
     private void setupStudioExtraFeatures() {
@@ -877,6 +918,25 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         tvStudioFeZoom.setText(String.format(Locale.US, "%.2fx", zoom));
         tvStudioFeCx.setText(String.format(Locale.US, "%.2f", cx));
         tvStudioFeCy.setText(String.format(Locale.US, "%.2f", cy));
+
+        // 4. Update Camera Slot Spinner for current selected camera
+        if (spinnerStudioCamSlot != null && layoutStudioCamSlot != null) {
+            if (activeMode == 1 || activeMode == 2) {
+                layoutStudioCamSlot.setVisibility(View.VISIBLE);
+                String prefKey = (activeMode == 2) ? "rear_cam_index" : (isTurnRight ? "right_cam_index" : "left_cam_index");
+                int defVal = (activeMode == 2) ? 1 : (isTurnRight ? 3 : 2);
+                int savedSlot = prefs.getInt(prefKey, defVal);
+                if (tvStudioCamSlotLabel != null) {
+                    String camName = (activeMode == 2) ? tr("กล้องหลัง (Rear)", "Rear Camera")
+                                   : (isTurnRight ? tr("กล้องขวา (Right)", "Right Camera")
+                                                  : tr("กล้องซ้าย (Left)", "Left Camera"));
+                    tvStudioCamSlotLabel.setText(tr("ลำดับพอร์ต " + camName + ":", camName + " Slot:"));
+                }
+                spinnerStudioCamSlot.setSelection(Math.max(0, Math.min(5, savedSlot)));
+            } else {
+                layoutStudioCamSlot.setVisibility(View.GONE);
+            }
+        }
 
         suppressSync = false;
         updatePreviewHud();

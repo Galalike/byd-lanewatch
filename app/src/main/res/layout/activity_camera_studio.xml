@@ -248,6 +248,34 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <!-- Camera Slot Index Selector (Live Preview & Mapping) -->
+                <LinearLayout
+                    android:id="@+id/layoutStudioCamSlot"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_card_inner"
+                    android:padding="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvStudioCamSlotLabel"
+                        android:text="@string/studio_cam_slot_label"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_accent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <Spinner
+                        android:id="@+id/spinnerStudioCamSlot"
+                        android:layout_width="120dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_spinner_box"/>
+                </LinearLayout>
+
                 <!-- 2. Rotation & Mirror Controls -->
                 <TextView
                     android:text="@string/studio_transform_header"
