@@ -3243,10 +3243,32 @@ public class MainActivity extends AppCompatActivity {
         TextView tvCams = findViewById(R.id.tvVehCameras);
         if (tvCams != null) {
             try {
-                CameraManager cm = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-                String[] camIds = cm != null ? cm.getCameraIdList() : new String[0];
-                if (camIds.length > 0) {
-                    tvCams.setText(tr("พร้อมใช้งาน ", "Available ") + camIds.length + " " + tr("กล้อง", "Cameras") + " (" + TextUtils.join(", ", camIds) + ")");
+                java.util.LinkedHashSet<String> camSet = new java.util.LinkedHashSet<>();
+                try {
+                    CameraManager cm = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                    if (cm != null) {
+                        for (String id : cm.getCameraIdList()) {
+                            camSet.add(id);
+                        }
+                    }
+                } catch (Throwable ignored) {}
+
+                // Also inspect BYD native BMM camera HAL (0 = Dashcam/DVR, 1 = 360 AVM ECU)
+                for (int testId : new int[]{0, 1}) {
+                    String idStr = String.valueOf(testId);
+                    if (!camSet.contains(idStr)) {
+                        try {
+                            android.hardware.JNIBMMCamera bmm = new android.hardware.JNIBMMCamera(testId);
+                            if (bmm.nativeOpen(testId)) {
+                                camSet.add(idStr);
+                                bmm.nativeClose();
+                            }
+                        } catch (Throwable ignored) {}
+                    }
+                }
+
+                if (!camSet.isEmpty()) {
+                    tvCams.setText(tr("พร้อมใช้งาน ", "Available ") + camSet.size() + " " + tr("กล้อง", "Cameras") + " (" + TextUtils.join(", ", camSet) + ")");
                 } else {
                     tvCams.setText("Not Available");
                 }
