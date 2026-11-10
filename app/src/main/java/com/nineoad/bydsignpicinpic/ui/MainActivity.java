@@ -3343,7 +3343,7 @@ public class MainActivity extends AppCompatActivity {
         RadioButton rbCam0 = findViewById(R.id.rbCam0);
 
         if (rgCamId != null) {
-            int savedCamId = prefs.getInt("avm_cam_id", -1);
+            int savedCamId = prefs.getInt("user_avm_cam_id", -1);
             if (savedCamId == 0) {
                 if (rbCam0 != null) rbCam0.setChecked(true);
             } else if (savedCamId == 1) {
@@ -3359,13 +3359,14 @@ public class MainActivity extends AppCompatActivity {
                 } else if (checkedId == R.id.rbCam1) {
                     newCamId = 1;
                 }
-                prefs.edit().putInt("avm_cam_id", newCamId).apply();
-                OverlayService.avmCamId = (newCamId >= 0) ? newCamId : (OverlayService.detectAvmCameraId() >= 0 ? OverlayService.detectAvmCameraId() : 1);
+                prefs.edit().putInt("user_avm_cam_id", newCamId).apply();
+                int detected = OverlayService.detectAvmCameraId();
+                OverlayService.avmCamId = (newCamId >= 0) ? newCamId : (detected >= 0 ? detected : 1);
                 OverlayService.reapplyLive();
                 OverlayService.restartCameraFeed();
                 Toast.makeText(MainActivity.this,
-                    tr("ตั้งค่ารหัสกล้อง 360 เป็น " + (newCamId >= 0 ? "Camera ID " + newCamId : "อัตโนมัติ"),
-                       "360 Camera ID set to " + (newCamId >= 0 ? "Camera ID " + newCamId : "Auto")),
+                    tr("ตั้งค่ารหัสกล้อง 360 เป็น " + (newCamId >= 0 ? "Camera ID " + newCamId : "อัตโนมัติ (Cam " + OverlayService.avmCamId + ")"),
+                       "360 Camera ID set to " + (newCamId >= 0 ? "Camera ID " + newCamId : "Auto (Cam " + OverlayService.avmCamId + ")")),
                     Toast.LENGTH_SHORT).show();
             });
         }

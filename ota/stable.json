@@ -1,16 +1,16 @@
 {
-  "versionCode": 111,
-  "versionName": "1.0.8.1",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.8.1/BYDLaneWatch_v1.0.8.1.apk",
-  "size": 63198447,
-  "releaseDate": "2026-11-09",
+  "versionCode": 112,
+  "versionName": "1.0.8.2",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.8.2/BYDLaneWatch_v1.0.8.2.apk",
+  "size": 59843364,
+  "releaseDate": "2026-11-10",
   "channel": "stable",
-  "whatsNew": "• Fixed Multi-Camera Slot Fallback Bug: Resolved an issue where selecting alternative camera slot indexes (Left/Right/Rear) mistakenly fell back to the front camera (slot 0) on some BYD models.\n• Live Camera Slot Mapping in Studio: Users can now switch and preview hardware camera slots (Index 0..5) live inside Calibration Studio with real-time screen update.\n• Instant Hot-Swap Feed: Instant camera feed reconnection when changing AVM Camera ID or slot mapping without needing to exit the app.\n• Fixed BYD Dolphin False Red Flashing Alert: Completely decoupled generic cluster blind-area flags and uncalibrated Area 1000 registers from directional PIP red alert borders.",
+  "whatsNew": "• Smart Primary 360° AVM Camera Discovery: Dynamically queries BYD hardware camera tags (pano_h / BmmCameraInfo) and probes 5120×960 panoramic resolution to lock onto the 360° AVM camera (ID 1) and prevent falling back to the Front DVR camera (ID 0).\n• Exclusive Camera Slot Ownership: Cleanly detaches background warm-standby GL surfaces before attaching Touch Calibration Studio surfaces and restores them upon exit, preventing dead-slot lockups.\n• Updated Day & Night Mode Hero Previews: Refreshed home screen mode preview cards with new geometric day and night artwork.\n• Dual-Layer Vehicle Camera Detection: Vehicle Information now queries both Android Camera2 and native BYD JNIBMMCamera HAL to accurately display all available camera devices.",
   "notes": [
-    "Stable Release v1.0.8.1",
-    "Fixed camera slot index fallback bug (forcing front camera on Atto 3 / Dolphin)",
-    "Live Camera Slot Index Mapping in Touch Calibration Studio with Realtime Preview",
-    "Instant Hot-Swap Camera Feed across settings changes without restarting app",
-    "Full bilingual English and Thai localization across all UI elements"
+    "Stable Release v1.0.8.2",
+    "Smart BmmCameraInfo & 5120x960 resolution probe for primary 360° AVM camera",
+    "Prevented Front DVR (Camera ID 0) fallback and SharedPreferences overwrite bug",
+    "Exclusive camera slot ownership between OverlayService and Calibration Studio",
+    "Updated Day/Night mode hero preview graphics and Vehicle Information camera detection"
   ]
 }

@@ -98,9 +98,9 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     private static final int ROLE_RIGHT = 2;
     private static final String TAG = "OverlayService";
     public static volatile int avmCamId = 1;
-    public static final int[] CANDIDATES_PANO = {1, 0};
-    public static final int[] CANDIDATES_LEFT = {1, 4, 2, 0};
-    public static final int[] CANDIDATES_RIGHT = {1, 5, 3, 0};
+    public static final int[] CANDIDATES_PANO = {1};
+    public static final int[] CANDIDATES_LEFT = {1, 4, 2};
+    public static final int[] CANDIDATES_RIGHT = {1, 5, 3};
 
     public static boolean isDilink4Platform() {
         try {
@@ -280,7 +280,18 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
 
     public static int detectAvmCameraId() {
         try {
-            Class<?> cls = Class.forName("android.hardware.BmmCameraInfo");
+            Class<?> cls;
+            try {
+                cls = Class.forName("android.hardware.BmmCameraInfo");
+            } catch (Throwable unused) {
+                ClassLoader cl = OverlayService.class.getClassLoader();
+                if (cl != null) {
+                    try {
+                        cl.getClass().getMethod("addDexPath", String.class).invoke(cl, "/system/framework/bmmcamera.jar");
+                    } catch (Throwable ignored) {}
+                }
+                cls = Class.forName("android.hardware.BmmCameraInfo");
+            }
             java.lang.reflect.Method m = cls.getDeclaredMethod("getCameraId", String.class);
             m.setAccessible(true);
             String[] tags = {"pano_h", "pano_l", "apa", "byd_apa"};
@@ -309,7 +320,23 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         } catch (Throwable t) {
             Log.d(TAG, "detectAvmCameraId via SystemProperties: " + t.getMessage());
         }
-        return -1;
+        // Native panoramic width probe (width >= 3840 -> 5120x960 4-in-1 AVM strip)
+        int[] probeIds = {1, 2, 3, 4, 5, 0};
+        for (int candidate : probeIds) {
+            try {
+                android.hardware.JNIBMMCamera probe = new android.hardware.JNIBMMCamera(candidate);
+                int w = probe.nativeGetPreviewWidth();
+                int h = probe.nativeGetPreviewHeight();
+                try {
+                    probe.nativeClose();
+                } catch (Throwable ignored) {}
+                if (w >= 3840) {
+                    Log.i(TAG, "Native width probe detected 360 pano camera ID " + candidate + " (" + w + "x" + h + ")");
+                    return candidate;
+                }
+            } catch (Throwable ignored) {}
+        }
+        return 1;
     }
 
     @Override // android.app.Service
@@ -322,10 +349,10 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             TurnSignalListener.lingerMs = (long) (this.prefs.getFloat("lingerSec", 3.5f) * 1000.0f);
         } catch (Throwable unused) {
         }
-        int savedCamId = this.prefs.getInt("avm_cam_id", -1);
+        int savedCamId = this.prefs.getInt("user_avm_cam_id", -1);
         if (savedCamId >= 0) {
             avmCamId = savedCamId;
-            Log.i(TAG, "Using saved avmCamId=" + avmCamId);
+            Log.i(TAG, "Using user_avm_cam_id=" + avmCamId);
         } else {
             int detected = detectAvmCameraId();
             avmCamId = (detected >= 0) ? detected : 1;
@@ -1072,19 +1099,14 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                     if (lastFrame == 0L) {
                         OverlayService.this.deadSlotRestarts++;
                         Log.w(TAG, "Camera producer health check: zero frames delivered (count=" + OverlayService.this.deadSlotRestarts + ")");
-                        if (OverlayService.this.deadSlotRestarts >= 2) {
-                            int currentId = OverlayService.avmCamId;
-                            int nextId;
-                            if (OverlayService.this.pendingSide == 1) {
-                                nextId = getNextCandidateId(CANDIDATES_LEFT, currentId);
-                            } else if (OverlayService.this.pendingSide == 2) {
-                                nextId = getNextCandidateId(CANDIDATES_RIGHT, currentId);
-                            } else {
-                                nextId = (currentId == 1) ? 0 : 1;
+                        int userPrefCamId = OverlayService.this.prefs.getInt("user_avm_cam_id", -1);
+                        if (userPrefCamId < 0 && OverlayService.this.deadSlotRestarts >= 3) {
+                            int detected = detectAvmCameraId();
+                            int nextId = (detected >= 0) ? detected : 1;
+                            if (nextId != OverlayService.avmCamId) {
+                                Log.w(TAG, "Auto-recovery: switching camera ID " + OverlayService.avmCamId + " -> " + nextId);
+                                OverlayService.avmCamId = nextId;
                             }
-                            Log.w(TAG, "Auto-switching camera ID " + currentId + " -> " + nextId + " due to zero frames on Dolphin/Atto 3/DiLink!");
-                            OverlayService.avmCamId = nextId;
-                            OverlayService.this.prefs.edit().putInt("avm_cam_id", nextId).apply();
                             OverlayService.this.deadSlotRestarts = 0;
                             if (OverlayService.this.avc != null && !OverlayService.this.avc.isBound() && !isDilink4Platform()) {
                                 OverlayService.this.avc.bind();
@@ -1145,6 +1167,11 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             }
             if (this.feed != null) {
                 this.feed.setFps(25);
+                if (isStudioActive && allowStudioPipTest) {
+                    if (this.studioSurfaceL != null) this.feed.rmSurface(this.studioSurfaceL, leftIndex);
+                    if (this.studioSurfaceR != null) this.feed.rmSurface(this.studioSurfaceR, rightIndex);
+                    if (this.studioSurfaceRear != null) this.feed.rmSurface(this.studioSurfaceRear, rearIndex);
+                }
             }
             pushGlParams();
             syncGl();
@@ -1228,6 +1255,10 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
 
     private void syncGl() {
         if (this.feed == null || isOemCameraForeground) {
+            return;
+        }
+        if (isStudioActive && !allowStudioPipTest
+                && (this.studioSurfaceL != null || this.studioSurfaceR != null || this.studioSurfaceRear != null)) {
             return;
         }
         Surface surfaceL = this.glView != null ? this.glView.getCameraSurfaceLeft() : null;
@@ -1316,6 +1347,8 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         this.studioSurfaceL = sL;
         this.studioSurfaceR = sR;
         this.studioSurfaceRear = sRear;
+        // Exclusive slot ownership: detach background GL surfaces before attaching Studio surfaces
+        detachGl();
         if (this.feed == null) {
             ensureFeed();
         }
@@ -1335,7 +1368,6 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                         if (altFeed.start(baseSurface, cand, 0)) {
                             this.feed = altFeed;
                             avmCamId = cand;
-                            this.prefs.edit().putInt("avm_cam_id", cand).apply();
                             ok = true;
                             break;
                         }
@@ -1391,6 +1423,8 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                 this.feed.rmSurface(this.studioSurfaceRear, rearIndex);
                 this.studioSurfaceRear = null;
             }
+            // Restore background GL warm-standby surfaces after Studio releases slots
+            syncGl();
             if (this.pendingSide == 0) {
                 this.feed.setFps(1);
             }
@@ -1495,7 +1529,6 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
                     if (altStart) {
                         this.feed = altFeed;
                         avmCamId = cand;
-                        this.prefs.edit().putInt("avm_cam_id", cand).apply();
                         recovered = true;
                         break;
                     }
@@ -2067,10 +2100,14 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         this.camBox.setVisibility(8);
         updateBlindSpotViews(0);
 
-        // Keep CameraFeed warm at 1 FPS in standby & keep Left/Right GL surfaces attached!
-        syncGl();
-        if (this.feed != null) {
-            this.feed.setFps(1);
+        if (isStudioActive && (this.studioSurfaceL != null || this.studioSurfaceR != null || this.studioSurfaceRear != null)) {
+            attachStudioSurfaces(this.studioSurfaceL, this.studioSurfaceR, this.studioSurfaceRear);
+        } else {
+            // Keep CameraFeed warm at 1 FPS in standby & keep Left/Right GL surfaces attached!
+            syncGl();
+            if (this.feed != null) {
+                this.feed.setFps(1);
+            }
         }
         parkWindowOffscreen();
         if (this.btnSwitchCam != null) {

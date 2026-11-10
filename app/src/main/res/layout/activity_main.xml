@@ -465,7 +465,7 @@
                 <!-- Card 1 Hero Graphic -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="145dp"
+                    android:layout_height="186dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="12dp"
                     app:cardCornerRadius="14dp"
@@ -477,7 +477,7 @@
                         android:src="@drawable/img_mode_turn_signal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="fitXY"/>
                 </androidx.cardview.widget.CardView>
 
                 <!-- Legacy Detailed Controls Container (Hidden from main screen) -->
@@ -1600,7 +1600,7 @@
                 <!-- Card 2 Hero Graphic -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="145dp"
+                    android:layout_height="186dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="12dp"
                     app:cardCornerRadius="14dp"
@@ -1612,7 +1612,7 @@
                         android:src="@drawable/img_mode_rearview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="fitXY"/>
                 </androidx.cardview.widget.CardView>
 
                 <!-- Legacy Detailed Controls Container (Hidden from main screen) -->
@@ -2253,7 +2253,7 @@
                 <!-- Card 3 Hero Graphic -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="145dp"
+                    android:layout_height="186dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="12dp"
                     app:cardCornerRadius="14dp"
@@ -2265,7 +2265,7 @@
                         android:src="@drawable/img_mode_quad_wheels"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="fitXY"/>
                 </androidx.cardview.widget.CardView>
 
                 <!-- Legacy Detailed Controls Container (Hidden from main screen) -->
