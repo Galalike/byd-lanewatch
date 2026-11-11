@@ -1311,7 +1311,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         int rot = getStoredRotation();
         float defFine = (activeMode == 1) ? (isTurnRight ? 27.0f : 48.0f) : 0f;
         boolean defMirror = (activeMode == 1) ? true : (activeMode == 2);
-        float fine = prefs.getFloat(getKeyFine(), defFine);
+        float fine = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyFine(), defFine);
         boolean mirror = prefs.getBoolean(getKeyMir(), defMirror);
         boolean flipV = prefs.getBoolean(getKeyFv(), false);
 
@@ -1326,10 +1326,10 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         float defR = (activeMode == 1) ? (isTurnRight ? 0.75f : 0.81f) : 1.0f;
         float defB = (activeMode == 1) ? (isTurnRight ? 0.89f : 0.97f) : ((activeMode == 2) ? 0.80f : ((selectedWheelIdx < 2) ? 0.55f : 1.00f));
 
-        float cropL = prefs.getFloat(getKeyCrop(0), defL);
-        float cropT = prefs.getFloat(getKeyCrop(1), defT);
-        float cropR = prefs.getFloat(getKeyCrop(2), defR);
-        float cropB = prefs.getFloat(getKeyCrop(3), defB);
+        float cropL = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyCrop(0), defL);
+        float cropT = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyCrop(1), defT);
+        float cropR = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyCrop(2), defR);
+        float cropB = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyCrop(3), defB);
 
         sbStudioCropT.setProgress((int) (cropT * 100));
         sbStudioCropB.setProgress((int) (cropB * 100));
@@ -1346,10 +1346,10 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         float defCx = (activeMode == 1) ? (isTurnRight ? 0.66f : 0.40f) : 0.50f;
         float defCy = (activeMode == 1) ? (isTurnRight ? 0.68f : 0.5601612f) : ((activeMode == 3) ? ((selectedWheelIdx < 2) ? 0.35f : 0.65f) : 0.50f);
 
-        float str = prefs.getFloat(getKeyFeStr(), defStr);
-        float zoom = prefs.getFloat(getKeyFeZoom(), defZoom);
-        float cx = prefs.getFloat(getKeyFeCx(), defCx);
-        float cy = prefs.getFloat(getKeyFeCy(), defCy);
+        float str = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyFeStr(), defStr);
+        float zoom = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyFeZoom(), defZoom);
+        float cx = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyFeCx(), defCx);
+        float cy = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(prefs, getKeyFeCy(), defCy);
 
         sbStudioFeStr.setProgress((int) ((str + 0.50f) * 100));
         sbStudioFeZoom.setProgress((int) ((zoom - 0.50f) * 100));

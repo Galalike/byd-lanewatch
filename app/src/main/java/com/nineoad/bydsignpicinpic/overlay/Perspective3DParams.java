@@ -153,22 +153,22 @@ public class Perspective3DParams {
         if (sp == null) return;
         Perspective3DParams def = fallback != null ? fallback : new Perspective3DParams();
         this.enabled = sp.getBoolean(prefix + "_3d_enabled", def.enabled);
-        this.pitchKeystone = sp.getFloat(prefix + "_pitchKeystone", def.pitchKeystone);
-        this.carBodyTilt = sp.getFloat(prefix + "_carBodyTilt", def.carBodyTilt);
-        this.poleTilt = sp.getFloat(prefix + "_poleTilt", def.poleTilt);
-        this.horizonStraighten = sp.getFloat(prefix + "_horizonStraighten", def.horizonStraighten);
-        this.rollDeg = sp.getFloat(prefix + "_rollDeg", def.rollDeg);
-        this.cylindrical = sp.getFloat(prefix + "_cylindrical", def.cylindrical);
-        this.trueLensK1 = sp.getFloat(prefix + "_trueLensK1", def.trueLensK1);
-        this.zoom3D = sp.getFloat(prefix + "_zoom3D", def.zoom3D);
-        this.globalScale = sp.getFloat(prefix + "_globalScale", def.globalScale);
-        this.panInOut = sp.getFloat(prefix + "_panInOut", def.panInOut);
-        this.panY = sp.getFloat(prefix + "_panY", def.panY);
-        this.panX = sp.getFloat(prefix + "_panX", def.panX);
-        this.wideCrop[0] = sp.getFloat(prefix + "_w0", def.wideCrop[0]);
-        this.wideCrop[1] = sp.getFloat(prefix + "_w1", def.wideCrop[1]);
-        this.wideCrop[2] = sp.getFloat(prefix + "_w2", def.wideCrop[2]);
-        this.wideCrop[3] = sp.getFloat(prefix + "_w3", def.wideCrop[3]);
+        this.pitchKeystone = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_pitchKeystone", def.pitchKeystone);
+        this.carBodyTilt = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_carBodyTilt", def.carBodyTilt);
+        this.poleTilt = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_poleTilt", def.poleTilt);
+        this.horizonStraighten = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_horizonStraighten", def.horizonStraighten);
+        this.rollDeg = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_rollDeg", def.rollDeg);
+        this.cylindrical = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_cylindrical", def.cylindrical);
+        this.trueLensK1 = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_trueLensK1", def.trueLensK1);
+        this.zoom3D = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_zoom3D", def.zoom3D);
+        this.globalScale = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_globalScale", def.globalScale);
+        this.panInOut = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_panInOut", def.panInOut);
+        this.panY = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_panY", def.panY);
+        this.panX = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_panX", def.panX);
+        this.wideCrop[0] = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_w0", def.wideCrop[0]);
+        this.wideCrop[1] = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_w1", def.wideCrop[1]);
+        this.wideCrop[2] = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_w2", def.wideCrop[2]);
+        this.wideCrop[3] = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sp, prefix + "_w3", def.wideCrop[3]);
     }
 
     /**

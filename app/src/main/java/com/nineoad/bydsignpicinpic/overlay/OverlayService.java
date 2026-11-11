@@ -2021,16 +2021,16 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         drivingMirrorRight = sharedPreferences.getBoolean(strCustomPrefix + "mir_r", true);
         drivingFlipVLeft = sharedPreferences.getBoolean(strCustomPrefix + "fv_l", false);
         drivingFlipVRight = sharedPreferences.getBoolean(strCustomPrefix + "fv_r", false);
-        drivingFineLeft = sharedPreferences.getFloat(strCustomPrefix + "fn_l", 48.0f);
-        drivingFineRight = sharedPreferences.getFloat(strCustomPrefix + "fn_r", 27.0f);
-        drivingFeStrengthLeft = sharedPreferences.getFloat(strCustomPrefix + "str_l", -0.24f);
-        drivingFeStrengthRight = sharedPreferences.getFloat(strCustomPrefix + "str_r", -0.38f);
-        drivingFeZoomLeft = sharedPreferences.getFloat(strCustomPrefix + "zoom_l", 1.14f);
-        drivingFeZoomRight = sharedPreferences.getFloat(strCustomPrefix + "zoom_r", 0.91f);
-        drivingFeCxLeft = sharedPreferences.getFloat(strCustomPrefix + "cx_l", 0.40f);
-        drivingFeCxRight = sharedPreferences.getFloat(strCustomPrefix + "cx_r", 0.66f);
-        drivingFeCyLeft = sharedPreferences.getFloat(strCustomPrefix + "cy_l", 0.5601612f);
-        drivingFeCyRight = sharedPreferences.getFloat(strCustomPrefix + "cy_r", 0.68f);
+        drivingFineLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "fn_l", 48.0f);
+        drivingFineRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "fn_r", 27.0f);
+        drivingFeStrengthLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "str_l", -0.24f);
+        drivingFeStrengthRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "str_r", -0.38f);
+        drivingFeZoomLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "zoom_l", 1.14f);
+        drivingFeZoomRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "zoom_r", 0.91f);
+        drivingFeCxLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "cx_l", 0.40f);
+        drivingFeCxRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "cx_r", 0.66f);
+        drivingFeCyLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "cy_l", 0.5601612f);
+        drivingFeCyRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "cy_r", 0.68f);
         drivingCropLeft = loadCrop(sharedPreferences, strCustomPrefix + "l", new float[]{0.22f, 0.57f, 0.81f, 0.97f});
         drivingCropRight = loadCrop(sharedPreferences, strCustomPrefix + "r", new float[]{0.21f, 0.62f, 0.75f, 0.89f});
         customOrient = sharedPreferences.getInt(strCustomPrefix + "orient", 0);
@@ -2045,7 +2045,12 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     }
 
     private static float[] loadCrop(SharedPreferences sharedPreferences, String str, float[] fArr) {
-        return new float[]{sharedPreferences.getFloat(str + "0", fArr[0]), sharedPreferences.getFloat(str + "1", fArr[1]), sharedPreferences.getFloat(str + "2", fArr[2]), sharedPreferences.getFloat(str + "3", fArr[3])};
+        return new float[]{
+            com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, str + "0", fArr[0]),
+            com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, str + "1", fArr[1]),
+            com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, str + "2", fArr[2]),
+            com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, str + "3", fArr[3])
+        };
     }
 
     /* JADX INFO: Access modifiers changed from: private */

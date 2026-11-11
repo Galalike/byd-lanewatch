@@ -821,7 +821,7 @@ public class MainActivity extends AppCompatActivity {
             i2++;
         }
         this.spinnerLinger.setAdapter((SpinnerAdapter) new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, strArr));
-        float f = this.prefs.getFloat("lingerSec", 3.5f);
+        float f = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(this.prefs, "lingerSec", 3.5f);
         int i3 = 5;
         while (true) {
             float[] fArr2 = LINGER;
@@ -851,7 +851,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void applyLingerToListener() {
-        TurnSignalListener.lingerMs = (long) (this.prefs.getFloat("lingerSec", 3.5f) * 1000.0f);
+        TurnSignalListener.lingerMs = (long) (com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(this.prefs, "lingerSec", 3.5f) * 1000.0f);
     }
 
     private void setupModeSpinner() {
@@ -2839,7 +2839,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static final int BACKUP_SCHEMA_VERSION = 2;
+    private static final int BACKUP_SCHEMA_VERSION = 3;
     private UpdateChecker.UpdateInfo availableUpdateInfo = null;
     private File downloadedUpdateFile = null;
 
@@ -3808,10 +3808,19 @@ public class MainActivity extends AppCompatActivity {
             json.put("exported_at", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
 
             JSONObject data = new JSONObject();
+            JSONObject types = new JSONObject();
             for (Map.Entry<String, ?> entry : all.entrySet()) {
-                data.put(entry.getKey(), entry.getValue());
+                String k = entry.getKey();
+                Object val = entry.getValue();
+                data.put(k, val);
+                if (val instanceof Float) types.put(k, "float");
+                else if (val instanceof Integer) types.put(k, "int");
+                else if (val instanceof Boolean) types.put(k, "boolean");
+                else if (val instanceof Long) types.put(k, "long");
+                else if (val instanceof String) types.put(k, "string");
             }
             json.put("preferences", data);
+            json.put("types", types);
 
             File internalBackup = new File(getExternalFilesDir(null), "lanewatch_settings_backup.json");
             FileOutputStream fos = new FileOutputStream(internalBackup);
@@ -3860,6 +3869,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            final JSONObject types = json.optJSONObject("types");
             final JSONObject data = json.has("preferences") ? json.getJSONObject("preferences") : json;
             final int count = data.length();
 
@@ -3873,13 +3883,41 @@ public class MainActivity extends AppCompatActivity {
                         Iterator<String> keys = data.keys();
                         while (keys.hasNext()) {
                             String k = keys.next();
-                            if ("schema_version".equals(k) || "app_version".equals(k) || "exported_at".equals(k)) continue;
+                            if ("schema_version".equals(k) || "app_version".equals(k) || "exported_at".equals(k) || "types".equals(k) || "preferences".equals(k)) continue;
                             Object v = data.get(k);
-                            if (v instanceof Boolean) ed.putBoolean(k, (Boolean) v);
-                            else if (v instanceof Integer) ed.putInt(k, (Integer) v);
-                            else if (v instanceof Long) ed.putLong(k, (Long) v);
-                            else if (v instanceof Double) ed.putFloat(k, ((Double) v).floatValue());
-                            else if (v instanceof String) ed.putString(k, (String) v);
+
+                            String explicitType = (types != null && types.has(k)) ? types.optString(k, null) : null;
+                            if ("float".equals(explicitType) || (explicitType == null && com.nineoad.bydsignpicinpic.config.PrefsHelper.isFloatKey(k))) {
+                                if (v instanceof Number) {
+                                    ed.putFloat(k, ((Number) v).floatValue());
+                                } else if (v instanceof String) {
+                                    try { ed.putFloat(k, Float.parseFloat((String) v)); } catch (Exception ignored) {}
+                                }
+                            } else if ("int".equals(explicitType) || (explicitType == null && com.nineoad.bydsignpicinpic.config.PrefsHelper.isIntKey(k))) {
+                                if (v instanceof Number) {
+                                    ed.putInt(k, ((Number) v).intValue());
+                                } else if (v instanceof String) {
+                                    try { ed.putInt(k, Integer.parseInt((String) v)); } catch (Exception ignored) {}
+                                }
+                            } else if ("boolean".equals(explicitType) || v instanceof Boolean) {
+                                if (v instanceof Boolean) {
+                                    ed.putBoolean(k, (Boolean) v);
+                                } else {
+                                    ed.putBoolean(k, Boolean.parseBoolean(String.valueOf(v)));
+                                }
+                            } else if ("long".equals(explicitType)) {
+                                if (v instanceof Number) {
+                                    ed.putLong(k, ((Number) v).longValue());
+                                }
+                            } else if ("string".equals(explicitType) || v instanceof String) {
+                                ed.putString(k, String.valueOf(v));
+                            } else if (v instanceof Integer) {
+                                ed.putInt(k, (Integer) v);
+                            } else if (v instanceof Double || v instanceof Float) {
+                                ed.putFloat(k, ((Number) v).floatValue());
+                            } else if (v instanceof Long) {
+                                ed.putLong(k, (Long) v);
+                            }
                         }
                         ed.apply();
 
