@@ -20,8 +20,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Surface;
 import com.nineoad.bydsignpicinpic.R;
+import com.nineoad.bydsignpicinpic.config.OemRecommendedPreset;
 import com.nineoad.bydsignpicinpic.overlay.FisheyeGLView;
 import com.nineoad.bydsignpicinpic.overlay.OverlayService;
+import com.nineoad.bydsignpicinpic.overlay.Perspective3DParams;
 import com.nineoad.bydsignpicinpic.signal.BevAutomationManager;
 import java.util.Locale;
 
@@ -57,6 +59,33 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
     private Button btnStudioSideLeft;
     private Button btnStudioSideRight;
     private boolean isTurnRight = false;
+
+    // 3D Perspective Controls (Mode 1: Turn Signal)
+    private View layoutStudio3DControls;
+    private View layoutStudio2DControls;
+    private Spinner spinnerStudioModelPreset;
+    private Switch swStudio3DMode;
+
+    private SeekBar sbStudioPoleTilt, sbStudioCarBodyTilt, sbStudioPitchKeystone, sbStudioHorizonStraighten;
+    private SeekBar sbStudioRollDeg, sbStudioCylindrical, sbStudioTrueLensK1, sbStudioZoom3D;
+    private SeekBar sbStudioGlobalScale, sbStudioPanInOut, sbStudioPanY, sbStudioPanX;
+
+    private TextView tvStudioPoleTilt, tvStudioCarBodyTilt, tvStudioPitchKeystone, tvStudioHorizonStraighten;
+    private TextView tvStudioRollDeg, tvStudioCylindrical, tvStudioTrueLensK1, tvStudioZoom3D;
+    private TextView tvStudioGlobalScale, tvStudioPanInOut, tvStudioPanY, tvStudioPanX;
+
+    private Button btnStudioPoleTiltMinus, btnStudioPoleTiltPlus;
+    private Button btnStudioCarBodyTiltMinus, btnStudioCarBodyTiltPlus;
+    private Button btnStudioPitchKeystoneMinus, btnStudioPitchKeystonePlus;
+    private Button btnStudioHorizonStraightenMinus, btnStudioHorizonStraightenPlus;
+    private Button btnStudioRollDegMinus, btnStudioRollDegPlus;
+    private Button btnStudioCylindricalMinus, btnStudioCylindricalPlus;
+    private Button btnStudioTrueLensK1Minus, btnStudioTrueLensK1Plus;
+    private Button btnStudioZoom3DMinus, btnStudioZoom3DPlus;
+    private Button btnStudioGlobalScaleMinus, btnStudioGlobalScalePlus;
+    private Button btnStudioPanInOutMinus, btnStudioPanInOutPlus;
+    private Button btnStudioPanYMinus, btnStudioPanYPlus;
+    private Button btnStudioPanXMinus, btnStudioPanXPlus;
 
     private LinearLayout dockWheelGrid;
     private Button btnStudioWheelFL, btnStudioWheelFR;
@@ -389,6 +418,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         setupCamSlotSelector();
 
         setupStudioExtraFeatures();
+        setup3DListeners();
     }
 
     private void setupCamSlotSelector() {
@@ -419,6 +449,311 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
                 }
             }
         });
+    }
+
+    private void setup3DListeners() {
+        layoutStudio3DControls = findViewById(R.id.layoutStudio3DControls);
+        layoutStudio2DControls = findViewById(R.id.layoutStudio2DControls);
+        spinnerStudioModelPreset = findViewById(R.id.spinnerStudioModelPreset);
+        swStudio3DMode = findViewById(R.id.swStudio3DMode);
+
+        if (spinnerStudioModelPreset != null) {
+            final String[] modelOptions = new String[]{
+                getString(R.string.studio_model_atto3),
+                getString(R.string.studio_model_dolphin),
+                getString(R.string.studio_model_seal)
+            };
+            spinnerStudioModelPreset.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, modelOptions));
+            spinnerStudioModelPreset.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override public void onNothingSelected(AdapterView<?> parent) {}
+                @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (suppressSync) return;
+                    if (position == 0) { // ATTO 3
+                        OemRecommendedPreset.applyAtto3PerspectivePreset(prefs);
+                        Toast.makeText(CameraStudioActivity.this, R.string.studio_toast_atto3_loaded, Toast.LENGTH_SHORT).show();
+                        loadCurrentModeIntoControls();
+                        updateStudioGlParams();
+                        OverlayService.reapplyLive();
+                    } else {
+                        Toast.makeText(CameraStudioActivity.this, tr("พรีเซ็ตรุ่นนี้กำลังอยู่ในการทดสอบ (Coming Soon)", "Preset for this model is coming soon"), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+        if (swStudio3DMode != null) {
+            swStudio3DMode.setOnCheckedChangeListener((btn, isChecked) -> {
+                if (!suppressSync) {
+                    prefs.edit().putBoolean("perspective_3d_enabled", isChecked).apply();
+                    updateStudioGlParams();
+                    OverlayService.reapplyLive();
+                }
+            });
+        }
+
+        // 1. Pole Plumb
+        sbStudioPoleTilt = findViewById(R.id.sbStudioPoleTilt);
+        tvStudioPoleTilt = findViewById(R.id.tvStudioPoleTilt);
+        btnStudioPoleTiltMinus = findViewById(R.id.btnStudioPoleTiltMinus);
+        btnStudioPoleTiltPlus = findViewById(R.id.btnStudioPoleTiltPlus);
+        if (sbStudioPoleTilt != null) {
+            sbStudioPoleTilt.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) - 1.00f;
+                        save3DParam("poleTilt", v);
+                        if (tvStudioPoleTilt != null) tvStudioPoleTilt.setText(String.format(Locale.US, "%+.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioPoleTiltMinus != null) btnStudioPoleTiltMinus.setOnClickListener(v -> nudge3DParam("poleTilt", -0.02f, -1.00f, 3.50f));
+        if (btnStudioPoleTiltPlus != null) btnStudioPoleTiltPlus.setOnClickListener(v -> nudge3DParam("poleTilt", 0.02f, -1.00f, 3.50f));
+
+        // 2. Car Body Plumb
+        sbStudioCarBodyTilt = findViewById(R.id.sbStudioCarBodyTilt);
+        tvStudioCarBodyTilt = findViewById(R.id.tvStudioCarBodyTilt);
+        btnStudioCarBodyTiltMinus = findViewById(R.id.btnStudioCarBodyTiltMinus);
+        btnStudioCarBodyTiltPlus = findViewById(R.id.btnStudioCarBodyTiltPlus);
+        if (sbStudioCarBodyTilt != null) {
+            sbStudioCarBodyTilt.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) - 1.00f;
+                        save3DParam("carBodyTilt", v);
+                        if (tvStudioCarBodyTilt != null) tvStudioCarBodyTilt.setText(String.format(Locale.US, "%+.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioCarBodyTiltMinus != null) btnStudioCarBodyTiltMinus.setOnClickListener(v -> nudge3DParam("carBodyTilt", -0.02f, -1.00f, 2.50f));
+        if (btnStudioCarBodyTiltPlus != null) btnStudioCarBodyTiltPlus.setOnClickListener(v -> nudge3DParam("carBodyTilt", 0.02f, -1.00f, 2.50f));
+
+        // 3. Pitch Keystone
+        sbStudioPitchKeystone = findViewById(R.id.sbStudioPitchKeystone);
+        tvStudioPitchKeystone = findViewById(R.id.tvStudioPitchKeystone);
+        btnStudioPitchKeystoneMinus = findViewById(R.id.btnStudioPitchKeystoneMinus);
+        btnStudioPitchKeystonePlus = findViewById(R.id.btnStudioPitchKeystonePlus);
+        if (sbStudioPitchKeystone != null) {
+            sbStudioPitchKeystone.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) - 0.50f;
+                        save3DParam("pitchKeystone", v);
+                        if (tvStudioPitchKeystone != null) tvStudioPitchKeystone.setText(String.format(Locale.US, "%+.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioPitchKeystoneMinus != null) btnStudioPitchKeystoneMinus.setOnClickListener(v -> nudge3DParam("pitchKeystone", -0.01f, -0.50f, 0.80f));
+        if (btnStudioPitchKeystonePlus != null) btnStudioPitchKeystonePlus.setOnClickListener(v -> nudge3DParam("pitchKeystone", 0.01f, -0.50f, 0.80f));
+
+        // 4. Horizon Straighten
+        sbStudioHorizonStraighten = findViewById(R.id.sbStudioHorizonStraighten);
+        tvStudioHorizonStraighten = findViewById(R.id.tvStudioHorizonStraighten);
+        btnStudioHorizonStraightenMinus = findViewById(R.id.btnStudioHorizonStraightenMinus);
+        btnStudioHorizonStraightenPlus = findViewById(R.id.btnStudioHorizonStraightenPlus);
+        if (sbStudioHorizonStraighten != null) {
+            sbStudioHorizonStraighten.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) - 1.00f;
+                        save3DParam("horizonStraighten", v);
+                        if (tvStudioHorizonStraighten != null) tvStudioHorizonStraighten.setText(String.format(Locale.US, "%+.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioHorizonStraightenMinus != null) btnStudioHorizonStraightenMinus.setOnClickListener(v -> nudge3DParam("horizonStraighten", -0.01f, -1.00f, 0.50f));
+        if (btnStudioHorizonStraightenPlus != null) btnStudioHorizonStraightenPlus.setOnClickListener(v -> nudge3DParam("horizonStraighten", 0.01f, -1.00f, 0.50f));
+
+        // 5. Roll Deg
+        sbStudioRollDeg = findViewById(R.id.sbStudioRollDeg);
+        tvStudioRollDeg = findViewById(R.id.tvStudioRollDeg);
+        btnStudioRollDegMinus = findViewById(R.id.btnStudioRollDegMinus);
+        btnStudioRollDegPlus = findViewById(R.id.btnStudioRollDegPlus);
+        if (sbStudioRollDeg != null) {
+            sbStudioRollDeg.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 10.0f) - 30.0f;
+                        save3DParam("rollDeg", v);
+                        if (tvStudioRollDeg != null) tvStudioRollDeg.setText(String.format(Locale.US, "%+.1f°", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioRollDegMinus != null) {
+            btnStudioRollDegMinus.setOnClickListener(v -> nudge3DParam("rollDeg", -0.1f, -30.0f, 30.0f));
+            btnStudioRollDegMinus.setOnLongClickListener(v -> { nudge3DParam("rollDeg", -1.0f, -30.0f, 30.0f); return true; });
+        }
+        if (btnStudioRollDegPlus != null) {
+            btnStudioRollDegPlus.setOnClickListener(v -> nudge3DParam("rollDeg", 0.1f, -30.0f, 30.0f));
+            btnStudioRollDegPlus.setOnLongClickListener(v -> { nudge3DParam("rollDeg", 1.0f, -30.0f, 30.0f); return true; });
+        }
+
+        // 6. Cylindrical Panini
+        sbStudioCylindrical = findViewById(R.id.sbStudioCylindrical);
+        tvStudioCylindrical = findViewById(R.id.tvStudioCylindrical);
+        btnStudioCylindricalMinus = findViewById(R.id.btnStudioCylindricalMinus);
+        btnStudioCylindricalPlus = findViewById(R.id.btnStudioCylindricalPlus);
+        if (sbStudioCylindrical != null) {
+            sbStudioCylindrical.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) - 0.50f;
+                        save3DParam("cylindrical", v);
+                        if (tvStudioCylindrical != null) tvStudioCylindrical.setText(String.format(Locale.US, "%.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioCylindricalMinus != null) btnStudioCylindricalMinus.setOnClickListener(v -> nudge3DParam("cylindrical", -0.02f, -0.50f, 1.00f));
+        if (btnStudioCylindricalPlus != null) btnStudioCylindricalPlus.setOnClickListener(v -> nudge3DParam("cylindrical", 0.02f, -0.50f, 1.00f));
+
+        // 7. True Lens Fisheye K1
+        sbStudioTrueLensK1 = findViewById(R.id.sbStudioTrueLensK1);
+        tvStudioTrueLensK1 = findViewById(R.id.tvStudioTrueLensK1);
+        btnStudioTrueLensK1Minus = findViewById(R.id.btnStudioTrueLensK1Minus);
+        btnStudioTrueLensK1Plus = findViewById(R.id.btnStudioTrueLensK1Plus);
+        if (sbStudioTrueLensK1 != null) {
+            sbStudioTrueLensK1.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) - 0.80f;
+                        save3DParam("trueLensK1", v);
+                        if (tvStudioTrueLensK1 != null) tvStudioTrueLensK1.setText(String.format(Locale.US, "%.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioTrueLensK1Minus != null) btnStudioTrueLensK1Minus.setOnClickListener(v -> nudge3DParam("trueLensK1", -0.01f, -0.80f, 0.30f));
+        if (btnStudioTrueLensK1Plus != null) btnStudioTrueLensK1Plus.setOnClickListener(v -> nudge3DParam("trueLensK1", 0.01f, -0.80f, 0.30f));
+
+        // 8. Zoom 3D
+        sbStudioZoom3D = findViewById(R.id.sbStudioZoom3D);
+        tvStudioZoom3D = findViewById(R.id.tvStudioZoom3D);
+        btnStudioZoom3DMinus = findViewById(R.id.btnStudioZoom3DMinus);
+        btnStudioZoom3DPlus = findViewById(R.id.btnStudioZoom3DPlus);
+        if (sbStudioZoom3D != null) {
+            sbStudioZoom3D.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) + 0.50f;
+                        save3DParam("zoom3D", v);
+                        if (tvStudioZoom3D != null) tvStudioZoom3D.setText(String.format(Locale.US, "%.2fx", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioZoom3DMinus != null) btnStudioZoom3DMinus.setOnClickListener(v -> nudge3DParam("zoom3D", -0.05f, 0.50f, 3.50f));
+        if (btnStudioZoom3DPlus != null) btnStudioZoom3DPlus.setOnClickListener(v -> nudge3DParam("zoom3D", 0.05f, 0.50f, 3.50f));
+
+        // 9. Global Scale
+        sbStudioGlobalScale = findViewById(R.id.sbStudioGlobalScale);
+        tvStudioGlobalScale = findViewById(R.id.tvStudioGlobalScale);
+        btnStudioGlobalScaleMinus = findViewById(R.id.btnStudioGlobalScaleMinus);
+        btnStudioGlobalScalePlus = findViewById(R.id.btnStudioGlobalScalePlus);
+        if (sbStudioGlobalScale != null) {
+            sbStudioGlobalScale.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) + 0.50f;
+                        save3DParam("globalScale", v);
+                        if (tvStudioGlobalScale != null) tvStudioGlobalScale.setText(String.format(Locale.US, "%.2fx", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioGlobalScaleMinus != null) btnStudioGlobalScaleMinus.setOnClickListener(v -> nudge3DParam("globalScale", -0.02f, 0.50f, 3.00f));
+        if (btnStudioGlobalScalePlus != null) btnStudioGlobalScalePlus.setOnClickListener(v -> nudge3DParam("globalScale", 0.02f, 0.50f, 3.00f));
+
+        // 10. Pan In / Out
+        sbStudioPanInOut = findViewById(R.id.sbStudioPanInOut);
+        tvStudioPanInOut = findViewById(R.id.tvStudioPanInOut);
+        btnStudioPanInOutMinus = findViewById(R.id.btnStudioPanInOutMinus);
+        btnStudioPanInOutPlus = findViewById(R.id.btnStudioPanInOutPlus);
+        if (sbStudioPanInOut != null) {
+            sbStudioPanInOut.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 200.0f) - 1.00f;
+                        save3DParam("panInOut", v);
+                        if (tvStudioPanInOut != null) tvStudioPanInOut.setText(String.format(Locale.US, "%+.3f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioPanInOutMinus != null) btnStudioPanInOutMinus.setOnClickListener(v -> nudge3DParam("panInOut", -0.01f, -1.00f, 1.00f));
+        if (btnStudioPanInOutPlus != null) btnStudioPanInOutPlus.setOnClickListener(v -> nudge3DParam("panInOut", 0.01f, -1.00f, 1.00f));
+
+        // 11. Pan Y
+        sbStudioPanY = findViewById(R.id.sbStudioPanY);
+        tvStudioPanY = findViewById(R.id.tvStudioPanY);
+        btnStudioPanYMinus = findViewById(R.id.btnStudioPanYMinus);
+        btnStudioPanYPlus = findViewById(R.id.btnStudioPanYPlus);
+        if (sbStudioPanY != null) {
+            sbStudioPanY.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) - 1.50f;
+                        save3DParam("panY", v);
+                        if (tvStudioPanY != null) tvStudioPanY.setText(String.format(Locale.US, "%+.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioPanYMinus != null) btnStudioPanYMinus.setOnClickListener(v -> nudge3DParam("panY", -0.02f, -1.50f, 1.50f));
+        if (btnStudioPanYPlus != null) btnStudioPanYPlus.setOnClickListener(v -> nudge3DParam("panY", 0.02f, -1.50f, 1.50f));
+
+        // 12. Pan X
+        sbStudioPanX = findViewById(R.id.sbStudioPanX);
+        tvStudioPanX = findViewById(R.id.tvStudioPanX);
+        btnStudioPanXMinus = findViewById(R.id.btnStudioPanXMinus);
+        btnStudioPanXPlus = findViewById(R.id.btnStudioPanXPlus);
+        if (sbStudioPanX != null) {
+            sbStudioPanX.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 200.0f) - 0.50f;
+                        save3DParam("panX", v);
+                        if (tvStudioPanX != null) tvStudioPanX.setText(String.format(Locale.US, "%+.3f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioPanXMinus != null) btnStudioPanXMinus.setOnClickListener(v -> nudge3DParam("panX", -0.005f, -0.50f, 0.50f));
+        if (btnStudioPanXPlus != null) btnStudioPanXPlus.setOnClickListener(v -> nudge3DParam("panX", 0.005f, -0.50f, 0.50f));
+    }
+
+    private void save3DParam(String name, float val) {
+        String prefix = isTurnRight ? "R" : "L";
+        prefs.edit().putFloat(prefix + "_" + name, val).apply();
+        updateStudioGlParams();
+        OverlayService.reapplyLive();
+    }
+
+    private void nudge3DParam(String name, float delta, float min, float max) {
+        String prefix = isTurnRight ? "R" : "L";
+        Perspective3DParams def = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+        float defVal = 0f;
+        if (name.equals("poleTilt")) defVal = def.poleTilt;
+        else if (name.equals("carBodyTilt")) defVal = def.carBodyTilt;
+        else if (name.equals("pitchKeystone")) defVal = def.pitchKeystone;
+        else if (name.equals("horizonStraighten")) defVal = def.horizonStraighten;
+        else if (name.equals("rollDeg")) defVal = def.rollDeg;
+        else if (name.equals("cylindrical")) defVal = def.cylindrical;
+        else if (name.equals("trueLensK1")) defVal = def.trueLensK1;
+        else if (name.equals("zoom3D")) defVal = def.zoom3D;
+        else if (name.equals("globalScale")) defVal = def.globalScale;
+        else if (name.equals("panInOut")) defVal = def.panInOut;
+        else if (name.equals("panY")) defVal = def.panY;
+        else if (name.equals("panX")) defVal = def.panX;
+
+        float cur = prefs.getFloat(prefix + "_" + name, defVal);
+        float next = Math.max(min, Math.min(max, Math.round((cur + delta) * 1000.0f) / 1000.0f));
+        save3DParam(name, next);
+        loadCurrentModeIntoControls();
     }
 
     private void setupStudioExtraFeatures() {
@@ -679,7 +1014,7 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
     private float getTargetPipAspect() {
         if (activeMode == 1) {
-            return 16.0f / 9.0f; // 1.7778
+            return 5.0f / 3.0f; // 1.6667 (Approved ATTO 3 PIP Aspect)
         }
         if (activeMode == 2) {
             int aspectChoice = prefs != null ? prefs.getInt("rear_aspect", 0) : 0;
@@ -725,18 +1060,24 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         }
         updatePreviewAspectRatio(getTargetPipAspect());
         if (activeMode == 1) {
-            tvStudioTitle.setText(tr("สตูดิโอตั้งค่า: กล้องช่วยเลี้ยว (Turn Signal Camera)", "Calibration Studio: Turn Signal Camera"));
+            tvStudioTitle.setText(tr("สตูดิโอตั้งค่า: กล้องช่วยเลี้ยว 3D (Turn Signal Camera)", "Calibration Studio: Turn Signal 3D"));
             dockTurnTabs.setVisibility(View.VISIBLE);
             dockWheelGrid.setVisibility(View.GONE);
+            if (layoutStudio3DControls != null) layoutStudio3DControls.setVisibility(View.VISIBLE);
+            if (layoutStudio2DControls != null) layoutStudio2DControls.setVisibility(View.GONE);
             selectTurnSide(false);
         } else if (activeMode == 2) {
             tvStudioTitle.setText(tr("สตูดิโอตั้งค่า: กระจกมองหลังดิจิทัล (Digital Rearview)", "Calibration Studio: Digital Rearview Mirror"));
             dockTurnTabs.setVisibility(View.GONE);
             dockWheelGrid.setVisibility(View.GONE);
+            if (layoutStudio3DControls != null) layoutStudio3DControls.setVisibility(View.GONE);
+            if (layoutStudio2DControls != null) layoutStudio2DControls.setVisibility(View.VISIBLE);
         } else {
             tvStudioTitle.setText(tr("สตูดิโอตั้งค่า: มุมล้อหน้าซ้ายและขวา (Front Wheels)", "Calibration Studio: Front Wheels (FL & FR)"));
             dockTurnTabs.setVisibility(View.GONE);
             dockWheelGrid.setVisibility(View.VISIBLE);
+            if (layoutStudio3DControls != null) layoutStudio3DControls.setVisibility(View.GONE);
+            if (layoutStudio2DControls != null) layoutStudio2DControls.setVisibility(View.VISIBLE);
             selectWheel(0);
         }
     }
@@ -938,12 +1279,66 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
             }
         }
 
+        // 5. 3D Perspective Controls Sync (Mode 1: Turn Signal)
+        if (activeMode == 1) {
+            String pfx = isTurnRight ? "R" : "L";
+            Perspective3DParams defP = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+            Perspective3DParams p = new Perspective3DParams();
+            p.load(prefs, pfx, defP);
+
+            if (sbStudioPoleTilt != null) sbStudioPoleTilt.setProgress(Math.round((p.poleTilt + 1.00f) * 100));
+            if (tvStudioPoleTilt != null) tvStudioPoleTilt.setText(String.format(Locale.US, "%+.2f", p.poleTilt));
+
+            if (sbStudioCarBodyTilt != null) sbStudioCarBodyTilt.setProgress(Math.round((p.carBodyTilt + 1.00f) * 100));
+            if (tvStudioCarBodyTilt != null) tvStudioCarBodyTilt.setText(String.format(Locale.US, "%+.2f", p.carBodyTilt));
+
+            if (sbStudioPitchKeystone != null) sbStudioPitchKeystone.setProgress(Math.round((p.pitchKeystone + 0.50f) * 100));
+            if (tvStudioPitchKeystone != null) tvStudioPitchKeystone.setText(String.format(Locale.US, "%+.2f", p.pitchKeystone));
+
+            if (sbStudioHorizonStraighten != null) sbStudioHorizonStraighten.setProgress(Math.round((p.horizonStraighten + 1.00f) * 100));
+            if (tvStudioHorizonStraighten != null) tvStudioHorizonStraighten.setText(String.format(Locale.US, "%+.2f", p.horizonStraighten));
+
+            if (sbStudioRollDeg != null) sbStudioRollDeg.setProgress(Math.round((p.rollDeg + 30.0f) * 10));
+            if (tvStudioRollDeg != null) tvStudioRollDeg.setText(String.format(Locale.US, "%+.1f°", p.rollDeg));
+
+            if (sbStudioCylindrical != null) sbStudioCylindrical.setProgress(Math.round((p.cylindrical + 0.50f) * 100));
+            if (tvStudioCylindrical != null) tvStudioCylindrical.setText(String.format(Locale.US, "%.2f", p.cylindrical));
+
+            if (sbStudioTrueLensK1 != null) sbStudioTrueLensK1.setProgress(Math.round((p.trueLensK1 + 0.80f) * 100));
+            if (tvStudioTrueLensK1 != null) tvStudioTrueLensK1.setText(String.format(Locale.US, "%.2f", p.trueLensK1));
+
+            if (sbStudioZoom3D != null) sbStudioZoom3D.setProgress(Math.round((p.zoom3D - 0.50f) * 100));
+            if (tvStudioZoom3D != null) tvStudioZoom3D.setText(String.format(Locale.US, "%.2fx", p.zoom3D));
+
+            if (sbStudioGlobalScale != null) sbStudioGlobalScale.setProgress(Math.round((p.globalScale - 0.50f) * 100));
+            if (tvStudioGlobalScale != null) tvStudioGlobalScale.setText(String.format(Locale.US, "%.2fx", p.globalScale));
+
+            if (sbStudioPanInOut != null) sbStudioPanInOut.setProgress(Math.round((p.panInOut + 1.00f) * 200));
+            if (tvStudioPanInOut != null) tvStudioPanInOut.setText(String.format(Locale.US, "%+.3f", p.panInOut));
+
+            if (sbStudioPanY != null) sbStudioPanY.setProgress(Math.round((p.panY + 1.50f) * 100));
+            if (tvStudioPanY != null) tvStudioPanY.setText(String.format(Locale.US, "%+.2f", p.panY));
+
+            if (sbStudioPanX != null) sbStudioPanX.setProgress(Math.round((p.panX + 0.50f) * 200));
+            if (tvStudioPanX != null) tvStudioPanX.setText(String.format(Locale.US, "%+.3f", p.panX));
+
+            if (swStudio3DMode != null) swStudio3DMode.setChecked(prefs.getBoolean("perspective_3d_enabled", true));
+        }
+
         suppressSync = false;
         updatePreviewHud();
         updateStudioGlParams();
     }
 
     private void updatePreviewHud() {
+        if (activeMode == 1) {
+            String pfx = isTurnRight ? "R" : "L";
+            Perspective3DParams defP = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+            Perspective3DParams p = new Perspective3DParams();
+            p.load(prefs, pfx, defP);
+            previewView.updateReadouts(p.panInOut, p.panY, p.zoom3D, p.rollDeg, getTargetLabel());
+            return;
+        }
         float cx = sbStudioFeCx.getProgress() / 100.0f + 0.10f;
         float cy = sbStudioFeCy.getProgress() / 100.0f + 0.10f;
         float zoom = sbStudioFeZoom.getProgress() / 100.0f + 0.50f;
@@ -971,6 +1366,17 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
             float cx = prefs.getFloat("dr_cx_" + side, 0.5f);
             float cy = prefs.getFloat("dr_cy_" + side, 0.5f);
             float[] crop = new float[]{cropL, cropT, cropR, cropB};
+
+            Perspective3DParams p3dL = new Perspective3DParams();
+            p3dL.load(prefs, "L", Perspective3DParams.createAtto3LeftDefault());
+            Perspective3DParams p3dR = new Perspective3DParams();
+            p3dR.load(prefs, "R", Perspective3DParams.createAtto3RightDefault());
+            boolean p3dGlobal = prefs.getBoolean("perspective_3d_enabled", true);
+            p3dL.enabled = p3dGlobal;
+            p3dR.enabled = p3dGlobal;
+
+            studioGlView.setParams3DLeft(p3dL);
+            studioGlView.setParams3DRight(p3dR);
 
             studioGlView.setDualMode(false, isR ? 2 : 1);
             if (isR) {
@@ -1024,6 +1430,19 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
     // --- Direct Touch Gestures Callbacks ---
     @Override
     public void onPan(float deltaX, float deltaY) {
+        if (activeMode == 1) {
+            String prefix = isTurnRight ? "R" : "L";
+            Perspective3DParams def = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+            float curInOut = prefs.getFloat(prefix + "_panInOut", def.panInOut);
+            float curY = prefs.getFloat(prefix + "_panY", def.panY);
+            float nextInOut = Math.max(-1.00f, Math.min(1.00f, Math.round((curInOut - deltaX * 0.5f) * 1000f) / 1000f));
+            float nextY = Math.max(-1.50f, Math.min(1.50f, Math.round((curY - deltaY * 0.5f) * 1000f) / 1000f));
+            prefs.edit().putFloat(prefix + "_panInOut", nextInOut).putFloat(prefix + "_panY", nextY).apply();
+            loadCurrentModeIntoControls();
+            updateStudioGlParams();
+            OverlayService.reapplyLive();
+            return;
+        }
         String keyCx = getKeyFeCx();
         String keyCy = getKeyFeCy();
         float defCy = (activeMode == 3) ? ((selectedWheelIdx < 2) ? 0.35f : 0.65f) : 0.50f;
@@ -1040,6 +1459,17 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
     @Override
     public void onZoom(float scaleFactor) {
+        if (activeMode == 1) {
+            String prefix = isTurnRight ? "R" : "L";
+            Perspective3DParams def = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+            float curZoom = prefs.getFloat(prefix + "_zoom3D", def.zoom3D);
+            float nextZoom = Math.max(0.50f, Math.min(3.50f, Math.round(curZoom * scaleFactor * 100f) / 100f));
+            prefs.edit().putFloat(prefix + "_zoom3D", nextZoom).apply();
+            loadCurrentModeIntoControls();
+            updateStudioGlParams();
+            OverlayService.reapplyLive();
+            return;
+        }
         String keyZoom = getKeyFeZoom();
         float defZoom = (activeMode == 3) ? 1.25f : 1.0f;
         float curZoom = prefs.getFloat(keyZoom, defZoom);
@@ -1053,6 +1483,17 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
     @Override
     public void onRotate(float deltaDegrees) {
+        if (activeMode == 1) {
+            String prefix = isTurnRight ? "R" : "L";
+            Perspective3DParams def = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+            float curRoll = prefs.getFloat(prefix + "_rollDeg", def.rollDeg);
+            float nextRoll = Math.max(-30.0f, Math.min(30.0f, Math.round((curRoll + deltaDegrees * 0.5f) * 10f) / 10f));
+            prefs.edit().putFloat(prefix + "_rollDeg", nextRoll).apply();
+            loadCurrentModeIntoControls();
+            updateStudioGlParams();
+            OverlayService.reapplyLive();
+            return;
+        }
         String keyFine = getKeyFine();
         float cur = prefs.getFloat(keyFine, 0f);
         float next = Math.max(-180f, Math.min(180f, cur + deltaDegrees * 0.5f));
@@ -1065,6 +1506,14 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
     // --- Recommended Presets ---
     private void applyRecommendedPreset() {
+        if (activeMode == 1) {
+            OemRecommendedPreset.applyAtto3PerspectivePreset(prefs);
+            loadCurrentModeIntoControls();
+            updateStudioGlParams();
+            OverlayService.reapplyLive();
+            Toast.makeText(this, R.string.studio_toast_atto3_loaded, Toast.LENGTH_SHORT).show();
+            return;
+        }
         SharedPreferences.Editor ed = prefs.edit();
         if (activeMode == 1) {
             if (isTurnRight) {
@@ -1181,6 +1630,19 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
     }
 
     private void resetCurrentToDefaults() {
+        if (activeMode == 1) {
+            String prefix = isTurnRight ? "R" : "L";
+            Perspective3DParams def = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+            SharedPreferences.Editor ed = prefs.edit();
+            def.save(ed, prefix);
+            ed.apply();
+            loadCurrentModeIntoControls();
+            updateStudioGlParams();
+            OverlayService.reapplyLive();
+            Toast.makeText(this, tr("รีเซ็ตค่า 3D กลับเป็นค่าแนะนำสำหรับ " + getTargetLabel() + " เรียบร้อย",
+                "Reset 3D parameters to defaults for " + getTargetLabel()), Toast.LENGTH_SHORT).show();
+            return;
+        }
         SharedPreferences.Editor ed = prefs.edit();
         if (activeMode == 1) {
             String side = isTurnRight ? "r" : "l";

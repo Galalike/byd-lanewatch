@@ -237,4 +237,25 @@
     <string name="studio_btn_test_adas">🚨 Test ADAS Warning (5s)</string>
     <string name="studio_auto_triggers_header">AUTOMATIC TRIGGERS</string>
     <string name="studio_live_status_waiting">📡 Live Status: Waiting for vehicle connection...</string>
+
+    <!-- 3D Perspective & Lens Rectification Studio Strings -->
+    <string name="studio_3d_header">3D Perspective &amp; Lens Rectification</string>
+    <string name="studio_3d_mode_switch">Enable 3D Perspective Rectification</string>
+    <string name="studio_model_preset_header">Vehicle Model Preset</string>
+    <string name="studio_model_atto3">BYD ATTO 3 (Recommended)</string>
+    <string name="studio_model_dolphin">BYD Dolphin (Coming Soon)</string>
+    <string name="studio_model_seal">BYD Seal (Coming Soon)</string>
+    <string name="studio_lbl_pitch_keystone">Pitch Keystone (Horizon Divisor)</string>
+    <string name="studio_lbl_car_body_tilt">Car Body Plumb (Inner Vertical)</string>
+    <string name="studio_lbl_pole_tilt">Pole Plumb (Outer Vertical)</string>
+    <string name="studio_lbl_horizon_straighten">Road Horizon Straighten</string>
+    <string name="studio_lbl_roll_deg">Fine Roll Rotation Angle</string>
+    <string name="studio_lbl_cylindrical">Cylindrical Compression (Panini)</string>
+    <string name="studio_lbl_true_lens_k1">True Lens Fisheye K1 (1280x960)</string>
+    <string name="studio_lbl_zoom_3d">3D Perspective Depth Zoom</string>
+    <string name="studio_lbl_global_scale">Global Image Scale</string>
+    <string name="studio_lbl_pan_in_out">Pan In / Out (Vehicle Edge)</string>
+    <string name="studio_lbl_pan_y">Pan Y (Vertical Elevation)</string>
+    <string name="studio_lbl_pan_x">Pan X (Fine Horizontal)</string>
+    <string name="studio_toast_atto3_loaded">Loaded ATTO 3 Recommended 3D Calibration</string>
 </resources>

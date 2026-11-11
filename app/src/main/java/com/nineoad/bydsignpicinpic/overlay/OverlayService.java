@@ -132,7 +132,9 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     public static volatile int drivingHeightPx = 405;
     public static volatile int drivingRotLeft = 0;
     public static volatile int drivingRotRight = 0;
-    public static volatile int drivingWidthPx = 720;
+    public static volatile int drivingWidthPx = 672; // Aspect 5:3 (672x405)
+    public static final Perspective3DParams params3DL = Perspective3DParams.createAtto3LeftDefault();
+    public static final Perspective3DParams params3DR = Perspective3DParams.createAtto3RightDefault();
     public static volatile int wheelStripWidthPx = 270;
     private volatile int steeringWheelSide = 0; // 0 = none, 1 = Left (FL), 2 = Right (FR)
     public static volatile int frontIndex = 4;
@@ -1489,19 +1491,23 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         }
 
         if (!this.isDualView && this.pendingSide == 1 && this.steeringWheelSide != 0) {
-            // Combined: Left Turn Signal (16:9) + Front-Left Wheel (Vertical on Right)
+            // Combined: Left Turn Signal (5:3) + Front-Left Wheel (Vertical on Right)
+            this.glView.setParams3DLeft(params3DL);
             this.glView.setParamsLeft(rotL, fineL, mirrorL, flipVL, cropL, strL, zoomL, cxL, cyL);
             this.glView.setDualMode(false, 21);
             return;
         }
 
         if (!this.isDualView && this.pendingSide == 2 && this.steeringWheelSide != 0) {
-            // Combined: Right Turn Signal (16:9) + Front-Right Wheel (Vertical on Right)
+            // Combined: Right Turn Signal (5:3) + Front-Right Wheel (Vertical on Right)
+            this.glView.setParams3DRight(params3DR);
             this.glView.setParamsRight(rotR, fineR, mirrorR, flipVR, cropR, strR, zoomR, cxR, cyR);
             this.glView.setDualMode(false, 22);
             return;
         }
 
+        this.glView.setParams3DLeft(params3DL);
+        this.glView.setParams3DRight(params3DR);
         this.glView.setDualMode(this.isDualView, this.pendingSide);
         this.glView.setParamsLeft(rotL, fineL, mirrorL, flipVL, cropL, strL, zoomL, cxL, cyL);
         this.glView.setParamsRight(rotR, fineR, mirrorR, flipVR, cropR, strR, zoomR, cxR, cyR);
@@ -2029,6 +2035,13 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         drivingCropRight = loadCrop(sharedPreferences, strCustomPrefix + "r", new float[]{0.21f, 0.62f, 0.75f, 0.89f});
         customOrient = sharedPreferences.getInt(strCustomPrefix + "orient", 0);
         pipCornerRadiusDp = sharedPreferences.getInt("pip_corner_radius", 22);
+
+        // Load 3D Perspective & Lens Rectification Parameters
+        params3DL.load(sharedPreferences, "L", Perspective3DParams.createAtto3LeftDefault());
+        params3DR.load(sharedPreferences, "R", Perspective3DParams.createAtto3RightDefault());
+        boolean p3dGlobalEnabled = sharedPreferences.getBoolean("perspective_3d_enabled", true);
+        params3DL.enabled = p3dGlobalEnabled;
+        params3DR.enabled = p3dGlobalEnabled;
     }
 
     private static float[] loadCrop(SharedPreferences sharedPreferences, String str, float[] fArr) {

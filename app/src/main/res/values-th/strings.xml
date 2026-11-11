@@ -239,4 +239,25 @@
     <string name="studio_btn_test_adas">🚨 ทดสอบเตือนจุดอับสายตา ADAS (5 วินาที)</string>
     <string name="studio_auto_triggers_header">ระบบสั่งเปิดอัตโนมัติ (AUTOMATIC TRIGGERS)</string>
     <string name="studio_live_status_waiting">📡 สถานะสด: กำลังรอการเชื่อมต่อระบบรถ...</string>
+
+    <!-- 3D Perspective & Lens Rectification Studio Strings -->
+    <string name="studio_3d_header">การดัดมุมมอง 3D และแก้ความโค้งเลนส์</string>
+    <string name="studio_3d_mode_switch">เปิดใช้งานการดัดมุมมอง 3D</string>
+    <string name="studio_model_preset_header">พรีเซ็ตรุ่นรถยนต์ (Vehicle Model)</string>
+    <string name="studio_model_atto3">BYD ATTO 3 (แนะนำ)</string>
+    <string name="studio_model_dolphin">BYD Dolphin (เร็วๆ นี้)</string>
+    <string name="studio_model_seal">BYD Seal (เร็วๆ นี้)</string>
+    <string name="studio_lbl_pitch_keystone">ปรับมุมก้มเสาอาคาร (Pitch Keystone)</string>
+    <string name="studio_lbl_car_body_tilt">ปรับแนวดิ่งตัวรถ (Car Body Plumb)</string>
+    <string name="studio_lbl_pole_tilt">ปรับแนวดิ่งเสาไฟ (Pole Plumb)</string>
+    <string name="studio_lbl_horizon_straighten">ดัดโค้งถนน/ขอบฟ้า (Horizon Straighten)</string>
+    <string name="studio_lbl_roll_deg">หมุนปรับองศาภาพละเอียด (Roll Angle)</string>
+    <string name="studio_lbl_cylindrical">บีบขอบภาพทรงกระบอก (Cylindrical Panini)</string>
+    <string name="studio_lbl_true_lens_k1">แก้ความโค้งเลนส์กายภาพ (Fisheye K1)</string>
+    <string name="studio_lbl_zoom_3d">ซูมมิติชัดลึก (3D Depth Zoom)</string>
+    <string name="studio_lbl_global_scale">ขนาดสเกลภาพรวม (Global Scale)</string>
+    <string name="studio_lbl_pan_in_out">เลื่อนเข้า-ออกชิดตัวรถ (Pan In/Out)</string>
+    <string name="studio_lbl_pan_y">เลื่อนตำแหน่งแนวตั้ง (Pan Y)</string>
+    <string name="studio_lbl_pan_x">เลื่อนตำแหน่งแนวนอน (Pan X)</string>
+    <string name="studio_toast_atto3_loaded">โหลดค่าปรับแต่ง 3D แนะนำสำหรับ BYD ATTO 3 เรียบร้อยแล้ว</string>
 </resources>

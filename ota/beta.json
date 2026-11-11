@@ -1,16 +1,17 @@
 {
-  "versionCode": 109,
-  "versionName": "1.0.8-beta",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.8-beta/BYDLaneWatch_v1.0.8-beta.apk",
-  "size": 64268928,
-  "releaseDate": "2026-11-09",
+  "versionCode": 113,
+  "versionName": "1.0.9-beta",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.9-beta/BYDLaneWatch_v1.0.9-beta.apk",
+  "size": 59876132,
+  "releaseDate": "2026-11-11",
   "channel": "beta",
-  "whatsNew": "• Fixed BYD Dolphin & Atto 3 Flashing Red Border on Turn Signal: Purged uncalibrated Area 1000 cluster registers and decoupled generic BSD system state (ADAS_BSD_STATE / INSTRUMENT_BLIND_AREA) from directional visual alert layers.\n• Canonical BYD Radar Alarm Architecture: Directional warning indicators now strictly bind to genuine Area 1038 ADAS hardware registers (1098907692 FL / 1098907694 FR / 1098907664 LCA Left / 1098907666 LCA Right) with 1500ms CAN pulse hold smoothing.\n• New Radar Warning Frame Preference Switch: Added toggle switch in Settings (adas_bsd_warning_enabled) allowing users to easily enable or disable visual red alert frames as desired.\n• Full Bilingual Localization: Updated base English strings and full Thai localization across all settings, diagnostics, and probe interfaces.",
+  "whatsNew": "• 3D Perspective Lens Rectification: Full OpenGL ES 3D homography & unwarp shader replacing 2D stretch/distortion with true perspective calibration.\n• Fixed 5:3 PIP Aspect Ratio: Adjusted turn signal PIP frame to 672x405 (5:3) to eliminate unnatural vehicle and road distortion.\n• BYD ATTO 3 Factory Recommended Preset: Pre-calibrated factory parameters optimized for BYD ATTO 3 wing mirror camera angles, with model preset selection for future Dolphin & Seal models.\n• Integrated Camera Studio 3D Controls: Fine-grained slider and stepper adjustments for Keystone Pitch, Pole Plumb, Car Body Plumb, Horizon straightener, Panini Cylindrical curve, Roll deg, Global Scale & Zoom, and Pan In/Out/X/Y.\n• Preserved Legacy 2D Modes: Mode 2 (Rearview) and Mode 3 (Wheel blindspot) continue to utilize dedicated 2D crop settings without regression.",
   "notes": [
-    "Beta Release v1.0.8-beta",
-    "Resolved Dolphin & Atto 3 persistent red flashing frame during turn signal PIP",
-    "Canonical Area 1038 ADAS radar alarm integration with 1500ms pulse smoothing",
-    "New user toggle switch in Settings for ADAS Blind Spot Warning Frame",
-    "Full bilingual English and Thai localization across all UI elements"
+    "Beta Release v1.0.9-beta",
+    "3D Perspective Lens Rectification & Hardware Shader Pipeline",
+    "Calibrated 5:3 PIP aspect ratio (672x405 px) eliminating image distortion",
+    "BYD ATTO 3 Factory Recommended Presets baked into app defaults and migration",
+    "Dedicated 3D adjustment controls in Camera Studio with visual alignment guides",
+    "Full backwards compatibility for Mode 2 (Rearview) and Mode 3 (Wheel) 2D crops"
   ]
 }

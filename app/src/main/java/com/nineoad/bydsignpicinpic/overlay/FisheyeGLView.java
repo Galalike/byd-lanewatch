@@ -17,11 +17,12 @@ import javax.microedition.khronos.opengles.GL10;
 public class FisheyeGLView extends GLSurfaceView {
     private static final String FRAG =
         "#extension GL_OES_EGL_image_external : require\n" +
-        "precision mediump float;\n" +
+        "precision highp float;\n" +
         "varying vec2 vUv;\n" +
         "uniform samplerExternalOES uTex;\n" +
         "uniform mat4 uSt;\n" +
         "uniform vec4 uCrop;\n" +
+        "uniform vec4 uWideCrop;\n" +
         "uniform mat2 uRot;\n" +
         "uniform float uStrength;\n" +
         "uniform float uZoom;\n" +
@@ -29,6 +30,68 @@ public class FisheyeGLView extends GLSurfaceView {
         "uniform float uAspect;\n" +
         "uniform vec2 uWindowSize;\n" +
         "uniform float uRadius;\n" +
+        "uniform int u3DMode;\n" +
+        "uniform int uSide;\n" +
+        "uniform float uPitchKeystone;\n" +
+        "uniform float uCarBodyTilt;\n" +
+        "uniform float uPoleTilt;\n" +
+        "uniform float uHorizonStraighten;\n" +
+        "uniform float uRollDeg;\n" +
+        "uniform float uCylindrical;\n" +
+        "uniform float uTrueLensK1;\n" +
+        "uniform vec2 uTrueLensCenter;\n" +
+        "uniform float uZoom3D;\n" +
+        "uniform float uPanInOut;\n" +
+        "uniform float uPanY;\n" +
+        "uniform float uPanX;\n" +
+        "uniform float uGlobalScale;\n" +
+        "\n" +
+        "vec2 apply3DRectify(vec2 uv, out bool outOfBounds) {\n" +
+        "  outOfBounds = false;\n" +
+        "  if (u3DMode == 0) {\n" +
+        "    return uv;\n" +
+        "  }\n" +
+        "  float sx = (uv.x - 0.5) * 2.0;\n" +
+        "  float sy = (uv.y - 0.5) * 2.0;\n" +
+        "  float sInOut = (uSide == 1) ? sx : -sx;\n" +
+        "\n" +
+        "  float ux = (sInOut / max(0.2, uZoom3D)) - uPanInOut;\n" +
+        "  float uy = (sy / max(0.2, uZoom3D)) - uPanY;\n" +
+        "\n" +
+        "  float d = 1.0 + uPitchKeystone * uy;\n" +
+        "  float denom = (d < 0.15) ? 0.15 : d;\n" +
+        "  float kx = ux / denom;\n" +
+        "  float ky = uy / denom;\n" +
+        "\n" +
+        "  float wIn = clamp((kx + 1.0) * 0.5, 0.0, 1.0);\n" +
+        "  float wOut = 1.0 - wIn;\n" +
+        "  float tx = kx + ky * (uCarBodyTilt * wIn - uPoleTilt * wOut);\n" +
+        "\n" +
+        "  if (abs(uCylindrical) > 0.001) {\n" +
+        "    tx = tx * (1.0 - uCylindrical * 0.25 * tx * tx);\n" +
+        "  }\n" +
+        "\n" +
+        "  float xRel = tx + 0.10;\n" +
+        "  float ty = ky + uHorizonStraighten * (xRel * xRel);\n" +
+        "\n" +
+        "  float px = (uSide == 1) ? tx : -tx;\n" +
+        "  float py = ty;\n" +
+        "  float rad = radians(uRollDeg);\n" +
+        "  float cosR = cos(rad);\n" +
+        "  float sinR = sin(rad);\n" +
+        "  float rx = (px * uAspect * cosR - py * sinR) / uAspect;\n" +
+        "  float ry = (px * uAspect * sinR + py * cosR);\n" +
+        "\n" +
+        "  rx = (rx / max(0.1, uGlobalScale)) - uPanX;\n" +
+        "  ry = (ry / max(0.1, uGlobalScale));\n" +
+        "\n" +
+        "  vec2 rectUv = vec2((rx + 1.0) * 0.5, (ry + 1.0) * 0.5);\n" +
+        "  if (rectUv.x < 0.0 || rectUv.x > 1.0 || rectUv.y < 0.0 || rectUv.y > 1.0) {\n" +
+        "    outOfBounds = true;\n" +
+        "  }\n" +
+        "  return clamp(rectUv, 0.0, 1.0);\n" +
+        "}\n" +
+        "\n" +
         "void main() {\n" +
         "  if (uRadius > 0.5) {\n" +
         "    vec2 halfSize = uWindowSize * 0.5;\n" +
@@ -39,14 +102,23 @@ public class FisheyeGLView extends GLSurfaceView {
         "      discard;\n" +
         "    }\n" +
         "  }\n" +
-        "  vec2 cuv = vec2(mix(uCrop.x, uCrop.z, vUv.x), mix(uCrop.y, uCrop.w, vUv.y));\n" +
+        "  bool oob = false;\n" +
+        "  vec2 rectUv = apply3DRectify(vUv, oob);\n" +
+        "  vec4 activeCrop = (u3DMode == 1) ? uWideCrop : uCrop;\n" +
+        "  vec2 cuv = vec2(mix(activeCrop.x, activeCrop.z, rectUv.x), mix(activeCrop.y, activeCrop.w, rectUv.y));\n" +
         "  vec2 p = cuv - uCenter;\n" +
         "  p = uRot * p;\n" +
         "  vec2 pa = vec2(p.x * uAspect, p.y);\n" +
         "  float r2 = dot(pa, pa);\n" +
-        "  float f = (1.0 + uStrength * r2) / uZoom;\n" +
+        "  float str = (u3DMode == 1) ? 0.0 : uStrength;\n" +
+        "  float f = (1.0 + str * r2) / max(0.05, uZoom);\n" +
         "  vec2 src = uCenter + p * f;\n" +
-        "  vec2 tc = (uSt * vec4(src, 0.0, 1.0)).xy;\n" +
+        "  if (u3DMode == 1 && abs(uTrueLensK1) > 0.0001) {\n" +
+        "    vec2 dSens = (src - uTrueLensCenter) * vec2(1.333333, 1.0);\n" +
+        "    float rSens2 = dot(dSens, dSens);\n" +
+        "    src = uTrueLensCenter + (src - uTrueLensCenter) * (1.0 + uTrueLensK1 * rSens2);\n" +
+        "  }\n" +
+        "  vec2 tc = (uSt * vec4(clamp(src, 0.001, 0.999), 0.0, 1.0)).xy;\n" +
         "  if (tc.x < 0.0 || tc.x > 1.0 || tc.y < 0.0 || tc.y > 1.0) {\n" +
         "    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n" +
         "  } else {\n" +
@@ -196,6 +268,32 @@ public class FisheyeGLView extends GLSurfaceView {
     private volatile float pZoomR = 1.0f;
     private volatile float pCxR = 0.5f;
     private volatile float pCyR = 0.5f;
+
+    // 3D Perspective & Lens Rectification Parameters (ATTO 3 Factory Recommended Defaults)
+    private final Perspective3DParams params3DL = Perspective3DParams.createAtto3LeftDefault();
+    private final Perspective3DParams params3DR = Perspective3DParams.createAtto3RightDefault();
+
+    public void setParams3DLeft(Perspective3DParams p) {
+        if (p != null) {
+            this.params3DL.copyFrom(p);
+            requestRender();
+        }
+    }
+
+    public void setParams3DRight(Perspective3DParams p) {
+        if (p != null) {
+            this.params3DR.copyFrom(p);
+            requestRender();
+        }
+    }
+
+    public Perspective3DParams getParams3DLeft() {
+        return this.params3DL;
+    }
+
+    public Perspective3DParams getParams3DRight() {
+        return this.params3DR;
+    }
 
     // 4-Quadrant Wheel Monitor (FL, FR, RL, RR)
     // Index: 0=FL (Left Cam), 1=FR (Right Cam), 2=RL (Left Cam), 3=RR (Right Cam)
@@ -413,11 +511,27 @@ public class FisheyeGLView extends GLSurfaceView {
         private int uRadius;
         private int uCenter;
         private int uCrop;
+        private int uWideCrop;
         private int uRot;
         private int uSt;
         private int uStrength;
         private int uTex;
         private int uZoom;
+        private int u3DMode;
+        private int uSide;
+        private int uPitchKeystone;
+        private int uCarBodyTilt;
+        private int uPoleTilt;
+        private int uHorizonStraighten;
+        private int uRollDeg;
+        private int uCylindrical;
+        private int uTrueLensK1;
+        private int uTrueLensCenter;
+        private int uZoom3D;
+        private int uPanInOut;
+        private int uPanY;
+        private int uPanX;
+        private int uGlobalScale;
         private int viewW;
         private int viewH;
 
@@ -450,6 +564,7 @@ public class FisheyeGLView extends GLSurfaceView {
             this.uTex = GLES20.glGetUniformLocation(this.program, "uTex");
             this.uSt = GLES20.glGetUniformLocation(this.program, "uSt");
             this.uCrop = GLES20.glGetUniformLocation(this.program, "uCrop");
+            this.uWideCrop = GLES20.glGetUniformLocation(this.program, "uWideCrop");
             this.uRot = GLES20.glGetUniformLocation(this.program, "uRot");
             this.uStrength = GLES20.glGetUniformLocation(this.program, "uStrength");
             this.uZoom = GLES20.glGetUniformLocation(this.program, "uZoom");
@@ -457,6 +572,21 @@ public class FisheyeGLView extends GLSurfaceView {
             this.uAspect = GLES20.glGetUniformLocation(this.program, "uAspect");
             this.uWindowSize = GLES20.glGetUniformLocation(this.program, "uWindowSize");
             this.uRadius = GLES20.glGetUniformLocation(this.program, "uRadius");
+            this.u3DMode = GLES20.glGetUniformLocation(this.program, "u3DMode");
+            this.uSide = GLES20.glGetUniformLocation(this.program, "uSide");
+            this.uPitchKeystone = GLES20.glGetUniformLocation(this.program, "uPitchKeystone");
+            this.uCarBodyTilt = GLES20.glGetUniformLocation(this.program, "uCarBodyTilt");
+            this.uPoleTilt = GLES20.glGetUniformLocation(this.program, "uPoleTilt");
+            this.uHorizonStraighten = GLES20.glGetUniformLocation(this.program, "uHorizonStraighten");
+            this.uRollDeg = GLES20.glGetUniformLocation(this.program, "uRollDeg");
+            this.uCylindrical = GLES20.glGetUniformLocation(this.program, "uCylindrical");
+            this.uTrueLensK1 = GLES20.glGetUniformLocation(this.program, "uTrueLensK1");
+            this.uTrueLensCenter = GLES20.glGetUniformLocation(this.program, "uTrueLensCenter");
+            this.uZoom3D = GLES20.glGetUniformLocation(this.program, "uZoom3D");
+            this.uPanInOut = GLES20.glGetUniformLocation(this.program, "uPanInOut");
+            this.uPanY = GLES20.glGetUniformLocation(this.program, "uPanY");
+            this.uPanX = GLES20.glGetUniformLocation(this.program, "uPanX");
+            this.uGlobalScale = GLES20.glGetUniformLocation(this.program, "uGlobalScale");
 
             int[] iArr = new int[3];
             GLES20.glGenTextures(3, iArr, 0);
@@ -556,6 +686,10 @@ public class FisheyeGLView extends GLSurfaceView {
         }
 
         private void drawQuad(int tex, float[] stMat, float rotDeg, float fine, boolean mirror, boolean flipV, float[] crop, float strength, float zoom, float cx, float cy, float aspect) {
+            drawQuad(tex, stMat, rotDeg, fine, mirror, flipV, crop, strength, zoom, cx, cy, aspect, 0, null);
+        }
+
+        private void drawQuad(int tex, float[] stMat, float rotDeg, float fine, boolean mirror, boolean flipV, float[] crop, float strength, float zoom, float cx, float cy, float aspect, int side, Perspective3DParams p3d) {
             double radians = Math.toRadians(rotDeg + fine);
             float fCos = (float) Math.cos(radians);
             float fSin = (float) Math.sin(radians);
@@ -573,6 +707,29 @@ public class FisheyeGLView extends GLSurfaceView {
             GLES20.glUniform1f(this.uZoom, Math.max(0.05f, zoom));
             GLES20.glUniform2f(this.uCenter, cx, cy);
             GLES20.glUniform1f(this.uAspect, aspect);
+
+            if (p3d != null && p3d.enabled) {
+                GLES20.glUniform1i(this.u3DMode, 1);
+                GLES20.glUniform1i(this.uSide, side);
+                GLES20.glUniform4f(this.uWideCrop, p3d.wideCrop[0], p3d.wideCrop[1], p3d.wideCrop[2], p3d.wideCrop[3]);
+                GLES20.glUniform1f(this.uPitchKeystone, p3d.pitchKeystone);
+                GLES20.glUniform1f(this.uCarBodyTilt, p3d.carBodyTilt);
+                GLES20.glUniform1f(this.uPoleTilt, p3d.poleTilt);
+                GLES20.glUniform1f(this.uHorizonStraighten, p3d.horizonStraighten);
+                GLES20.glUniform1f(this.uRollDeg, p3d.rollDeg);
+                GLES20.glUniform1f(this.uCylindrical, p3d.cylindrical);
+                GLES20.glUniform1f(this.uTrueLensK1, p3d.trueLensK1);
+                GLES20.glUniform2f(this.uTrueLensCenter, p3d.trueLensCx, p3d.trueLensCy);
+                GLES20.glUniform1f(this.uZoom3D, p3d.zoom3D);
+                GLES20.glUniform1f(this.uPanInOut, p3d.panInOut);
+                GLES20.glUniform1f(this.uPanY, p3d.panY);
+                GLES20.glUniform1f(this.uPanX, p3d.panX);
+                GLES20.glUniform1f(this.uGlobalScale, p3d.globalScale);
+            } else {
+                GLES20.glUniform1i(this.u3DMode, 0);
+                GLES20.glUniform1i(this.uSide, side);
+            }
+
             float viewWidthOnScreen = FisheyeGLView.this.getWidth();
             float scale = 1.0f;
             if (viewWidthOnScreen > 0.0f && this.viewW > 0) {
@@ -632,20 +789,20 @@ public class FisheyeGLView extends GLSurfaceView {
 
             if (!FisheyeGLView.this.isDual) {
                 if (FisheyeGLView.this.singleSide == 21) {
-                    // COMBINED: Turn Signal Left (16:9 on Left) + Front-Left Wheel (Vertical on Right)
+                    // COMBINED: Turn Signal Left (5:3) + Front-Left Wheel (Vertical on Right)
                     if (this.camSTL != null) {
                         try {
                             this.camSTL.updateTexImage();
                             this.camSTL.getTransformMatrix(this.stMatrixL);
                         } catch (Throwable unused) {}
                     }
-                    int turnW = Math.max(1, Math.round(this.viewH * (16.0f / 9.0f)));
+                    int turnW = Math.max(1, Math.round(this.viewH * (5.0f / 3.0f)));
                     if (turnW >= this.viewW) {
                         turnW = Math.round(this.viewW * 0.72f);
                     }
                     int wheelW = Math.max(1, this.viewW - turnW);
 
-                    // 1. Main Turn Signal Camera (16:9)
+                    // 1. Main Turn Signal Camera (5:3)
                     GLES20.glViewport(0, 0, turnW, this.viewH);
                     float aspectTurn = (float) turnW / (float) this.viewH;
                     drawQuad(this.oesTexL, this.stMatrixL,
@@ -653,7 +810,7 @@ public class FisheyeGLView extends GLSurfaceView {
                             FisheyeGLView.this.pMirrorL, FisheyeGLView.this.pFlipVL,
                             FisheyeGLView.this.pCropL, FisheyeGLView.this.pStrengthL,
                             FisheyeGLView.this.pZoomL, FisheyeGLView.this.pCxL,
-                            FisheyeGLView.this.pCyL, aspectTurn);
+                            FisheyeGLView.this.pCyL, aspectTurn, 1, FisheyeGLView.this.params3DL);
 
                     // 2. Attached Vertical Front-Left Wheel View
                     GLES20.glViewport(turnW, 0, wheelW, this.viewH);
@@ -663,22 +820,22 @@ public class FisheyeGLView extends GLSurfaceView {
                             FisheyeGLView.this.pMirQuad[0], FisheyeGLView.this.pFlipVQuad[0],
                             FisheyeGLView.this.pCropQuad[0], FisheyeGLView.this.pStrengthQuad[0],
                             FisheyeGLView.this.pZoomQuad[0], FisheyeGLView.this.pCxQuad[0],
-                            FisheyeGLView.this.pCyQuad[0], aspectWheel);
+                            FisheyeGLView.this.pCyQuad[0], aspectWheel, 0, null);
                 } else if (FisheyeGLView.this.singleSide == 22) {
-                    // COMBINED: Turn Signal Right (16:9 on Left) + Front-Right Wheel (Vertical on Right)
+                    // COMBINED: Turn Signal Right (5:3) + Front-Right Wheel (Vertical on Right)
                     if (this.camSTR != null) {
                         try {
                             this.camSTR.updateTexImage();
                             this.camSTR.getTransformMatrix(this.stMatrixR);
                         } catch (Throwable unused) {}
                     }
-                    int turnW = Math.max(1, Math.round(this.viewH * (16.0f / 9.0f)));
+                    int turnW = Math.max(1, Math.round(this.viewH * (5.0f / 3.0f)));
                     if (turnW >= this.viewW) {
                         turnW = Math.round(this.viewW * 0.72f);
                     }
                     int wheelW = Math.max(1, this.viewW - turnW);
 
-                    // 1. Main Turn Signal Camera (16:9)
+                    // 1. Main Turn Signal Camera (5:3)
                     GLES20.glViewport(0, 0, turnW, this.viewH);
                     float aspectTurn = (float) turnW / (float) this.viewH;
                     drawQuad(this.oesTexR, this.stMatrixR,
@@ -686,7 +843,7 @@ public class FisheyeGLView extends GLSurfaceView {
                             FisheyeGLView.this.pMirrorR, FisheyeGLView.this.pFlipVR,
                             FisheyeGLView.this.pCropR, FisheyeGLView.this.pStrengthR,
                             FisheyeGLView.this.pZoomR, FisheyeGLView.this.pCxR,
-                            FisheyeGLView.this.pCyR, aspectTurn);
+                            FisheyeGLView.this.pCyR, aspectTurn, 2, FisheyeGLView.this.params3DR);
 
                     // 2. Attached Vertical Front-Right Wheel View
                     GLES20.glViewport(turnW, 0, wheelW, this.viewH);
@@ -696,7 +853,7 @@ public class FisheyeGLView extends GLSurfaceView {
                             FisheyeGLView.this.pMirQuad[1], FisheyeGLView.this.pFlipVQuad[1],
                             FisheyeGLView.this.pCropQuad[1], FisheyeGLView.this.pStrengthQuad[1],
                             FisheyeGLView.this.pZoomQuad[1], FisheyeGLView.this.pCxQuad[1],
-                            FisheyeGLView.this.pCyQuad[1], aspectWheel);
+                            FisheyeGLView.this.pCyQuad[1], aspectWheel, 0, null);
                 } else if (FisheyeGLView.this.singleSide == 5 || FisheyeGLView.this.singleSide == 11) {
                     // FL (Front-Left Wheel - standalone)
                     if (this.camSTL != null) {
@@ -706,13 +863,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
-                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (5.0f / 3.0f);
                     drawQuad(this.oesTexL, this.stMatrixL,
                             FisheyeGLView.this.pRotQuad[0], FisheyeGLView.this.pFineQuad[0],
                             FisheyeGLView.this.pMirQuad[0], FisheyeGLView.this.pFlipVQuad[0],
                             FisheyeGLView.this.pCropQuad[0], FisheyeGLView.this.pStrengthQuad[0],
                             FisheyeGLView.this.pZoomQuad[0], FisheyeGLView.this.pCxQuad[0],
-                            FisheyeGLView.this.pCyQuad[0], aspectSingle);
+                            FisheyeGLView.this.pCyQuad[0], aspectSingle, 0, null);
                 } else if (FisheyeGLView.this.singleSide == 12) {
                     // FR (Front-Right Wheel - standalone)
                     if (this.camSTR != null) {
@@ -722,13 +879,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
-                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (5.0f / 3.0f);
                     drawQuad(this.oesTexR, this.stMatrixR,
                             FisheyeGLView.this.pRotQuad[1], FisheyeGLView.this.pFineQuad[1],
                             FisheyeGLView.this.pMirQuad[1], FisheyeGLView.this.pFlipVQuad[1],
                             FisheyeGLView.this.pCropQuad[1], FisheyeGLView.this.pStrengthQuad[1],
                             FisheyeGLView.this.pZoomQuad[1], FisheyeGLView.this.pCxQuad[1],
-                            FisheyeGLView.this.pCyQuad[1], aspectSingle);
+                            FisheyeGLView.this.pCyQuad[1], aspectSingle, 0, null);
                 } else if (FisheyeGLView.this.singleSide == 4) {
                     if (this.camSTRear != null) {
                         try {
@@ -743,7 +900,7 @@ public class FisheyeGLView extends GLSurfaceView {
                             FisheyeGLView.this.pMirrorRear, FisheyeGLView.this.pFlipVRear,
                             FisheyeGLView.this.pCropRear, FisheyeGLView.this.pStrengthRear,
                             FisheyeGLView.this.pZoomRear, FisheyeGLView.this.pCxRear,
-                            FisheyeGLView.this.pCyRear, aspectSingle);
+                            FisheyeGLView.this.pCyRear, aspectSingle, 0, null);
                 } else if (FisheyeGLView.this.singleSide == 2) {
                     if (this.camSTR != null) {
                         try {
@@ -752,13 +909,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
-                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (5.0f / 3.0f);
                     drawQuad(this.oesTexR, this.stMatrixR,
                             FisheyeGLView.this.pRotDegR, FisheyeGLView.this.pFineR,
                             FisheyeGLView.this.pMirrorR, FisheyeGLView.this.pFlipVR,
                             FisheyeGLView.this.pCropR, FisheyeGLView.this.pStrengthR,
                             FisheyeGLView.this.pZoomR, FisheyeGLView.this.pCxR,
-                            FisheyeGLView.this.pCyR, aspectSingle);
+                            FisheyeGLView.this.pCyR, aspectSingle, 2, FisheyeGLView.this.params3DR);
                 } else {
                     if (this.camSTL != null) {
                         try {
@@ -767,13 +924,13 @@ public class FisheyeGLView extends GLSurfaceView {
                         } catch (Throwable unused) {}
                     }
                     GLES20.glViewport(0, 0, this.viewW, this.viewH);
-                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (16.0f / 9.0f);
+                    float aspectSingle = (this.viewH > 0) ? ((float) this.viewW / (float) this.viewH) : (5.0f / 3.0f);
                     drawQuad(this.oesTexL, this.stMatrixL,
                             FisheyeGLView.this.pRotDegL, FisheyeGLView.this.pFineL,
                             FisheyeGLView.this.pMirrorL, FisheyeGLView.this.pFlipVL,
                             FisheyeGLView.this.pCropL, FisheyeGLView.this.pStrengthL,
                             FisheyeGLView.this.pZoomL, FisheyeGLView.this.pCxL,
-                            FisheyeGLView.this.pCyL, aspectSingle);
+                            FisheyeGLView.this.pCyL, aspectSingle, 1, FisheyeGLView.this.params3DL);
                 }
             } else {
                 // DUAL CAMERA VIEW (Side-by-side)
@@ -788,13 +945,13 @@ public class FisheyeGLView extends GLSurfaceView {
                     } catch (Throwable unused) {}
                 }
                 GLES20.glViewport(0, 0, leftW, this.viewH);
-                float aspectDualLeft = (this.viewH > 0) ? ((float) leftW / (float) this.viewH) : (16.0f / 9.0f);
+                float aspectDualLeft = (this.viewH > 0) ? ((float) leftW / (float) this.viewH) : (5.0f / 3.0f);
                 drawQuad(this.oesTexL, this.stMatrixL,
                         FisheyeGLView.this.pRotDegL, FisheyeGLView.this.pFineL,
                         FisheyeGLView.this.pMirrorL, FisheyeGLView.this.pFlipVL,
                         FisheyeGLView.this.pCropL, FisheyeGLView.this.pStrengthL,
                         FisheyeGLView.this.pZoomL, FisheyeGLView.this.pCxL,
-                        FisheyeGLView.this.pCyL, aspectDualLeft);
+                        FisheyeGLView.this.pCyL, aspectDualLeft, 1, FisheyeGLView.this.params3DL);
 
                 // 2. Draw RIGHT camera on right half (with 1px gap)
                 int rightX = halfW + 1;
@@ -806,13 +963,13 @@ public class FisheyeGLView extends GLSurfaceView {
                     } catch (Throwable unused) {}
                 }
                 GLES20.glViewport(rightX, 0, rightW, this.viewH);
-                float aspectDualRight = (this.viewH > 0) ? ((float) rightW / (float) this.viewH) : (16.0f / 9.0f);
+                float aspectDualRight = (this.viewH > 0) ? ((float) rightW / (float) this.viewH) : (5.0f / 3.0f);
                 drawQuad(this.oesTexR, this.stMatrixR,
                         FisheyeGLView.this.pRotDegR, FisheyeGLView.this.pFineR,
                         FisheyeGLView.this.pMirrorR, FisheyeGLView.this.pFlipVR,
                         FisheyeGLView.this.pCropR, FisheyeGLView.this.pStrengthR,
                         FisheyeGLView.this.pZoomR, FisheyeGLView.this.pCxR,
-                        FisheyeGLView.this.pCyR, aspectDualRight);
+                        FisheyeGLView.this.pCyR, aspectDualRight, 2, FisheyeGLView.this.params3DR);
             }
         }
 

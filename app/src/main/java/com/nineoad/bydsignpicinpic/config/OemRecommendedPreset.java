@@ -2,16 +2,31 @@ package com.nineoad.bydsignpicinpic.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.nineoad.bydsignpicinpic.overlay.Perspective3DParams;
 
 /**
  * Pre-calibrated OEM defaults matching the user's tested BYD DiLink 3.0 configuration.
  */
 public class OemRecommendedPreset {
     public static final String PREF_NAME = "pnp";
-    public static final int PRESET_VERSION = 1;
+    public static final int PRESET_VERSION = 2;
+
+    /**
+     * Applies the approved 3D Perspective & Lens Rectification calibration for BYD ATTO 3.
+     */
+    public static void applyAtto3PerspectivePreset(SharedPreferences sp) {
+        if (sp == null) return;
+        SharedPreferences.Editor ed = sp.edit();
+        Perspective3DParams.createAtto3LeftDefault().save(ed, "L");
+        Perspective3DParams.createAtto3RightDefault().save(ed, "R");
+        ed.putBoolean("perspective_3d_enabled", true);
+        ed.putString("vehicle_model_preset", "atto3");
+        ed.apply();
+    }
 
     public static void applyRecommendedPreset(SharedPreferences sp) {
         if (sp == null) return;
+        applyAtto3PerspectivePreset(sp);
         sp.edit()
             // --- Mode & Global ---
             .putInt("mode", 2) // Default Balance Mode (สมดุล)
@@ -174,8 +189,15 @@ public class OemRecommendedPreset {
     public static void ensureDefaultsInitialized(Context context) {
         if (context == null) return;
         SharedPreferences sp = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        if (!sp.contains("recommended_preset_ver")) {
-            applyRecommendedPreset(sp);
+        int currentVer = sp.getInt("recommended_preset_ver", 0);
+        if (currentVer < PRESET_VERSION) {
+            if (currentVer == 0) {
+                applyRecommendedPreset(sp);
+            } else {
+                // Upgrade from v1 to v2: initialize 3D perspective preset for ATTO 3
+                applyAtto3PerspectivePreset(sp);
+                sp.edit().putInt("recommended_preset_ver", PRESET_VERSION).apply();
+            }
         }
     }
 }
