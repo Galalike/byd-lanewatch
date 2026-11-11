@@ -74,6 +74,21 @@
             app:cornerRadius="8dp"
             android:text="@string/studio_btn_recommended"/>
 
+        <!-- Import Lab JSON Button -->
+        <Button
+            android:id="@+id/btnStudioImportJson"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#7C3AED"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_marginEnd="8dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:cornerRadius="8dp"
+            android:text="@string/studio_btn_import_json"/>
+
         <!-- Reset Button -->
         <Button
             android:id="@+id/btnStudioReset"
@@ -957,6 +972,125 @@
                             android:textColor="@color/lw_btn_outline_text"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
                     </LinearLayout>
+
+                    <!-- 13. Sensor Width -->
+                    <TextView
+                        android:text="@string/studio_lbl_sensor_width"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_secondary"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <SeekBar
+                            android:id="@+id/sbStudioSensorWidth"
+                            android:max="60"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:id="@+id/tvStudioSensorWidth"
+                            android:text="0.92"
+                            android:textSize="11sp"
+                            android:textColor="@color/lw_text_primary"
+                            android:layout_width="45dp"
+                            android:layout_height="wrap_content"/>
+                        <Button
+                            android:id="@+id/btnStudioSensorWidthMinus"
+                            android:text="-"
+                            android:textSize="12sp"
+                            android:minWidth="28dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="26dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:textColor="@color/lw_btn_outline_text"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                        <Button
+                            android:id="@+id/btnStudioSensorWidthPlus"
+                            android:text="+"
+                            android:textSize="12sp"
+                            android:minWidth="28dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="4dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:textColor="@color/lw_btn_outline_text"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                    </LinearLayout>
+
+                    <!-- 14. Sensor Height -->
+                    <TextView
+                        android:text="@string/studio_lbl_sensor_height"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/lw_text_secondary"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <SeekBar
+                            android:id="@+id/sbStudioSensorHeight"
+                            android:max="60"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:id="@+id/tvStudioSensorHeight"
+                            android:text="0.98"
+                            android:textSize="11sp"
+                            android:textColor="@color/lw_text_primary"
+                            android:layout_width="45dp"
+                            android:layout_height="wrap_content"/>
+                        <Button
+                            android:id="@+id/btnStudioSensorHeightMinus"
+                            android:text="-"
+                            android:textSize="12sp"
+                            android:minWidth="28dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="26dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:textColor="@color/lw_btn_outline_text"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                        <Button
+                            android:id="@+id/btnStudioSensorHeightPlus"
+                            android:text="+"
+                            android:textSize="12sp"
+                            android:minWidth="28dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="4dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:textColor="@color/lw_btn_outline_text"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                    </LinearLayout>
+
+                    <!-- Export Lab Button -->
+                    <Button
+                        android:id="@+id/btnStudioExportJson"
+                        android:text="@string/studio_btn_export_json"
+                        android:textSize="11sp"
+                        android:textColor="@color/lw_btn_outline_text"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:cornerRadius="6dp"
+                        app:strokeColor="@color/lw_btn_outline_stroke"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
                 </LinearLayout>
 
                 <!-- 2D LEGACY CONTROLS CONTAINER (Mode 2: Rearview, Mode 3: Wheels) -->

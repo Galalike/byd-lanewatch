@@ -259,5 +259,12 @@
     <string name="studio_lbl_pan_in_out">Pan In / Out (Vehicle Edge)</string>
     <string name="studio_lbl_pan_y">Pan Y (Vertical Elevation)</string>
     <string name="studio_lbl_pan_x">Pan X (Fine Horizontal)</string>
+    <string name="studio_lbl_sensor_width">Sensor Width (Horizontal Wide Field)</string>
+    <string name="studio_lbl_sensor_height">Sensor Height (Vertical Wide Field)</string>
+    <string name="studio_btn_import_json">📥 Import Lab</string>
+    <string name="studio_btn_export_json">💾 Export Lab</string>
+    <string name="studio_toast_import_success">Imported settings from Lab JSON successfully!</string>
+    <string name="studio_toast_import_failed">Lab JSON file not found in Downloads folder!</string>
+    <string name="studio_toast_export_success">Exported 3D calibration to Downloads/byd_fisheye3d_lab.json</string>
     <string name="studio_toast_atto3_loaded">Loaded ATTO 3 Recommended 3D Calibration</string>
 </resources>

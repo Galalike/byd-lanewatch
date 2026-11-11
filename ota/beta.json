@@ -2,7 +2,7 @@
   "versionCode": 113,
   "versionName": "1.0.9-beta",
   "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.9-beta/BYDLaneWatch_v1.0.9-beta.apk",
-  "size": 59876132,
+  "size": 59880228,
   "releaseDate": "2026-11-11",
   "channel": "beta",
   "whatsNew": "• 3D Perspective Lens Rectification: Full OpenGL ES 3D homography & unwarp shader replacing 2D stretch/distortion with true perspective calibration.\n• Fixed 5:3 PIP Aspect Ratio: Adjusted turn signal PIP frame to 672x405 (5:3) to eliminate unnatural vehicle and road distortion.\n• BYD ATTO 3 Factory Recommended Preset: Pre-calibrated factory parameters optimized for BYD ATTO 3 wing mirror camera angles, with model preset selection for future Dolphin & Seal models.\n• Integrated Camera Studio 3D Controls: Fine-grained slider and stepper adjustments for Keystone Pitch, Pole Plumb, Car Body Plumb, Horizon straightener, Panini Cylindrical curve, Roll deg, Global Scale & Zoom, and Pan In/Out/X/Y.\n• Preserved Legacy 2D Modes: Mode 2 (Rearview) and Mode 3 (Wheel blindspot) continue to utilize dedicated 2D crop settings without regression.",

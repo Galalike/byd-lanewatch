@@ -69,10 +69,12 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
     private SeekBar sbStudioPoleTilt, sbStudioCarBodyTilt, sbStudioPitchKeystone, sbStudioHorizonStraighten;
     private SeekBar sbStudioRollDeg, sbStudioCylindrical, sbStudioTrueLensK1, sbStudioZoom3D;
     private SeekBar sbStudioGlobalScale, sbStudioPanInOut, sbStudioPanY, sbStudioPanX;
+    private SeekBar sbStudioSensorWidth, sbStudioSensorHeight;
 
     private TextView tvStudioPoleTilt, tvStudioCarBodyTilt, tvStudioPitchKeystone, tvStudioHorizonStraighten;
     private TextView tvStudioRollDeg, tvStudioCylindrical, tvStudioTrueLensK1, tvStudioZoom3D;
     private TextView tvStudioGlobalScale, tvStudioPanInOut, tvStudioPanY, tvStudioPanX;
+    private TextView tvStudioSensorWidth, tvStudioSensorHeight;
 
     private Button btnStudioPoleTiltMinus, btnStudioPoleTiltPlus;
     private Button btnStudioCarBodyTiltMinus, btnStudioCarBodyTiltPlus;
@@ -86,6 +88,10 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
     private Button btnStudioPanInOutMinus, btnStudioPanInOutPlus;
     private Button btnStudioPanYMinus, btnStudioPanYPlus;
     private Button btnStudioPanXMinus, btnStudioPanXPlus;
+    private Button btnStudioSensorWidthMinus, btnStudioSensorWidthPlus;
+    private Button btnStudioSensorHeightMinus, btnStudioSensorHeightPlus;
+    private Button btnStudioImportJson;
+    private Button btnStudioExportJson;
 
     private LinearLayout dockWheelGrid;
     private Button btnStudioWheelFL, btnStudioWheelFR;
@@ -315,6 +321,21 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
         btnStudioRecommended = findViewById(R.id.btnStudioRecommended);
         btnStudioRecommended.setOnClickListener(v -> applyRecommendedPreset());
+
+        btnStudioImportJson = findViewById(R.id.btnStudioImportJson);
+        if (btnStudioImportJson != null) {
+            btnStudioImportJson.setOnClickListener(v -> {
+                boolean ok = Perspective3DParams.importFromLabJsonFile(prefs);
+                if (ok) {
+                    Toast.makeText(this, R.string.studio_toast_import_success, Toast.LENGTH_SHORT).show();
+                    loadCurrentModeIntoControls();
+                    updateStudioGlParams();
+                    OverlayService.reapplyLive();
+                } else {
+                    Toast.makeText(this, R.string.studio_toast_import_failed, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
         btnStudioReset = findViewById(R.id.btnStudioReset);
         btnStudioReset.setOnClickListener(v -> resetCurrentToDefaults());
@@ -724,6 +745,82 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         }
         if (btnStudioPanXMinus != null) btnStudioPanXMinus.setOnClickListener(v -> nudge3DParam("panX", -0.005f, -0.50f, 0.50f));
         if (btnStudioPanXPlus != null) btnStudioPanXPlus.setOnClickListener(v -> nudge3DParam("panX", 0.005f, -0.50f, 0.50f));
+
+        // 13. Sensor Width
+        sbStudioSensorWidth = findViewById(R.id.sbStudioSensorWidth);
+        tvStudioSensorWidth = findViewById(R.id.tvStudioSensorWidth);
+        btnStudioSensorWidthMinus = findViewById(R.id.btnStudioSensorWidthMinus);
+        btnStudioSensorWidthPlus = findViewById(R.id.btnStudioSensorWidthPlus);
+        if (sbStudioSensorWidth != null) {
+            sbStudioSensorWidth.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) + 0.40f;
+                        save3DSensorSize("width", v);
+                        if (tvStudioSensorWidth != null) tvStudioSensorWidth.setText(String.format(Locale.US, "%.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioSensorWidthMinus != null) btnStudioSensorWidthMinus.setOnClickListener(v -> nudge3DSensorSize("width", -0.02f));
+        if (btnStudioSensorWidthPlus != null) btnStudioSensorWidthPlus.setOnClickListener(v -> nudge3DSensorSize("width", 0.02f));
+
+        // 14. Sensor Height
+        sbStudioSensorHeight = findViewById(R.id.sbStudioSensorHeight);
+        tvStudioSensorHeight = findViewById(R.id.tvStudioSensorHeight);
+        btnStudioSensorHeightMinus = findViewById(R.id.btnStudioSensorHeightMinus);
+        btnStudioSensorHeightPlus = findViewById(R.id.btnStudioSensorHeightPlus);
+        if (sbStudioSensorHeight != null) {
+            sbStudioSensorHeight.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+                @Override public void onProgressChanged(SeekBar sb, int p, boolean fromUser) {
+                    if (fromUser && !suppressSync) {
+                        float v = (p / 100.0f) + 0.40f;
+                        save3DSensorSize("height", v);
+                        if (tvStudioSensorHeight != null) tvStudioSensorHeight.setText(String.format(Locale.US, "%.2f", v));
+                    }
+                }
+            });
+        }
+        if (btnStudioSensorHeightMinus != null) btnStudioSensorHeightMinus.setOnClickListener(v -> nudge3DSensorSize("height", -0.02f));
+        if (btnStudioSensorHeightPlus != null) btnStudioSensorHeightPlus.setOnClickListener(v -> nudge3DSensorSize("height", 0.02f));
+
+        btnStudioExportJson = findViewById(R.id.btnStudioExportJson);
+        if (btnStudioExportJson != null) {
+            btnStudioExportJson.setOnClickListener(v -> {
+                boolean ok = Perspective3DParams.exportToLabJsonFile(prefs);
+                if (ok) {
+                    Toast.makeText(this, R.string.studio_toast_export_success, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void save3DSensorSize(String dimension, float val) {
+        String prefix = isTurnRight ? "R" : "L";
+        Perspective3DParams def = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+        Perspective3DParams p = new Perspective3DParams();
+        p.load(prefs, prefix, def);
+        if ("width".equals(dimension)) {
+            p.setSensorWidth(val);
+        } else {
+            p.setSensorHeight(val);
+        }
+        SharedPreferences.Editor ed = prefs.edit();
+        p.save(ed, prefix);
+        ed.apply();
+        updateStudioGlParams();
+        OverlayService.reapplyLive();
+    }
+
+    private void nudge3DSensorSize(String dimension, float delta) {
+        String prefix = isTurnRight ? "R" : "L";
+        Perspective3DParams def = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
+        Perspective3DParams p = new Perspective3DParams();
+        p.load(prefs, prefix, def);
+        float cur = "width".equals(dimension) ? p.getSensorWidth() : p.getSensorHeight();
+        float next = Math.max(0.40f, Math.min(1.00f, Math.round((cur + delta) * 100f) / 100f));
+        save3DSensorSize(dimension, next);
+        loadCurrentModeIntoControls();
     }
 
     private void save3DParam(String name, float val) {
@@ -1212,8 +1309,10 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
         // 1. Rotation & Mirror
         int rot = getStoredRotation();
-        float fine = prefs.getFloat(getKeyFine(), 0f);
-        boolean mirror = prefs.getBoolean(getKeyMir(), activeMode == 2);
+        float defFine = (activeMode == 1) ? (isTurnRight ? 27.0f : 48.0f) : 0f;
+        boolean defMirror = (activeMode == 1) ? true : (activeMode == 2);
+        float fine = prefs.getFloat(getKeyFine(), defFine);
+        boolean mirror = prefs.getBoolean(getKeyMir(), defMirror);
         boolean flipV = prefs.getBoolean(getKeyFv(), false);
 
         tvStudioRotateVal.setText(rot + "°");
@@ -1222,10 +1321,10 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         swStudioFlipV.setChecked(flipV);
 
         // 2. Crop
-        float defL = (activeMode == 1) ? (isTurnRight ? 0.08f : 0.05f) : 0.0f;
-        float defT = (activeMode == 1) ? 0.24f : ((activeMode == 2) ? 0.20f : ((selectedWheelIdx < 2) ? 0.00f : 0.45f));
-        float defR = (activeMode == 1) ? (isTurnRight ? 0.95f : 0.92f) : 1.0f;
-        float defB = (activeMode == 1) ? 1.00f : ((activeMode == 2) ? 0.80f : ((selectedWheelIdx < 2) ? 0.55f : 1.00f));
+        float defL = (activeMode == 1) ? (isTurnRight ? 0.21f : 0.22f) : 0.0f;
+        float defT = (activeMode == 1) ? (isTurnRight ? 0.62f : 0.57f) : ((activeMode == 2) ? 0.20f : ((selectedWheelIdx < 2) ? 0.00f : 0.45f));
+        float defR = (activeMode == 1) ? (isTurnRight ? 0.75f : 0.81f) : 1.0f;
+        float defB = (activeMode == 1) ? (isTurnRight ? 0.89f : 0.97f) : ((activeMode == 2) ? 0.80f : ((selectedWheelIdx < 2) ? 0.55f : 1.00f));
 
         float cropL = prefs.getFloat(getKeyCrop(0), defL);
         float cropT = prefs.getFloat(getKeyCrop(1), defT);
@@ -1242,13 +1341,14 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
         tvStudioCropR.setText(String.format(Locale.US, "%.2f", cropR));
 
         // 3. Fisheye
-        float defStr = (activeMode == 3) ? -0.15f : 0.0f;
-        float defZoom = (activeMode == 3) ? 1.25f : 1.0f;
-        float defCy = (activeMode == 3) ? ((selectedWheelIdx < 2) ? 0.35f : 0.65f) : 0.50f;
+        float defStr = (activeMode == 1) ? (isTurnRight ? -0.38f : -0.24f) : ((activeMode == 3) ? -0.15f : 0.0f);
+        float defZoom = (activeMode == 1) ? (isTurnRight ? 0.91f : 1.14f) : ((activeMode == 3) ? 1.25f : 1.0f);
+        float defCx = (activeMode == 1) ? (isTurnRight ? 0.66f : 0.40f) : 0.50f;
+        float defCy = (activeMode == 1) ? (isTurnRight ? 0.68f : 0.5601612f) : ((activeMode == 3) ? ((selectedWheelIdx < 2) ? 0.35f : 0.65f) : 0.50f);
 
         float str = prefs.getFloat(getKeyFeStr(), defStr);
         float zoom = prefs.getFloat(getKeyFeZoom(), defZoom);
-        float cx = prefs.getFloat(getKeyFeCx(), 0.50f);
+        float cx = prefs.getFloat(getKeyFeCx(), defCx);
         float cy = prefs.getFloat(getKeyFeCy(), defCy);
 
         sbStudioFeStr.setProgress((int) ((str + 0.50f) * 100));
@@ -1322,6 +1422,12 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
             if (sbStudioPanX != null) sbStudioPanX.setProgress(Math.round((p.panX + 0.50f) * 200));
             if (tvStudioPanX != null) tvStudioPanX.setText(String.format(Locale.US, "%+.3f", p.panX));
 
+            if (sbStudioSensorWidth != null) sbStudioSensorWidth.setProgress(Math.round((p.getSensorWidth() - 0.40f) * 100));
+            if (tvStudioSensorWidth != null) tvStudioSensorWidth.setText(String.format(Locale.US, "%.2f", p.getSensorWidth()));
+
+            if (sbStudioSensorHeight != null) sbStudioSensorHeight.setProgress(Math.round((p.getSensorHeight() - 0.40f) * 100));
+            if (tvStudioSensorHeight != null) tvStudioSensorHeight.setText(String.format(Locale.US, "%.2f", p.getSensorHeight()));
+
             if (swStudio3DMode != null) swStudio3DMode.setChecked(prefs.getBoolean("perspective_3d_enabled", true));
         }
 
@@ -1354,17 +1460,17 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
             boolean isR = isTurnRight;
             String side = isR ? "r" : "l";
             int rot = prefs.getInt("dr_rot_" + side, isR ? 270 : 0);
-            float fine = prefs.getFloat("dr_fn_" + side, 0f);
-            boolean mir = prefs.getBoolean("dr_mir_" + side, false);
+            float fine = prefs.getFloat("dr_fn_" + side, isR ? 27.0f : 48.0f);
+            boolean mir = prefs.getBoolean("dr_mir_" + side, true);
             boolean fv = prefs.getBoolean("dr_fv_" + side, false);
-            float cropL = prefs.getFloat("dr_" + side + "0", isR ? 0.08f : 0.05f);
-            float cropT = prefs.getFloat("dr_" + side + "1", 0.24f);
-            float cropR = prefs.getFloat("dr_" + side + "2", isR ? 0.95f : 0.92f);
-            float cropB = prefs.getFloat("dr_" + side + "3", 1.00f);
-            float str = prefs.getFloat("dr_str_" + side, 0.0f);
-            float zoom = prefs.getFloat("dr_zoom_" + side, 1.0f);
-            float cx = prefs.getFloat("dr_cx_" + side, 0.5f);
-            float cy = prefs.getFloat("dr_cy_" + side, 0.5f);
+            float cropL = prefs.getFloat("dr_" + side + "0", isR ? 0.21f : 0.22f);
+            float cropT = prefs.getFloat("dr_" + side + "1", isR ? 0.62f : 0.57f);
+            float cropR = prefs.getFloat("dr_" + side + "2", isR ? 0.75f : 0.81f);
+            float cropB = prefs.getFloat("dr_" + side + "3", isR ? 0.89f : 0.97f);
+            float str = prefs.getFloat("dr_str_" + side, isR ? -0.38f : -0.24f);
+            float zoom = prefs.getFloat("dr_zoom_" + side, isR ? 0.91f : 1.14f);
+            float cx = prefs.getFloat("dr_cx_" + side, isR ? 0.66f : 0.40f);
+            float cy = prefs.getFloat("dr_cy_" + side, isR ? 0.68f : 0.5601612f);
             float[] crop = new float[]{cropL, cropT, cropR, cropB};
 
             Perspective3DParams p3dL = new Perspective3DParams();
@@ -1631,16 +1737,12 @@ public class CameraStudioActivity extends AppCompatActivity implements TouchCali
 
     private void resetCurrentToDefaults() {
         if (activeMode == 1) {
-            String prefix = isTurnRight ? "R" : "L";
-            Perspective3DParams def = isTurnRight ? Perspective3DParams.createAtto3RightDefault() : Perspective3DParams.createAtto3LeftDefault();
-            SharedPreferences.Editor ed = prefs.edit();
-            def.save(ed, prefix);
-            ed.apply();
+            OemRecommendedPreset.applyAtto3PerspectivePreset(prefs);
             loadCurrentModeIntoControls();
             updateStudioGlParams();
             OverlayService.reapplyLive();
-            Toast.makeText(this, tr("รีเซ็ตค่า 3D กลับเป็นค่าแนะนำสำหรับ " + getTargetLabel() + " เรียบร้อย",
-                "Reset 3D parameters to defaults for " + getTargetLabel()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, tr("รีเซ็ตค่า 3D และมุมกล้องกลับเป็นค่าแนะนำสำหรับ BYD ATTO 3 เรียบร้อย",
+                "Reset 3D and camera calibration to BYD ATTO 3 defaults"), Toast.LENGTH_SHORT).show();
             return;
         }
         SharedPreferences.Editor ed = prefs.edit();

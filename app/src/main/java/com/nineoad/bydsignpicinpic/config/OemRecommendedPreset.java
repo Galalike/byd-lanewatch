@@ -21,6 +21,34 @@ public class OemRecommendedPreset {
         Perspective3DParams.createAtto3RightDefault().save(ed, "R");
         ed.putBoolean("perspective_3d_enabled", true);
         ed.putString("vehicle_model_preset", "atto3");
+
+        // Canonical Base Camera Layer (Left & Right) matching tested BYD ATTO 3 optics
+        ed.putInt("dr_rot_l", 0);
+        ed.putFloat("dr_fn_l", 48.0f);
+        ed.putBoolean("dr_mir_l", true);
+        ed.putBoolean("dr_fv_l", false);
+        ed.putFloat("dr_l0", 0.22f);
+        ed.putFloat("dr_l1", 0.57f);
+        ed.putFloat("dr_l2", 0.81f);
+        ed.putFloat("dr_l3", 0.97f);
+        ed.putFloat("dr_str_l", -0.24f);
+        ed.putFloat("dr_zoom_l", 1.14f);
+        ed.putFloat("dr_cx_l", 0.40f);
+        ed.putFloat("dr_cy_l", 0.5601612f);
+
+        ed.putInt("dr_rot_r", 270);
+        ed.putFloat("dr_fn_r", 27.0f);
+        ed.putBoolean("dr_mir_r", true);
+        ed.putBoolean("dr_fv_r", false);
+        ed.putFloat("dr_r0", 0.21f);
+        ed.putFloat("dr_r1", 0.62f);
+        ed.putFloat("dr_r2", 0.75f);
+        ed.putFloat("dr_r3", 0.89f);
+        ed.putFloat("dr_str_r", -0.38f);
+        ed.putFloat("dr_zoom_r", 0.91f);
+        ed.putFloat("dr_cx_r", 0.66f);
+        ed.putFloat("dr_cy_r", 0.68f);
+
         ed.apply();
     }
 

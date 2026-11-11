@@ -259,5 +259,12 @@
     <string name="studio_lbl_pan_in_out">เลื่อนเข้า-ออกชิดตัวรถ (Pan In/Out)</string>
     <string name="studio_lbl_pan_y">เลื่อนตำแหน่งแนวตั้ง (Pan Y)</string>
     <string name="studio_lbl_pan_x">เลื่อนตำแหน่งแนวนอน (Pan X)</string>
+    <string name="studio_lbl_sensor_width">เปิดกว้างเซนเซอร์แนวนอน (Sensor Width)</string>
+    <string name="studio_lbl_sensor_height">เปิดสูงเซนเซอร์แนวดิ่ง (Sensor Height)</string>
+    <string name="studio_btn_import_json">📥 นำเข้าจากเซฟแล็บ</string>
+    <string name="studio_btn_export_json">💾 บันทึกลงเซฟแล็บ</string>
+    <string name="studio_toast_import_success">นำเข้าการตั้งค่าจากไฟล์แล็บสำเร็จแล้ว!</string>
+    <string name="studio_toast_import_failed">ไม่พบไฟล์แล็บในโฟลเดอร์ Download!</string>
+    <string name="studio_toast_export_success">บันทึกการตั้งค่าลง Downloads/byd_fisheye3d_lab.json แล้ว</string>
     <string name="studio_toast_atto3_loaded">โหลดค่าปรับแต่ง 3D แนะนำสำหรับ BYD ATTO 3 เรียบร้อยแล้ว</string>
 </resources>
