@@ -38,10 +38,6 @@ public class AdasBlindSpotMonitor {
     private long lastAlertLTimeMs = 0L;
     private long lastAlertRTimeMs = 0L;
 
-    private long lastDaemonPollMs = 0L;
-    private boolean daemonAlertL = false;
-    private boolean daemonAlertR = false;
-
     public AdasBlindSpotMonitor(Callback callback) {
         this.callback = callback;
     }
@@ -84,12 +80,7 @@ public class AdasBlindSpotMonitor {
                         || (lcaR != null && lcaR > 0 && lcaR != 65535)
                         || (dowR != null && dowR > 0 && dowR != 65535);
 
-                // 3. Check local Overdrive daemon loopback states if running
-                checkDaemonAlerts();
-                if (this.daemonAlertL) rawAlertL = true;
-                if (this.daemonAlertR) rawAlertR = true;
-
-                // 4. Hold smoothing so fast CAN pulse remains steady during the hazard window
+                // 3. Hold smoothing so fast CAN pulse remains steady during the hazard window
                 long now = SystemClock.elapsedRealtime();
                 if (rawAlertL) {
                     this.lastAlertLTimeMs = now;
@@ -122,44 +113,6 @@ public class AdasBlindSpotMonitor {
                 break;
             }
         }
-    }
-
-    private void checkDaemonAlerts() {
-        long now = System.currentTimeMillis();
-        if (now - this.lastDaemonPollMs < 300) return;
-        this.lastDaemonPollMs = now;
-        try {
-            java.net.URL url = new java.net.URL("http://127.0.0.1:8080/api/automations/state");
-            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(200);
-            conn.setReadTimeout(200);
-            conn.setRequestMethod("GET");
-            if (conn.getResponseCode() == 200) {
-                java.io.InputStream in = conn.getInputStream();
-                java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(in));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-                reader.close();
-                in.close();
-                org.json.JSONObject root = new org.json.JSONObject(sb.toString());
-                org.json.JSONObject state = root.optJSONObject("state");
-                if (state != null) {
-                    this.daemonAlertL = "on".equalsIgnoreCase(state.optString("blindSpot:side=left"))
-                            || "on".equalsIgnoreCase(state.optString("rearCrossTraffic:side=left"))
-                            || "on".equalsIgnoreCase(state.optString("doorOpenWarning:side=left"));
-                    this.daemonAlertR = "on".equalsIgnoreCase(state.optString("blindSpot:side=right"))
-                            || "on".equalsIgnoreCase(state.optString("rearCrossTraffic:side=right"))
-                            || "on".equalsIgnoreCase(state.optString("doorOpenWarning:side=right"));
-                    return;
-                }
-            }
-        } catch (Throwable ignored) {
-        }
-        this.daemonAlertL = false;
-        this.daemonAlertR = false;
     }
 
     public boolean isLeftAlert() {

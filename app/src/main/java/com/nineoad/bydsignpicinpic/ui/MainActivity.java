@@ -2776,21 +2776,48 @@ public class MainActivity extends AppCompatActivity {
 
         applySteeringPositionLayout();
 
-        setupNavUpdatePage();
-        setupNavVehiclePage();
-        setupNavSettingsPage();
-        setupNavDiagnosticsPage();
-        setupNavBackupPage();
-        setupNavGuidePage();
-        setupNavAboutPage();
-
         int initialTab = this.prefs.getInt("last_nav_tab", 0);
         this.prefs.edit().remove("last_nav_tab").apply();
         switchNavTab(initialTab);
     }
 
+    private final boolean[] navTabInitialized = new boolean[8];
+
+    private void ensureNavTabInitialized(int index) {
+        if (index < 0 || index >= this.navTabInitialized.length || this.navTabInitialized[index]) {
+            return;
+        }
+        this.navTabInitialized[index] = true;
+        switch (index) {
+            case 1:
+                setupNavUpdatePage();
+                break;
+            case 2:
+                setupNavVehiclePage();
+                break;
+            case 3:
+                setupNavSettingsPage();
+                break;
+            case 4:
+                setupNavDiagnosticsPage();
+                break;
+            case 5:
+                setupNavBackupPage();
+                break;
+            case 6:
+                setupNavGuidePage();
+                break;
+            case 7:
+                setupNavAboutPage();
+                break;
+            default:
+                break;
+        }
+    }
+
     private void switchNavTab(int index) {
         if (this.navPages == null || this.navButtons == null) return;
+        ensureNavTabInitialized(index);
         this.currentNavIndex = index;
         for (int i = 0; i < this.navPages.length; i++) {
             if (this.navPages[i] != null) {

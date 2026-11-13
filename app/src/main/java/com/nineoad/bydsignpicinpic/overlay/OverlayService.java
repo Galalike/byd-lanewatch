@@ -348,7 +348,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         this.wm = (WindowManager) getSystemService("window");
         buildOverlay();
         try {
-            TurnSignalListener.lingerMs = (long) (this.prefs.getFloat("lingerSec", 3.5f) * 1000.0f);
+            TurnSignalListener.lingerMs = (long) (com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(this.prefs, "lingerSec", 3.5f) * 1000.0f);
         } catch (Throwable unused) {
         }
         int savedCamId = this.prefs.getInt("user_avm_cam_id", -1);
@@ -356,9 +356,18 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             avmCamId = savedCamId;
             Log.i(TAG, "Using user_avm_cam_id=" + avmCamId);
         } else {
-            int detected = detectAvmCameraId();
-            avmCamId = (detected >= 0) ? detected : 1;
-            Log.i(TAG, "Auto-detected avmCamId=" + avmCamId + " (detected=" + detected + ")");
+            int confirmedCamId = this.prefs.getInt("confirmed_avm_cam_id", -1);
+            if (confirmedCamId >= 0) {
+                avmCamId = confirmedCamId;
+                Log.i(TAG, "Using cached confirmed_avm_cam_id=" + avmCamId);
+            } else {
+                int detected = detectAvmCameraId();
+                avmCamId = (detected >= 0) ? detected : 1;
+                if (detected >= 0) {
+                    this.prefs.edit().putInt("confirmed_avm_cam_id", avmCamId).apply();
+                }
+                Log.i(TAG, "Auto-detected avmCamId=" + avmCamId + " (detected=" + detected + ")");
+            }
         }
         this.avc = new AvcClient(this);
         if (!directMode && !isDilink4Platform()) {
