@@ -2,16 +2,59 @@ package com.nineoad.bydsignpicinpic.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.nineoad.bydsignpicinpic.overlay.Perspective3DParams;
 
 /**
  * Pre-calibrated OEM defaults matching the user's tested BYD DiLink 3.0 configuration.
  */
 public class OemRecommendedPreset {
     public static final String PREF_NAME = "pnp";
-    public static final int PRESET_VERSION = 1;
+    public static final int PRESET_VERSION = 2;
+
+    /**
+     * Applies the approved 3D Perspective & Lens Rectification calibration for BYD ATTO 3.
+     */
+    public static void applyAtto3PerspectivePreset(SharedPreferences sp) {
+        if (sp == null) return;
+        SharedPreferences.Editor ed = sp.edit();
+        Perspective3DParams.createAtto3LeftDefault().save(ed, "L");
+        Perspective3DParams.createAtto3RightDefault().save(ed, "R");
+        ed.putBoolean("perspective_3d_enabled", true);
+        ed.putString("vehicle_model_preset", "atto3");
+
+        // Canonical Base Camera Layer (Left & Right) matching tested BYD ATTO 3 optics
+        ed.putInt("dr_rot_l", 0);
+        ed.putFloat("dr_fn_l", 48.0f);
+        ed.putBoolean("dr_mir_l", true);
+        ed.putBoolean("dr_fv_l", false);
+        ed.putFloat("dr_l0", 0.22f);
+        ed.putFloat("dr_l1", 0.57f);
+        ed.putFloat("dr_l2", 0.81f);
+        ed.putFloat("dr_l3", 0.97f);
+        ed.putFloat("dr_str_l", -0.24f);
+        ed.putFloat("dr_zoom_l", 1.14f);
+        ed.putFloat("dr_cx_l", 0.40f);
+        ed.putFloat("dr_cy_l", 0.5601612f);
+
+        ed.putInt("dr_rot_r", 270);
+        ed.putFloat("dr_fn_r", 27.0f);
+        ed.putBoolean("dr_mir_r", true);
+        ed.putBoolean("dr_fv_r", false);
+        ed.putFloat("dr_r0", 0.21f);
+        ed.putFloat("dr_r1", 0.62f);
+        ed.putFloat("dr_r2", 0.75f);
+        ed.putFloat("dr_r3", 0.89f);
+        ed.putFloat("dr_str_r", -0.38f);
+        ed.putFloat("dr_zoom_r", 0.91f);
+        ed.putFloat("dr_cx_r", 0.66f);
+        ed.putFloat("dr_cy_r", 0.68f);
+
+        ed.apply();
+    }
 
     public static void applyRecommendedPreset(SharedPreferences sp) {
         if (sp == null) return;
+        applyAtto3PerspectivePreset(sp);
         sp.edit()
             // --- Mode & Global ---
             .putInt("mode", 2) // Default Balance Mode (สมดุล)
@@ -174,8 +217,15 @@ public class OemRecommendedPreset {
     public static void ensureDefaultsInitialized(Context context) {
         if (context == null) return;
         SharedPreferences sp = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        if (!sp.contains("recommended_preset_ver")) {
-            applyRecommendedPreset(sp);
+        int currentVer = sp.getInt("recommended_preset_ver", 0);
+        if (currentVer < PRESET_VERSION) {
+            if (currentVer == 0) {
+                applyRecommendedPreset(sp);
+            } else {
+                // Upgrade from v1 to v2: initialize 3D perspective preset for ATTO 3
+                applyAtto3PerspectivePreset(sp);
+                sp.edit().putInt("recommended_preset_ver", PRESET_VERSION).apply();
+            }
         }
     }
 }

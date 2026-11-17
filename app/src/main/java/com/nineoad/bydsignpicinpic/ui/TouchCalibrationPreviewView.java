@@ -38,6 +38,9 @@ public class TouchCalibrationPreviewView extends View {
 
     // Paints
     private Paint gridPaint;
+    private Paint horizonPaint;
+    private Paint plumbPolePaint;
+    private Paint plumbCarPaint;
     private Paint pipBorderPaint;
     private Paint pipCornerPaint;
     private Paint pipDimPaint;
@@ -94,6 +97,18 @@ public class TouchCalibrationPreviewView extends View {
         gridPaint.setColor(Color.argb(70, 255, 255, 255));
         gridPaint.setStrokeWidth(1.5f);
         gridPaint.setPathEffect(new DashPathEffect(new float[]{8f, 8f}, 0));
+
+        horizonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        horizonPaint.setColor(Color.argb(220, 250, 204, 21)); // Yellow horizon reference
+        horizonPaint.setStrokeWidth(2.5f);
+
+        plumbPolePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        plumbPolePaint.setColor(Color.argb(200, 56, 189, 248)); // Cyan 90-deg pole plumb
+        plumbPolePaint.setStrokeWidth(2.0f);
+
+        plumbCarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        plumbCarPaint.setColor(Color.argb(220, 74, 222, 128)); // Green 90-deg car body plumb
+        plumbCarPaint.setStrokeWidth(2.5f);
 
         pipBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         pipBorderPaint.setColor(Color.rgb(62, 106, 225)); // Tesla Blue
@@ -177,7 +192,7 @@ public class TouchCalibrationPreviewView extends View {
     public void setPipMode(int mode) {
         this.pipMode = mode;
         if (mode == 1) {
-            this.targetPipAspect = 16f / 9f; // Turn Signal: 16:9 Landscape
+            this.targetPipAspect = 5.0f / 3.0f; // Turn Signal: 5:3 Landscape (Approved)
         } else if (mode == 2) {
             this.targetPipAspect = 960f / 320f; // Rearview: 3:1 Panoramic Mirror
         } else if (mode == 3) {
@@ -316,15 +331,35 @@ public class TouchCalibrationPreviewView extends View {
 
         // 5. Grid lines INSIDE the PIP bounding box
         if (showGrid) {
-            int divX = (pipMode == 3) ? 3 : 6;
-            int divY = (pipMode == 3) ? 4 : (pipMode == 2 ? 3 : 4);
-            float stepX = boxW / (float) divX;
-            float stepY = boxH / (float) divY;
-            for (int i = 1; i < divX; i++) {
-                canvas.drawLine(boxL + i * stepX, boxT, boxL + i * stepX, boxB, gridPaint);
-            }
-            for (int j = 1; j < divY; j++) {
-                canvas.drawLine(boxL, boxT + j * stepY, boxR, boxT + j * stepY, gridPaint);
+            if (pipMode == 1) {
+                // 3D Perspective Alignment Guidelines
+                // Yellow Horizon line at 76% height from bottom (24% from top)
+                float horizY = boxT + boxH * 0.24f;
+                canvas.drawLine(boxL, horizY, boxR, horizY, horizonPaint);
+
+                // Vertical 90-degree plumb lines for poles & road
+                float p1X = boxL + boxW * 0.22f;
+                float p2X = boxL + boxW * 0.50f;
+                float p3X = boxL + boxW * 0.78f;
+                canvas.drawLine(p1X, boxT, p1X, boxB, plumbPolePaint);
+                canvas.drawLine(p2X, boxT, p2X, boxB, plumbPolePaint);
+                canvas.drawLine(p3X, boxT, p3X, boxB, plumbPolePaint);
+
+                // Vertical car body plumb line (green)
+                boolean isRightSide = (activeLabel != null && activeLabel.contains("ขวา") || activeLabel != null && activeLabel.toLowerCase(Locale.US).contains("right"));
+                float carX = isRightSide ? (boxL + boxW * 0.10f) : (boxL + boxW * 0.90f);
+                canvas.drawLine(carX, boxT, carX, boxB, plumbCarPaint);
+            } else {
+                int divX = (pipMode == 3) ? 3 : 6;
+                int divY = (pipMode == 3) ? 4 : (pipMode == 2 ? 3 : 4);
+                float stepX = boxW / (float) divX;
+                float stepY = boxH / (float) divY;
+                for (int i = 1; i < divX; i++) {
+                    canvas.drawLine(boxL + i * stepX, boxT, boxL + i * stepX, boxB, gridPaint);
+                }
+                for (int j = 1; j < divY; j++) {
+                    canvas.drawLine(boxL, boxT + j * stepY, boxR, boxT + j * stepY, gridPaint);
+                }
             }
         }
 
@@ -341,7 +376,7 @@ public class TouchCalibrationPreviewView extends View {
     private void drawHudOverlay(Canvas canvas, int w, int h) {
         String pipTag;
         if (pipMode == 1) {
-            pipTag = "PIP 16:9";
+            pipTag = "PIP 5:3 (3D)";
         } else if (pipMode == 2) {
             pipTag = "PIP 3:1";
         } else {

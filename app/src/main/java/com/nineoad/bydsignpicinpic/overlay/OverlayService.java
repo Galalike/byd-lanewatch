@@ -132,7 +132,9 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     public static volatile int drivingHeightPx = 405;
     public static volatile int drivingRotLeft = 0;
     public static volatile int drivingRotRight = 0;
-    public static volatile int drivingWidthPx = 720;
+    public static volatile int drivingWidthPx = 672; // Aspect 5:3 (672x405)
+    public static final Perspective3DParams params3DL = Perspective3DParams.createAtto3LeftDefault();
+    public static final Perspective3DParams params3DR = Perspective3DParams.createAtto3RightDefault();
     public static volatile int wheelStripWidthPx = 270;
     private volatile int steeringWheelSide = 0; // 0 = none, 1 = Left (FL), 2 = Right (FR)
     public static volatile int frontIndex = 4;
@@ -346,7 +348,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         this.wm = (WindowManager) getSystemService("window");
         buildOverlay();
         try {
-            TurnSignalListener.lingerMs = (long) (this.prefs.getFloat("lingerSec", 3.5f) * 1000.0f);
+            TurnSignalListener.lingerMs = (long) (com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(this.prefs, "lingerSec", 3.5f) * 1000.0f);
         } catch (Throwable unused) {
         }
         int savedCamId = this.prefs.getInt("user_avm_cam_id", -1);
@@ -354,9 +356,18 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
             avmCamId = savedCamId;
             Log.i(TAG, "Using user_avm_cam_id=" + avmCamId);
         } else {
-            int detected = detectAvmCameraId();
-            avmCamId = (detected >= 0) ? detected : 1;
-            Log.i(TAG, "Auto-detected avmCamId=" + avmCamId + " (detected=" + detected + ")");
+            int confirmedCamId = this.prefs.getInt("confirmed_avm_cam_id", -1);
+            if (confirmedCamId >= 0) {
+                avmCamId = confirmedCamId;
+                Log.i(TAG, "Using cached confirmed_avm_cam_id=" + avmCamId);
+            } else {
+                int detected = detectAvmCameraId();
+                avmCamId = (detected >= 0) ? detected : 1;
+                if (detected >= 0) {
+                    this.prefs.edit().putInt("confirmed_avm_cam_id", avmCamId).apply();
+                }
+                Log.i(TAG, "Auto-detected avmCamId=" + avmCamId + " (detected=" + detected + ")");
+            }
         }
         this.avc = new AvcClient(this);
         if (!directMode && !isDilink4Platform()) {
@@ -1489,19 +1500,23 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         }
 
         if (!this.isDualView && this.pendingSide == 1 && this.steeringWheelSide != 0) {
-            // Combined: Left Turn Signal (16:9) + Front-Left Wheel (Vertical on Right)
+            // Combined: Left Turn Signal (5:3) + Front-Left Wheel (Vertical on Right)
+            this.glView.setParams3DLeft(params3DL);
             this.glView.setParamsLeft(rotL, fineL, mirrorL, flipVL, cropL, strL, zoomL, cxL, cyL);
             this.glView.setDualMode(false, 21);
             return;
         }
 
         if (!this.isDualView && this.pendingSide == 2 && this.steeringWheelSide != 0) {
-            // Combined: Right Turn Signal (16:9) + Front-Right Wheel (Vertical on Right)
+            // Combined: Right Turn Signal (5:3) + Front-Right Wheel (Vertical on Right)
+            this.glView.setParams3DRight(params3DR);
             this.glView.setParamsRight(rotR, fineR, mirrorR, flipVR, cropR, strR, zoomR, cxR, cyR);
             this.glView.setDualMode(false, 22);
             return;
         }
 
+        this.glView.setParams3DLeft(params3DL);
+        this.glView.setParams3DRight(params3DR);
         this.glView.setDualMode(this.isDualView, this.pendingSide);
         this.glView.setParamsLeft(rotL, fineL, mirrorL, flipVL, cropL, strL, zoomL, cxL, cyL);
         this.glView.setParamsRight(rotR, fineR, mirrorR, flipVR, cropR, strR, zoomR, cxR, cyR);
@@ -2015,24 +2030,36 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         drivingMirrorRight = sharedPreferences.getBoolean(strCustomPrefix + "mir_r", true);
         drivingFlipVLeft = sharedPreferences.getBoolean(strCustomPrefix + "fv_l", false);
         drivingFlipVRight = sharedPreferences.getBoolean(strCustomPrefix + "fv_r", false);
-        drivingFineLeft = sharedPreferences.getFloat(strCustomPrefix + "fn_l", 48.0f);
-        drivingFineRight = sharedPreferences.getFloat(strCustomPrefix + "fn_r", 27.0f);
-        drivingFeStrengthLeft = sharedPreferences.getFloat(strCustomPrefix + "str_l", -0.24f);
-        drivingFeStrengthRight = sharedPreferences.getFloat(strCustomPrefix + "str_r", -0.38f);
-        drivingFeZoomLeft = sharedPreferences.getFloat(strCustomPrefix + "zoom_l", 1.14f);
-        drivingFeZoomRight = sharedPreferences.getFloat(strCustomPrefix + "zoom_r", 0.91f);
-        drivingFeCxLeft = sharedPreferences.getFloat(strCustomPrefix + "cx_l", 0.40f);
-        drivingFeCxRight = sharedPreferences.getFloat(strCustomPrefix + "cx_r", 0.66f);
-        drivingFeCyLeft = sharedPreferences.getFloat(strCustomPrefix + "cy_l", 0.5601612f);
-        drivingFeCyRight = sharedPreferences.getFloat(strCustomPrefix + "cy_r", 0.68f);
+        drivingFineLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "fn_l", 48.0f);
+        drivingFineRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "fn_r", 27.0f);
+        drivingFeStrengthLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "str_l", -0.24f);
+        drivingFeStrengthRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "str_r", -0.38f);
+        drivingFeZoomLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "zoom_l", 1.14f);
+        drivingFeZoomRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "zoom_r", 0.91f);
+        drivingFeCxLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "cx_l", 0.40f);
+        drivingFeCxRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "cx_r", 0.66f);
+        drivingFeCyLeft = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "cy_l", 0.5601612f);
+        drivingFeCyRight = com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, strCustomPrefix + "cy_r", 0.68f);
         drivingCropLeft = loadCrop(sharedPreferences, strCustomPrefix + "l", new float[]{0.22f, 0.57f, 0.81f, 0.97f});
         drivingCropRight = loadCrop(sharedPreferences, strCustomPrefix + "r", new float[]{0.21f, 0.62f, 0.75f, 0.89f});
         customOrient = sharedPreferences.getInt(strCustomPrefix + "orient", 0);
         pipCornerRadiusDp = sharedPreferences.getInt("pip_corner_radius", 22);
+
+        // Load 3D Perspective & Lens Rectification Parameters
+        params3DL.load(sharedPreferences, "L", Perspective3DParams.createAtto3LeftDefault());
+        params3DR.load(sharedPreferences, "R", Perspective3DParams.createAtto3RightDefault());
+        boolean p3dGlobalEnabled = sharedPreferences.getBoolean("perspective_3d_enabled", true);
+        params3DL.enabled = p3dGlobalEnabled;
+        params3DR.enabled = p3dGlobalEnabled;
     }
 
     private static float[] loadCrop(SharedPreferences sharedPreferences, String str, float[] fArr) {
-        return new float[]{sharedPreferences.getFloat(str + "0", fArr[0]), sharedPreferences.getFloat(str + "1", fArr[1]), sharedPreferences.getFloat(str + "2", fArr[2]), sharedPreferences.getFloat(str + "3", fArr[3])};
+        return new float[]{
+            com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, str + "0", fArr[0]),
+            com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, str + "1", fArr[1]),
+            com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, str + "2", fArr[2]),
+            com.nineoad.bydsignpicinpic.config.PrefsHelper.getFloat(sharedPreferences, str + "3", fArr[3])
+        };
     }
 
     /* JADX INFO: Access modifiers changed from: private */

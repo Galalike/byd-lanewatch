@@ -17,8 +17,9 @@ public class TurnSignalListener {
     public static final int OFF = 0;
     private static final int ON = 1;
     private static final long POLL_MS = 40;
+    private static final long IDLE_POLL_MS = 65;
     public static final int RIGHT = 2;
-    private static final long SUPPRESS_POLL_MS = 750;
+    private static final long SUPPRESS_POLL_MS = 1500;
     private static final String TAG = "TurnSignal";
     public static volatile long lingerMs = 3500;
     public static volatile boolean showHazard = true;
@@ -112,7 +113,7 @@ public class TurnSignalListener {
                 }
 
                 boolean oemCameraActive = com.nineoad.bydsignpicinpic.overlay.OverlayService.isOemCameraForeground || panoProp;
-                if (jCurrentTimeMillis - this.lastSuppressMs >= SUPPRESS_POLL_MS) {
+                if (!BydKeyRemapService.isServiceRunning && jCurrentTimeMillis - this.lastSuppressMs >= SUPPRESS_POLL_MS) {
                     this.lastSuppressMs = jCurrentTimeMillis;
                     boolean fgCam = isCameraAppForeground();
                     if (fgCam && !com.nineoad.bydsignpicinpic.overlay.OverlayService.isOemCameraForeground) {
@@ -154,7 +155,7 @@ public class TurnSignalListener {
                 Log.w(TAG, "poll: " + th);
             }
             try {
-                Thread.sleep(POLL_MS);
+                Thread.sleep((this.state == 0 && !this.suppressed) ? IDLE_POLL_MS : POLL_MS);
             } catch (InterruptedException unused) {
                 return;
             }
@@ -245,7 +246,7 @@ public class TurnSignalListener {
         }
         try {
             long jCurrentTimeMillis = System.currentTimeMillis();
-            UsageEvents usageEventsQueryEvents = this.usm.queryEvents(jCurrentTimeMillis - 60000, jCurrentTimeMillis);
+            UsageEvents usageEventsQueryEvents = this.usm.queryEvents(jCurrentTimeMillis - 5000, jCurrentTimeMillis);
             if (usageEventsQueryEvents == null) {
                 return false;
             }
