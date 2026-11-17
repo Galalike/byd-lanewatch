@@ -6,18 +6,23 @@ import android.accessibilityservice.GestureDescription;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Toast;
 import com.nineoad.bydsignpicinpic.overlay.OverlayService;
 import java.util.List;
+import java.util.Locale;
 
 public class BydKeyRemapService extends AccessibilityService {
     private static final String TAG = "BydKeyRemap";
@@ -108,6 +113,70 @@ public class BydKeyRemapService extends AccessibilityService {
         triggerDisableAutostartAutomation(context, false);
     }
 
+    private static boolean isThaiLanguage(Context context) {
+        if (context != null) {
+            try {
+                SharedPreferences sp = context.getSharedPreferences("pnp", Context.MODE_PRIVATE);
+                String lang = sp.getString("app_lang", "");
+                if ("th".equalsIgnoreCase(lang)) return true;
+                if ("en".equalsIgnoreCase(lang)) return false;
+            } catch (Throwable ignored) {}
+        }
+        String sysLang = Locale.getDefault().getLanguage();
+        return sysLang != null && sysLang.toLowerCase(Locale.US).startsWith("th");
+    }
+
+    /**
+     * Attempts to launch BYD's AppStartManagement ("Disable Autostart") screen using multiple
+     * intent strategies so it works across DiLink firmware variations and even when Accessibility
+     * Service is disabled.
+     */
+    public static boolean launchAppStartManagement(Context context) {
+        Context launchCtx = context != null ? context : instance;
+        if (launchCtx == null) {
+            Log.e(TAG, "launchAppStartManagement: no valid Context");
+            return false;
+        }
+        int flags = Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP;
+        PackageManager pm = launchCtx.getPackageManager();
+
+        Intent[] candidates = new Intent[] {
+            new Intent("android.intent.action.BYD_APPSTARTMANAGEMENT")
+                .setClassName("com.byd.appstartmanagement", "com.byd.appstartmanagement.frame.AppStartManagement"),
+            new Intent()
+                .setClassName("com.byd.appstartmanagement", "com.byd.appstartmanagement.frame.AppStartManagement"),
+            new Intent("android.intent.action.BYD_APPSTARTMANAGEMENT"),
+            pm != null ? pm.getLaunchIntentForPackage("com.byd.appstartmanagement") : null
+        };
+
+        for (int i = 0; i < candidates.length; i++) {
+            Intent candidate = candidates[i];
+            if (candidate == null) continue;
+            try {
+                candidate.addFlags(flags);
+                launchCtx.startActivity(candidate);
+                Log.i(TAG, "Launched AppStartManagement via strategy #" + (i + 1) + ": " + candidate);
+                return true;
+            } catch (Throwable t) {
+                Log.w(TAG, "Strategy #" + (i + 1) + " failed for AppStartManagement: " + t.getMessage());
+            }
+        }
+        return false;
+    }
+
+    private static void openAppDetailsFallback(Context context) {
+        Context launchCtx = context != null ? context : instance;
+        if (launchCtx == null) return;
+        try {
+            Intent detailsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            detailsIntent.setData(Uri.fromParts("package", launchCtx.getPackageName(), null));
+            detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchCtx.startActivity(detailsIntent);
+        } catch (Throwable t) {
+            Log.e(TAG, "Failed to open app details fallback: " + t);
+        }
+    }
+
     public static synchronized void triggerDisableAutostartAutomation(Context context, boolean force) {
         long now = SystemClock.elapsedRealtime();
         if (!force && (isAutomationInProgress || isHandlingDisableAutostart || (now - lastAutomationStartTime < 15000L))) {
@@ -116,6 +185,26 @@ public class BydKeyRemapService extends AccessibilityService {
         }
 
         if (!isServiceRunning || instance == null) {
+            if (force) {
+                Log.w(TAG, "BydKeyRemapService not active on manual trigger -> launching AppStartManagement directly");
+                boolean launched = launchAppStartManagement(context);
+                boolean th = isThaiLanguage(context);
+                if (context != null) {
+                    if (launched) {
+                        Toast.makeText(context,
+                                th ? "เปิดหน้า Disable Autostart แล้ว — กรุณาปิดสวิตช์ BYD LaneWatch (หรือเปิด Accessibility Service เพื่อให้ระบบกดให้อัตโนมัติ)"
+                                   : "Opened Disable Autostart — please turn OFF BYD LaneWatch manually (or enable Accessibility Service for auto-unlock)",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context,
+                                th ? "ไม่พบหน้า Disable Autostart (com.byd.appstartmanagement) บนระบบนี้ กำลังเปิดหน้าข้อมูลแอปแทน"
+                                   : "Disable Autostart (com.byd.appstartmanagement) not found; opening App Info instead",
+                                Toast.LENGTH_LONG).show();
+                        openAppDetailsFallback(context);
+                    }
+                }
+                return;
+            }
             Log.w(TAG, "BydKeyRemapService not yet active, scheduling retry waiting for service...");
             autostartHandler.postDelayed(new Runnable() {
                 int attempts = 0;
@@ -155,22 +244,27 @@ public class BydKeyRemapService extends AccessibilityService {
         };
         autostartHandler.postDelayed(autostartTimeoutRunnable, 15000L);
 
-        try {
-            Intent intent = new Intent("android.intent.action.BYD_APPSTARTMANAGEMENT");
-            intent.setClassName("com.byd.appstartmanagement", "com.byd.appstartmanagement.frame.AppStartManagement");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            if (instance != null) {
-                instance.startActivity(intent);
-            } else if (context != null) {
-                context.startActivity(intent);
-            }
+        boolean launched = launchAppStartManagement(context != null ? context : instance);
+        if (launched) {
             // Ensure first processing pass starts even if window state change event is coalesced
             autostartHandler.removeCallbacks(instance.processAutostartRunnable);
             autostartHandler.postDelayed(instance.processAutostartRunnable, 800L);
-        } catch (Throwable t) {
-            Log.e(TAG, "Failed to launch AppStartManagement: " + t);
+        } else {
+            Log.e(TAG, "Failed to launch AppStartManagement with all strategies");
+            if (autostartTimeoutRunnable != null) {
+                autostartHandler.removeCallbacks(autostartTimeoutRunnable);
+                autostartTimeoutRunnable = null;
+            }
             isHandlingDisableAutostart = false;
             isAutomationInProgress = false;
+            if (force && context != null) {
+                boolean th = isThaiLanguage(context);
+                Toast.makeText(context,
+                        th ? "ไม่พบหน้า Disable Autostart (com.byd.appstartmanagement) บนระบบนี้ กำลังเปิดหน้าข้อมูลแอปแทน"
+                           : "Disable Autostart (com.byd.appstartmanagement) not found; opening App Info instead",
+                        Toast.LENGTH_LONG).show();
+                openAppDetailsFallback(context);
+            }
         }
     }
 

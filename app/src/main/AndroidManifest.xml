@@ -13,6 +13,12 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions"/>
+    <queries>
+        <package android:name="com.byd.appstartmanagement"/>
+        <intent>
+            <action android:name="android.intent.action.BYD_APPSTARTMANAGEMENT"/>
+        </intent>
+    </queries>
     <permission
         android:name="${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature"/>

@@ -3523,9 +3523,11 @@ public class MainActivity extends AppCompatActivity {
         if (btnRunAutostart != null) {
             btnRunAutostart.setOnClickListener(v -> {
                 prefs.edit().putBoolean("pending_autostart_unblock", true).apply();
-                Toast.makeText(MainActivity.this, 
-                    tr("กำลังเริ่มระบบตรวจสอบและปลดล็อก Autostart อัตโนมัติ...", "Starting Autostart sync automation..."), 
-                    Toast.LENGTH_SHORT).show();
+                if (BydKeyRemapService.isServiceRunning) {
+                    Toast.makeText(MainActivity.this,
+                        tr("กำลังเริ่มระบบตรวจสอบและปลดล็อก Autostart อัตโนมัติ...", "Starting Autostart sync automation..."),
+                        Toast.LENGTH_SHORT).show();
+                }
                 BydKeyRemapService.triggerDisableAutostartAutomation(MainActivity.this, true);
             });
         }
