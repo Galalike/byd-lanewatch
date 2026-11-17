@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
     private Switch swFlipV;
     private Switch swMirror;
     private Switch swTrigHazard;
+    private Switch swTrigReverse;
     private Switch swTrigLeft;
     private Switch swTrigRight;
     private Switch swAdasBsdAlert;
@@ -409,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
         this.swTrigLeft = (Switch) findViewById(R.id.swTrigLeft);
         this.swTrigRight = (Switch) findViewById(R.id.swTrigRight);
         this.swTrigHazard = (Switch) findViewById(R.id.swTrigHazard);
+        this.swTrigReverse = (Switch) findViewById(R.id.swTrigReverse);
         this.swAdasBsdAlert = (Switch) findViewById(R.id.swAdasBsdAlert);
         this.cardTuning = findViewById(R.id.cardTuning);
         setupLanguageSpinner();
@@ -715,6 +717,16 @@ public class MainActivity extends AppCompatActivity {
         this.swTrigLeft.setChecked(this.prefs.getBoolean("trigLeft", true));
         this.swTrigRight.setChecked(this.prefs.getBoolean("trigRight", true));
         this.swTrigHazard.setChecked(this.prefs.getBoolean("trigHazard", true));
+        if (this.swTrigReverse != null) {
+            boolean revEnabled = this.prefs.getBoolean("trigReverse", false);
+            this.swTrigReverse.setChecked(revEnabled);
+            TurnSignalListener.showReverse = revEnabled;
+            this.swTrigReverse.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+                MainActivity.this.prefs.edit().putBoolean("trigReverse", isChecked).apply();
+                TurnSignalListener.showReverse = isChecked;
+                OverlayService.refreshSuppression();
+            });
+        }
         if (this.swAdasBsdAlert != null) {
             this.swAdasBsdAlert.setChecked(this.prefs.getBoolean("adas_bsd_warning_enabled", true));
             this.swAdasBsdAlert.setOnCheckedChangeListener((compoundButton, isChecked) -> {

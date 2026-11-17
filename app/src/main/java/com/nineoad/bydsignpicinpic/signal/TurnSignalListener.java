@@ -25,6 +25,7 @@ public class TurnSignalListener {
     public static volatile boolean showHazard = true;
     public static volatile boolean showLeft = true;
     public static volatile boolean showRight = true;
+    public static volatile boolean showReverse = false;
     private final Callback callback;
     private final Context ctx;
     private Object gearDev;
@@ -59,6 +60,7 @@ public class TurnSignalListener {
             showLeft = sharedPreferences.getBoolean("trigLeft", true);
             showRight = sharedPreferences.getBoolean("trigRight", true);
             showHazard = sharedPreferences.getBoolean("trigHazard", true);
+            showReverse = sharedPreferences.getBoolean("trigReverse", false);
         } catch (Throwable unused) {
         }
         initGear();
@@ -119,10 +121,9 @@ public class TurnSignalListener {
                     if (fgCam && !com.nineoad.bydsignpicinpic.overlay.OverlayService.isOemCameraForeground) {
                         com.nineoad.bydsignpicinpic.overlay.OverlayService.setOemCameraForeground(true);
                     }
-                    this.suppressed = oemCameraActive || fgCam;
-                } else {
-                    this.suppressed = oemCameraActive;
+                    oemCameraActive = oemCameraActive || fgCam;
                 }
+                this.suppressed = !showReverse && oemCameraActive;
                 if (this.suppressed) {
                     if (this.state != 0) {
                         this.state = 0;
@@ -141,6 +142,8 @@ public class TurnSignalListener {
                         setActive(1);
                     } else if (showRight && num != null && (num.intValue() == 4 || num.intValue() == 5)) {
                         setActive(2);
+                    } else if (showReverse && isReverseGear()) {
+                        setActive(3);
                     }
                 }
 

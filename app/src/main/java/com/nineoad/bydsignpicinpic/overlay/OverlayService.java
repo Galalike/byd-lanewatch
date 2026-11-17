@@ -734,19 +734,21 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
 
         Button button = new Button(this);
         this.btnSwitchCam = button;
-        button.setText(en ? "+ Dual" : "+ 2 กล้อง");
-        this.btnSwitchCam.setTextSize(13.0f);
+        button.setText(en ? "Dual view" : "2 กล้อง");
+        this.btnSwitchCam.setTextSize(11.5f);
         this.btnSwitchCam.setTypeface(null, android.graphics.Typeface.BOLD);
         this.btnSwitchCam.setTextColor(-1);
+        this.btnSwitchCam.setAllCaps(false);
+        this.btnSwitchCam.setCompoundDrawablePadding(dpToPx(6));
         android.graphics.drawable.GradientDrawable gradientDrawable = new android.graphics.drawable.GradientDrawable();
         gradientDrawable.setShape(0);
-        gradientDrawable.setColor(0xE6202020);
-        gradientDrawable.setCornerRadius(dpToPx(16));
-        gradientDrawable.setStroke(dpToPx(1), 0xCCFFFFFF);
+        gradientDrawable.setColor(0xAA181818);
+        gradientDrawable.setCornerRadius(dpToPx(14));
+        gradientDrawable.setStroke(dpToPx(1), 0x44FFFFFF);
         this.btnSwitchCam.setBackground(gradientDrawable);
-        this.btnSwitchCam.setPadding(dpToPx(12), dpToPx(4), dpToPx(12), dpToPx(4));
+        this.btnSwitchCam.setPadding(dpToPx(10), dpToPx(2), dpToPx(10), dpToPx(2));
         if (Build.VERSION.SDK_INT >= 21) {
-            this.btnSwitchCam.setElevation(dpToPx(8));
+            this.btnSwitchCam.setElevation(dpToPx(6));
         }
         this.btnSwitchCam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -757,12 +759,12 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         this.btnSwitchCam.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if ((right - left) != (oldRight - oldLeft)) {
+                if ((right - left) != (oldRight - oldLeft) || (bottom - top) != (oldBottom - oldTop)) {
                     OverlayService.this.updateButtonPosition();
                 }
             }
         });
-        WindowManager.LayoutParams btnLayoutParams = new WindowManager.LayoutParams(-2, dpToPx(34), Build.VERSION.SDK_INT >= 26 ? 2038 : 2002, 40, -3);
+        WindowManager.LayoutParams btnLayoutParams = new WindowManager.LayoutParams(-2, dpToPx(28), Build.VERSION.SDK_INT >= 26 ? 2038 : 2002, 40, -3);
         this.btnLp = btnLayoutParams;
         btnLayoutParams.gravity = 8388659;
         this.btnLp.x = -500;
@@ -2435,6 +2437,17 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         // Reverse gear suppression removed per user preference
     }
 
+    public static void refreshSuppression() {
+        final OverlayService instance = sInstance;
+        if (instance == null) return;
+        instance.main.post(new Runnable() {
+            @Override
+            public void run() {
+                instance.updateSuppressionState();
+            }
+        });
+    }
+
     private void onOemCameraStateChanged(boolean active) {
         if (isOemCameraForeground == active) return;
         isOemCameraForeground = active;
@@ -2442,7 +2455,7 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
     }
 
     private void updateSuppressionState() {
-        boolean shouldSuppress = isOemCameraForeground;
+        boolean shouldSuppress = isOemCameraForeground && !TurnSignalListener.showReverse;
         if (shouldSuppress) {
             this.main.removeCallbacks(this.feedHealthCheckRunnable);
             if (this.glView != null) {
@@ -2485,16 +2498,16 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         if (this.btnSwitchCam != null && this.btnLp != null) {
             int btnW = this.btnSwitchCam.getWidth();
             if (btnW <= 0) {
-                btnW = dpToPx(85);
+                btnW = dpToPx(110);
+            }
+            int btnH = this.btnSwitchCam.getHeight();
+            if (btnH <= 0) {
+                btnH = dpToPx(28);
             }
             this.btnLp.width = -2;
-            this.btnLp.height = dpToPx(34);
-            if (this.pendingSide == 1 && !this.isDualView) {
-                this.btnLp.x = this.lp.x + dpToPx(8);
-            } else {
-                this.btnLp.x = (this.lp.x + this.lp.width) - btnW - dpToPx(8);
-            }
-            this.btnLp.y = this.lp.y + dpToPx(8);
+            this.btnLp.height = dpToPx(28);
+            this.btnLp.x = (this.lp.x + this.lp.width) - btnW - dpToPx(8);
+            this.btnLp.y = (this.lp.y + this.lp.height) - btnH - dpToPx(8);
             try {
                 this.wm.updateViewLayout(this.btnSwitchCam, this.btnLp);
             } catch (Throwable unused) {
@@ -2509,15 +2522,21 @@ public class OverlayService extends Service implements TextureView.SurfaceTextur
         }
         this.btnSwitchCam.setVisibility(0);
         boolean en = !com.nineoad.bydsignpicinpic.ui.MainActivity.isThaiLocale(this);
+        int iconRes;
         if (this.isDualView) {
-            this.btnSwitchCam.setText(en ? "− Single View" : "− มุมเดี่ยว");
+            this.btnSwitchCam.setText(en ? "Single view" : "มุมเดี่ยว");
+            iconRes = com.nineoad.bydsignpicinpic.R.drawable.ic_pip_chevron_left_bar;
         } else if (this.pendingSide == 1) {
-            this.btnSwitchCam.setText(en ? "+ Right" : "+ ขวา");
+            this.btnSwitchCam.setText(en ? "Add right" : "เพิ่มกล้องขวา");
+            iconRes = com.nineoad.bydsignpicinpic.R.drawable.ic_pip_chevron_right_bar;
         } else if (this.pendingSide == 2) {
-            this.btnSwitchCam.setText(en ? "+ Left" : "+ ซ้าย");
+            this.btnSwitchCam.setText(en ? "Add left" : "เพิ่มกล้องซ้าย");
+            iconRes = com.nineoad.bydsignpicinpic.R.drawable.ic_pip_chevron_left_bar;
         } else {
-            this.btnSwitchCam.setText(en ? "+ Dual" : "+ 2 กล้อง");
+            this.btnSwitchCam.setText(en ? "Dual view" : "2 กล้อง");
+            iconRes = com.nineoad.bydsignpicinpic.R.drawable.ic_pip_chevron_right_bar;
         }
+        this.btnSwitchCam.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, iconRes, 0);
         updateButtonPosition();
     }
 

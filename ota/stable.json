@@ -1,17 +1,14 @@
 {
-  "versionCode": 114,
-  "versionName": "1.0.9",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.9/BYDLaneWatch_v1.0.9.apk",
-  "size": 59880228,
-  "releaseDate": "2026-11-17",
+  "versionCode": 115,
+  "versionName": "1.0.10",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.10/BYDLaneWatch_v1.0.10.apk",
+  "size": 59896724,
+  "releaseDate": "2026-11-18",
   "channel": "stable",
-  "whatsNew": "• 3D Perspective Lens Rectification: Full OpenGL ES 3D homography & unwarp shader replacing 2D stretch/distortion with true perspective calibration.\n• Fixed 5:3 PIP Aspect Ratio: Adjusted turn signal PIP frame to 672x405 (5:3) to eliminate unnatural vehicle and road distortion.\n• BYD ATTO 3 Factory Recommended Preset & Camera Studio 3D Controls: Pre-calibrated factory parameters with fine-grained 3D slider and stepper adjustments.\n• Reliable Autostart Unblock Launcher: Immediately opens BYD AppStartManagement across DiLink firmware variations even when Accessibility Service is inactive, with clear guidance.\n• Performance & Startup Optimization: Lazy-loaded secondary tabs, cached AVM camera discovery, reduced background polling, and type-safe backup import/export.",
+  "whatsNew": "• Reverse Gear & AVC (360) Overlay Toggle: Added an optional switch (OFF by default) to auto-show Dual Left+Right camera PiP in Reverse gear and allow PiP overlay on top of the OEM 360 (AVC) screen.\n• Bottom-Right PiP Switch Button: Moved the PiP camera switcher pill to a clean translucent bottom-right position with clear labels (Add right / Add left / Single view) and vector >| / |< icons.",
   "notes": [
-    "Stable Release v1.0.9",
-    "3D Perspective Lens Rectification & Hardware Shader Pipeline",
-    "Calibrated 5:3 PIP aspect ratio (672x405 px) eliminating image distortion",
-    "BYD ATTO 3 Factory Recommended Presets and full Camera Studio 3D parity",
-    "Reliable Unblock Autostart button with multi-strategy AppStartManagement launch",
-    "Faster startup latency, lower background resource usage, and crash-free backup import/export"
+    "Stable Release v1.0.10",
+    "Optional Reverse Gear & OEM 360 (AVC) PiP overlay toggle (disabled by default)",
+    "Redesigned bottom-right translucent PiP camera switch button with vector icons"
   ]
 }

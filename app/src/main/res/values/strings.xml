@@ -16,6 +16,7 @@
     <string name="col1_trig_left">Left Turn Signal</string>
     <string name="col1_trig_right">Right Turn Signal</string>
     <string name="col1_trig_hazard">Hazard Lights</string>
+    <string name="col1_trig_reverse">Reverse Gear / Show on 360 (AVC)</string>
     <string name="col1_trig_adas_bsd">Blind Spot Warning Frame (Radar)</string>
     <string name="col1_trig_adas_bsd_desc">Flashing red warning border when vehicles are detected in blind spot</string>
     <string name="col1_btn_drop_show">Settings &amp; Tuning [v]</string>
