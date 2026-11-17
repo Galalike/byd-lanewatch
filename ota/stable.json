@@ -1,16 +1,17 @@
 {
-  "versionCode": 112,
-  "versionName": "1.0.8.2",
-  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.8.2/BYDLaneWatch_v1.0.8.2.apk",
-  "size": 59843364,
-  "releaseDate": "2026-11-10",
+  "versionCode": 114,
+  "versionName": "1.0.9",
+  "url": "https://github.com/Galalike/byd-lanewatch/releases/download/v1.0.9/BYDLaneWatch_v1.0.9.apk",
+  "size": 59880228,
+  "releaseDate": "2026-11-17",
   "channel": "stable",
-  "whatsNew": "• Smart Primary 360° AVM Camera Discovery: Dynamically queries BYD hardware camera tags (pano_h / BmmCameraInfo) and probes 5120×960 panoramic resolution to lock onto the 360° AVM camera (ID 1) and prevent falling back to the Front DVR camera (ID 0).\n• Exclusive Camera Slot Ownership: Cleanly detaches background warm-standby GL surfaces before attaching Touch Calibration Studio surfaces and restores them upon exit, preventing dead-slot lockups.\n• Updated Day & Night Mode Hero Previews: Refreshed home screen mode preview cards with new geometric day and night artwork.\n• Dual-Layer Vehicle Camera Detection: Vehicle Information now queries both Android Camera2 and native BYD JNIBMMCamera HAL to accurately display all available camera devices.",
+  "whatsNew": "• 3D Perspective Lens Rectification: Full OpenGL ES 3D homography & unwarp shader replacing 2D stretch/distortion with true perspective calibration.\n• Fixed 5:3 PIP Aspect Ratio: Adjusted turn signal PIP frame to 672x405 (5:3) to eliminate unnatural vehicle and road distortion.\n• BYD ATTO 3 Factory Recommended Preset & Camera Studio 3D Controls: Pre-calibrated factory parameters with fine-grained 3D slider and stepper adjustments.\n• Reliable Autostart Unblock Launcher: Immediately opens BYD AppStartManagement across DiLink firmware variations even when Accessibility Service is inactive, with clear guidance.\n• Performance & Startup Optimization: Lazy-loaded secondary tabs, cached AVM camera discovery, reduced background polling, and type-safe backup import/export.",
   "notes": [
-    "Stable Release v1.0.8.2",
-    "Smart BmmCameraInfo & 5120x960 resolution probe for primary 360° AVM camera",
-    "Prevented Front DVR (Camera ID 0) fallback and SharedPreferences overwrite bug",
-    "Exclusive camera slot ownership between OverlayService and Calibration Studio",
-    "Updated Day/Night mode hero preview graphics and Vehicle Information camera detection"
+    "Stable Release v1.0.9",
+    "3D Perspective Lens Rectification & Hardware Shader Pipeline",
+    "Calibrated 5:3 PIP aspect ratio (672x405 px) eliminating image distortion",
+    "BYD ATTO 3 Factory Recommended Presets and full Camera Studio 3D parity",
+    "Reliable Unblock Autostart button with multi-strategy AppStartManagement launch",
+    "Faster startup latency, lower background resource usage, and crash-free backup import/export"
   ]
 }
